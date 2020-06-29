@@ -44,7 +44,7 @@ jobs:
   - task: CopyFiles@2
     inputs:
       sourceFolder: '$(Build.SourcesDirectory)/src'
-      contents: 'src/agent/**/*.nupkg'
+      contents: 'agent/**/*.nupkg'
       flattenFolders: true
       targetFolder: '$(Build.ArtifactStagingDirectory)/packages'
 
