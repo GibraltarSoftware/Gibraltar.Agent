@@ -1,0 +1,646 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{03B16B7D-594A-4EAC-908B-CC9969F7D647}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Gibraltar</RootNamespace>
+    <AssemblyName>Loupe.Core</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\..\Loupe.Agent.snk</AssemblyOriginatorKeyFile>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;NET20</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DocumentationFile>bin\Debug\Loupe.Core.xml</DocumentationFile>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <LangVersion>7.0</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE;NET20</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\Loupe.Core.xml</DocumentationFile>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <LangVersion>7.0</LangVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="CsvHelper, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
+      <HintPath>..\packages\CsvHelper.2.16.3.0\lib\net20\CsvHelper.dll</HintPath>
+    </Reference>
+    <Reference Include="DevAge.Core, Version=4.10.3286.32154, Culture=neutral, PublicKeyToken=faad465d84242dbf, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Dependencies\DevAge.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevAge.Windows.Forms, Version=4.10.3286.32154, Culture=neutral, PublicKeyToken=faad465d84242dbf, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Dependencies\DevAge.Windows.Forms.dll</HintPath>
+    </Reference>
+    <Reference Include="Ionic.Zip.Reduced, Version=1.9.2.0, Culture=neutral, PublicKeyToken=ca42a1ee8d2e42d3, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Dependencies\Ionic.Zip.Reduced.dll</HintPath>
+    </Reference>
+    <Reference Include="Loupe.Extensibility, Version=4.9.0.0, Culture=neutral, PublicKeyToken=ca42a1ee8d2e42d3, processorArchitecture=MSIL">
+      <HintPath>..\packages\Loupe.Extensibility.4.9.5\lib\net20\Loupe.Extensibility.dll</HintPath>
+    </Reference>
+    <Reference Include="Manoli.Utils.CSharpFormat, Version=2.0.255.0, Culture=neutral, PublicKeyToken=ca42a1ee8d2e42d3, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Dependencies\Manoli.Utils.CSharpFormat.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="SourceGrid, Version=4.11.3286.32154, Culture=neutral, PublicKeyToken=df6f5e538749e85d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Dependencies\SourceGrid.dll</HintPath>
+    </Reference>
+    <Reference Include="SourceGrid.Extensions, Version=4.11.3286.32155, Culture=neutral, PublicKeyToken=df6f5e538749e85d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Dependencies\SourceGrid.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.ServiceProcess" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Agent\ExportFileElement.cs" />
+    <Compile Include="Agent\LiveStreamElement.cs" />
+    <Compile Include="Agent\NetworkViewerElement.cs" />
+    <Compile Include="BindingListController.cs" />
+    <Compile Include="BindingListEx.cs" />
+    <Compile Include="Data\Encryption.cs" />
+    <Compile Include="Data\Internal\EmailTransportPackage.cs" />
+    <Compile Include="Data\ExportFileMaintenance.cs" />
+    <Compile Include="Data\FileMaintenanceBase.cs" />
+    <Compile Include="Data\Internal\FileTransportPackage.cs" />
+    <Compile Include="Data\SessionCriteriaPredicate.cs" />
+    <Compile Include="Data\Internal\TransportPackageBase.cs" />
+    <Compile Include="Data\SimplePackage.cs" />
+    <Compile Include="DistinctValueList.cs" />
+    <Compile Include="FilteredBindingList.cs" />
+    <Compile Include="IBindingListListener.cs" />
+    <Compile Include="IDynamicDataSource.cs" />
+    <Compile Include="ListChangeBuffer.cs" />
+    <Compile Include="ItemListFilter.cs" />
+    <Compile Include="Messaging\Export\CsvFileMessenger.cs" />
+    <Compile Include="Messaging\Export\ExportFileMessengerConfiguration.cs" />
+    <Compile Include="Messaging\LocalServerDiscoveryFile.cs" />
+    <Compile Include="Messaging\LocalServerDiscoveryFileMonitor.cs" />
+    <Compile Include="Messaging\Net\ClockDriftMessage.cs" />
+    <Compile Include="Messaging\Net\IRemoteViewerConnection.cs" />
+    <Compile Include="Messaging\Net\GetSessionHeadersCommandMessage.cs" />
+    <Compile Include="Messaging\Net\NetworkClient.cs" />
+    <Compile Include="Messaging\Net\PacketStreamStartCommandMessage.cs" />
+    <Compile Include="Messaging\Net\PauseSessionHeadersCommandMessage.cs" />
+    <Compile Include="Messaging\Net\ResumeSessionHeadersCommandMessage.cs" />
+    <Compile Include="Messaging\Net\SendSessionCommandMessage.cs" />
+    <Compile Include="Messaging\Net\NetworkMessageTypeCodes.cs" />
+    <Compile Include="Monitor\ApplicationUser.cs" />
+    <Compile Include="Monitor\ApplicationUserCollection.cs" />
+    <Compile Include="Monitor\Internal\ApplicationUserPacket.cs" />
+    <Compile Include="Monitor\Internal\LogMessageEnumerable.cs" />
+    <Compile Include="Monitor\Internal\LogMessageEnumerator.cs" />
+    <Compile Include="Monitor\UserResolutionNotifier.cs" />
+    <Compile Include="Monitor\ResolveUserEventArgs.cs" />
+    <Compile Include="Monitor\Windows\Internal\ToolStripTextBoxDisposeHelper.cs" />
+    <Compile Include="Server\Client\ClientLogger.cs" />
+    <Compile Include="Server\Client\LiveSessionSubscriber.cs" />
+    <Compile Include="Messaging\NetworkWriter.cs" />
+    <Compile Include="Messaging\NetworkMessenger.cs" />
+    <Compile Include="Messaging\NetworkMessengerConfiguration.cs" />
+    <Compile Include="Messaging\Net\LiveViewStartCommandMessage.cs" />
+    <Compile Include="Messaging\Net\LiveViewStopCommandMessage.cs" />
+    <Compile Include="Messaging\Net\NetworkMessage.cs" />
+    <Compile Include="Messaging\Net\NetworkSerializer.cs" />
+    <Compile Include="Messaging\Net\RegisterAgentCommandMessage.cs" />
+    <Compile Include="Messaging\Net\RegisterAnalystCommandMessage.cs" />
+    <Compile Include="Messaging\Net\SessionClosedMessage.cs" />
+    <Compile Include="Messaging\Net\SessionHeaderMessage.cs" />
+    <Compile Include="Agent\AutoSendConsentElement.cs" />
+    <Compile Include="Agent\EmailElement.cs" />
+    <Compile Include="Agent\PropertiesCollection.cs" />
+    <Compile Include="Agent\PropertyElement.cs" />
+    <Compile Include="Agent\ServerElement.cs" />
+    <Compile Include="Agent\SessionFileElement.cs" />
+    <Compile Include="Agent\ListenerElement.cs" />
+    <Compile Include="Agent\PackagerElement.cs" />
+    <Compile Include="Agent\PublisherElement.cs" />
+    <Compile Include="Agent\ViewerElement.cs" />
+    <Compile Include="Data\AutoSendConsent.cs" />
+    <Compile Include="Data\Internal\RepositoryPublishEngine.cs" />
+    <Compile Include="Data\NewSessionsEventArgs.cs" />
+    <Compile Include="ExceptionSourceProvider.cs" />
+    <Compile Include="GibraltarDatabaseException.cs" />
+    <Compile Include="GibraltarPacketVersionException.cs" />
+    <Compile Include="GibraltarStackInfoException.cs" />
+    <Compile Include="Data\GLFReader.cs" />
+    <Compile Include="Data\IndexUpdate.cs" />
+    <Compile Include="Messaging\LogMessageNotifyEventArgs.cs" />
+    <Compile Include="Messaging\NotificationEventArgs.cs" />
+    <Compile Include="Messaging\Notifier.cs" />
+    <Compile Include="Monitor\AgentConfiguration.cs" />
+    <Compile Include="Monitor\Analysis.cs" />
+    <Compile Include="Monitor\AutoSendConsentConfiguration.cs" />
+    <Compile Include="Monitor\BasicLogMessage.cs" />
+    <Compile Include="Monitor\Comment.cs" />
+    <Compile Include="Monitor\CommentCollection.cs" />
+    <Compile Include="Monitor\DataExtension.cs" />
+    <Compile Include="Monitor\DataExtensionCollection.cs" />
+    <Compile Include="Monitor\DataMarker.cs" />
+    <Compile Include="Monitor\DataMarkerCollection.cs" />
+    <Compile Include="Monitor\DetailLogMessage.cs" />
+    <Compile Include="Monitor\EmailConfiguration.cs" />
+    <Compile Include="Monitor\ExceptionDisplayRequest.cs" />
+    <Compile Include="Monitor\ExceptionPolicy.cs" />
+    <Compile Include="Monitor\Internal\ISessionPacketCache.cs" />
+    <Compile Include="Monitor\SessionFileInfo.cs" />
+    <Compile Include="Monitor\Listener.cs" />
+    <Compile Include="Monitor\LocalLogMessage.cs" />
+    <Compile Include="Monitor\LocalRepository.cs" />
+    <Compile Include="Monitor\LogInitializingEventArgs.cs" />
+    <Compile Include="Monitor\LogMessage.cs" />
+    <Compile Include="Monitor\LogMessageBase.cs" />
+    <Compile Include="Monitor\LogMessageCollection.cs" />
+    <Compile Include="Monitor\LogMessageGroup.cs" />
+    <Compile Include="Monitor\LogMessageGroupCollection.cs" />
+    <Compile Include="Monitor\LogMessageTree.cs" />
+    <Compile Include="Monitor\Marker.cs" />
+    <Compile Include="Monitor\MarkerCollection.cs" />
+    <Compile Include="Monitor\MessageFilterEventArgs.cs" />
+    <Compile Include="Monitor\MessageSourceProvider.cs" />
+    <Compile Include="Monitor\Net\ConsoleListener.cs" />
+    <Compile Include="Messaging\LiveStreamConfiguration.cs" />
+    <Compile Include="Monitor\Net\TracePublisher.cs" />
+    <Compile Include="Data\SessionHeader.cs" />
+    <Compile Include="Messaging\ServerConfiguration.cs" />
+    <Compile Include="Monitor\Session.cs" />
+    <Compile Include="Monitor\SessionAssemblyInfo.cs" />
+    <Compile Include="Monitor\CollectionAction.cs" />
+    <Compile Include="Monitor\CollectionChangedEventArgs.cs" />
+    <Compile Include="Monitor\IMessageSourceProvider.cs" />
+    <Compile Include="Monitor\Internal\AssemblyInfoPacket.cs" />
+    <Compile Include="Monitor\Internal\GLFWriter.cs" />
+    <Compile Include="Data\RepositoryMaintenance.cs" />
+    <Compile Include="Monitor\TextParse.cs" />
+    <Compile Include="Monitor\LogWriteMode.cs" />
+    <Compile Include="Monitor\Net\CLRListener.cs" />
+    <Compile Include="Monitor\PackagerConfiguration.cs" />
+    <Compile Include="Monitor\SessionCollection.cs" />
+    <Compile Include="Monitor\SessionFragment.cs" />
+    <Compile Include="Monitor\SessionFragmentCollection.cs" />
+    <Compile Include="Monitor\SessionSummary.cs" />
+    <Compile Include="Monitor\Internal\SessionSummaryCollection.cs" />
+    <Compile Include="Monitor\SimpleLogMessage.cs" />
+    <Compile Include="Monitor\ThreadInfoCollection.cs" />
+    <Compile Include="Monitor\Windows\AutoSendConsentDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Monitor\Windows\AutoSendConsentDialog.Designer.cs">
+      <DependentUpon>AutoSendConsentDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Monitor\Windows\Internal\AlertDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Monitor\Windows\Internal\AlertDialog.Designer.cs">
+      <DependentUpon>AlertDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Monitor\Windows\Internal\ExceptionListViewer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Monitor\Windows\Internal\ExceptionListViewer.Designer.cs">
+      <DependentUpon>ExceptionListViewer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Monitor\Windows\Internal\GridViewer.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Monitor\Windows\Internal\GridViewerRows.cs" />
+    <Compile Include="Monitor\Windows\Internal\PackagerSequencer.cs" />
+    <Compile Include="Monitor\Windows\Internal\UIException.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Monitor\Windows\Internal\UIException.Designer.cs">
+      <DependentUpon>UIException.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Monitor\Windows\Internal\UIMessageDetails.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Monitor\Windows\Internal\UIMessageDetails.Designer.cs">
+      <DependentUpon>UIMessageDetails.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Monitor\Windows\Internal\UIThreadTrackViewer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Monitor\Windows\Internal\UIThreadTrackViewer.Designer.cs">
+      <DependentUpon>UIThreadTrackViewer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Monitor\Windows\UIExceptionDetail.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Monitor\Windows\UIExceptionDetail.Designer.cs">
+      <DependentUpon>UIExceptionDetail.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Monitor\Windows\UILogMessage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Monitor\Windows\UILogMessage.Designer.cs">
+      <DependentUpon>UILogMessage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Monitor\Windows\UILogMessageDetail.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Monitor\Windows\UILogMessageDetail.Designer.cs">
+      <DependentUpon>UILogMessageDetail.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Monitor\Windows\UISourceViewer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Monitor\Windows\UISourceViewer.Designer.cs">
+      <DependentUpon>UISourceViewer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Monitor\Windows\UIThreadsTracker.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Monitor\Windows\UIThreadsTracker.Designer.cs">
+      <DependentUpon>UIThreadsTracker.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Server\Client\LiveSessionPublisher.cs" />
+    <Compile Include="Data\Internal\RepositoryPublishClient.cs" />
+    <Compile Include="Server\Client\RequestedSessionsGetRequest.cs" />
+    <Compile Include="Server\Client\SessionFilesGetRequest.cs" />
+    <Compile Include="Server\Client\SessionHeaderEventArgs.cs" />
+    <Compile Include="Server\Client\SessionHeaderUploadRequest.cs" />
+    <Compile Include="Server\Client\SessionMarkComplete.cs" />
+    <Compile Include="Server\Client\SessionUploadRequest.cs" />
+    <Compile Include="Server\Client\SslProtocolExtensions.cs" />
+    <Compile Include="Server\Data\DataConverter.cs" />
+    <Compile Include="Windows\UI\IUIWizardSequencer.cs" />
+    <Compile Include="Monitor\Windows\LogMessageColumn.cs" />
+    <Compile Include="Monitor\Windows\MessageChangedEventArgs.cs" />
+    <Compile Include="Monitor\Windows\Internal\MessageFilter.cs" />
+    <Compile Include="Monitor\Windows\LiveLogViewer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Monitor\Windows\LiveLogViewer.Designer.cs">
+      <DependentUpon>LiveLogViewer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Monitor\Windows\Internal\LiveViewerForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Monitor\Windows\Internal\LiveViewerForm.Designer.cs">
+      <DependentUpon>LiveViewerForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UIResources.Designer.cs">
+      <DependentUpon>UIResources.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Windows\UI\IUIWizardFinishPage.cs" />
+    <Compile Include="Windows\UI\IUIWizardInputPage.cs" />
+    <Compile Include="Windows\UI\IUIWizardPage.cs" />
+    <Compile Include="Monitor\Windows\Internal\PackagerRequest.cs" />
+    <Compile Include="Monitor\Windows\Internal\UIPackagerCriteria.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Monitor\Windows\Internal\UIPackagerCriteria.Designer.cs">
+      <DependentUpon>UIPackagerCriteria.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Monitor\Windows\Internal\UIPackagerFinish.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Monitor\Windows\Internal\UIPackagerFinish.Designer.cs">
+      <DependentUpon>UIPackagerFinish.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Monitor\Windows\Internal\UIPackagerTransport.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Monitor\Windows\Internal\UIPackagerTransport.Designer.cs">
+      <DependentUpon>UIPackagerTransport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\UI\Internal\UIWizardResultPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Windows\UI\Internal\UIWizardResultPage.Designer.cs">
+      <DependentUpon>UIWizardResultPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\UI\WizardEngine.cs" />
+    <Compile Include="Monitor\Windows\UIPackagerDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Monitor\Windows\UIPackagerDialog.Designer.cs">
+      <DependentUpon>UIPackagerDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\UI\UIWizardDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\UI\UIWizardDialog.Designer.cs">
+      <DependentUpon>UIWizardDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Data\OperationMetric.cs" />
+    <Compile Include="Data\Packager.cs" />
+    <Compile Include="Data\PackageSendEventArgs.cs" />
+    <Compile Include="Data\SessionCriteria.cs" />
+    <Compile Include="Messaging\CommandPacket.cs" />
+    <Compile Include="Messaging\FileMessenger.cs" />
+    <Compile Include="Messaging\FileMessengerConfiguration.cs" />
+    <Compile Include="Messaging\IMessenger.cs" />
+    <Compile Include="Messaging\MessagingCommand.cs" />
+    <Compile Include="Messaging\MessengerBase.cs" />
+    <Compile Include="Messaging\MessengerConfiguration.cs" />
+    <Compile Include="Messaging\MonitorMessenger.cs" />
+    <Compile Include="Messaging\PacketEnvelope.cs" />
+    <Compile Include="Messaging\Publisher.cs" />
+    <Compile Include="Monitor\PublisherConfiguration.cs" />
+    <Compile Include="Monitor\Internal\AnalysisPacket.cs" />
+    <Compile Include="Monitor\Internal\AnalysisPacketFactory.cs" />
+    <Compile Include="Monitor\Internal\CommentPacket.cs" />
+    <Compile Include="Monitor\Internal\ExceptionInfoPacket.cs" />
+    <Compile Include="Monitor\Internal\GibraltarCachedPacket.cs" />
+    <Compile Include="Monitor\Internal\GibraltarPacket.cs" />
+    <Compile Include="Messaging\ICachedMessengerPacket.cs" />
+    <Compile Include="Messaging\IMessengerPacket.cs" />
+    <Compile Include="Monitor\Internal\IPacketObjectFactory.cs" />
+    <Compile Include="Monitor\Internal\LogMessagePacketFactory.cs" />
+    <Compile Include="Monitor\Internal\MarkerPacket.cs" />
+    <Compile Include="Monitor\Internal\MetricDefinitionPacketFactory.cs" />
+    <Compile Include="Monitor\Internal\MetricPacketFactory.cs" />
+    <Compile Include="Monitor\Internal\SessionClosePacket.cs" />
+    <Compile Include="Monitor\Internal\SessionFragmentPacket.cs" />
+    <Compile Include="Monitor\Internal\SessionPacketFactory.cs" />
+    <Compile Include="Monitor\Internal\SessionSummaryPacket.cs" />
+    <Compile Include="Monitor\Internal\ThreadInfoPacket.cs" />
+    <Compile Include="Monitor\Internal\MetricSamplePacketFactory.cs" />
+    <Compile Include="Monitor\CustomSampledMetricDefinition.cs" />
+    <Compile Include="Monitor\Internal\CustomSampledMetricDefinitionPacket.cs" />
+    <Compile Include="Monitor\CustomSampledMetricDictionary.cs" />
+    <Compile Include="Monitor\Internal\CustomSampledMetricPacket.cs" />
+    <Compile Include="Monitor\CustomSampledMetricSample.cs" />
+    <Compile Include="Monitor\CustomSampledMetric.cs" />
+    <Compile Include="Monitor\CustomSampledMetricSampleCollection.cs" />
+    <Compile Include="Monitor\Internal\CustomSampledMetricSamplePacket.cs" />
+    <Compile Include="Monitor\Net\ExceptionListener.cs" />
+    <Compile Include="Monitor\ListenerConfiguration.cs" />
+    <Compile Include="Monitor\Internal\DataExtensionPacket.cs" />
+    <Compile Include="Monitor\EventMetric.cs" />
+    <Compile Include="Monitor\EventMetricCollection.cs" />
+    <Compile Include="Monitor\Internal\EventMetricPacket.cs" />
+    <Compile Include="Monitor\EventMetricSample.cs" />
+    <Compile Include="Monitor\EventMetricSampleCollection.cs" />
+    <Compile Include="Monitor\Internal\EventMetricSamplePacket.cs" />
+    <Compile Include="Monitor\EventMetricValueDefinition.cs" />
+    <Compile Include="Monitor\EventMetricValueDefinitionCollection.cs" />
+    <Compile Include="Monitor\Internal\EventMetricValueDefinitionPacket.cs" />
+    <Compile Include="Monitor\EventMetricDefinition.cs" />
+    <Compile Include="Monitor\Internal\EventMetricDefinitionPacket.cs" />
+    <Compile Include="Monitor\Internal\IDataObject.cs" />
+    <Compile Include="Monitor\Metric.cs" />
+    <Compile Include="Monitor\MetricDefinition.cs" />
+    <Compile Include="Monitor\MetricDefinitionCollection.cs" />
+    <Compile Include="Monitor\Internal\MetricDefinitionPacket.cs" />
+    <Compile Include="Monitor\MetricCollection.cs" />
+    <Compile Include="Monitor\Internal\MetricPacket.cs" />
+    <Compile Include="Monitor\Internal\MetricPacketDictionary.cs" />
+    <Compile Include="Monitor\MetricSample.cs" />
+    <Compile Include="Monitor\MetricSampleCollection.cs" />
+    <Compile Include="Monitor\Internal\MetricSamplePacket.cs" />
+    <Compile Include="Monitor\MetricValue.cs" />
+    <Compile Include="Monitor\MetricValueCollection.cs" />
+    <Compile Include="Monitor\Internal\IDisplayable.cs" />
+    <Compile Include="Monitor\Log.cs" />
+    <Compile Include="Monitor\Net\LogListener.cs" />
+    <Compile Include="Monitor\Internal\LogMessagePacket.cs" />
+    <Compile Include="Monitor\PerfCounterMetric.cs" />
+    <Compile Include="Monitor\PerfCounterMetricDefinition.cs" />
+    <Compile Include="Monitor\Internal\PerfCounterMetricDefinitionPacket.cs" />
+    <Compile Include="Monitor\Internal\PerfCounterMetricPacket.cs" />
+    <Compile Include="Monitor\PerfCounterMetricCollection.cs" />
+    <Compile Include="Monitor\PerfCounterMetricSample.cs" />
+    <Compile Include="Monitor\PerfCounterMetricSampleCollection.cs" />
+    <Compile Include="Monitor\Internal\PerfCounterMetricSamplePacket.cs" />
+    <Compile Include="Monitor\PerfCounterCollection.cs" />
+    <Compile Include="Monitor\Net\PerformanceMonitor.cs" />
+    <Compile Include="Monitor\Net\ProcessMonitor.cs" />
+    <Compile Include="Monitor\SampledMetric.cs" />
+    <Compile Include="Monitor\SampledMetricDefinition.cs" />
+    <Compile Include="Monitor\Internal\SampledMetricDefinitionPacket.cs" />
+    <Compile Include="Monitor\SampledMetricCollection.cs" />
+    <Compile Include="Monitor\Internal\SampledMetricPacket.cs" />
+    <Compile Include="Monitor\SampledMetricSample.cs" />
+    <Compile Include="Monitor\Internal\SampledMetricSamplePacket.cs" />
+    <Compile Include="Monitor\ThreadInfo.cs" />
+    <Compile Include="Messaging\ViewerMessengerConfiguration.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{40FEE87C-13AA-4F81-9B9D-462E6E39300F}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Serialization\Serialization.csproj">
+      <Project>{7E2755B6-BE4E-4535-99D0-8EDCA06C97EC}</Project>
+      <Name>Serialization</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Server.Client.Net20\Server.Client.Net20.csproj">
+      <Project>{23a44549-4f9b-45f4-8b9d-a92bc62dd6ed}</Project>
+      <Name>Server.Client.Net20</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Monitor\Windows\LiveLogViewer.resx">
+      <DependentUpon>LiveLogViewer.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Monitor\Windows\Internal\LiveViewerForm.resx">
+      <DependentUpon>LiveViewerForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UIResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>UIResources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+      <CustomToolNamespace>Gibraltar.Monitor.Windows</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Monitor\Windows\Internal\UIPackagerCriteria.resx">
+      <DependentUpon>UIPackagerCriteria.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Monitor\Windows\Internal\UIPackagerFinish.resx">
+      <DependentUpon>UIPackagerFinish.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Monitor\Windows\Internal\UIPackagerTransport.resx">
+      <DependentUpon>UIPackagerTransport.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Windows\UI\Internal\UIWizardResultPage.resx">
+      <DependentUpon>UIWizardResultPage.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Windows\UI\UIWizardDialog.resx">
+      <DependentUpon>UIWizardDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+    <None Include="Resources\CancelSearch.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Code.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Copy.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\DeleteMessages.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Download.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\search.png" />
+    <None Include="Resources\Save.bmp" />
+    <None Include="Resources\Play.png" />
+    <None Include="Resources\Pause.png" />
+    <None Include="Resources\Pause.bmp" />
+    <None Include="Resources\FastReverse.png" />
+    <None Include="Resources\FastForward.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\error.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Warning.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\info.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Refresh.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Repeat.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Monitor\Windows\Internal\AlertDialog.resx">
+      <DependentUpon>AlertDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Monitor\Windows\Internal\ExceptionListViewer.resx">
+      <DependentUpon>ExceptionListViewer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Monitor\Windows\UIPackagerDialog.resx">
+      <DependentUpon>UIPackagerDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="Resources\RepeatHS.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Monitor\Windows\AutoSendConsentDialog.resx">
+      <DependentUpon>AutoSendConsentDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Monitor\Windows\Internal\UIException.resx">
+      <DependentUpon>UIException.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Monitor\Windows\Internal\UIMessageDetails.resx">
+      <DependentUpon>UIMessageDetails.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Monitor\Windows\Internal\UIThreadTrackViewer.resx">
+      <DependentUpon>UIThreadTrackViewer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Monitor\Windows\UIExceptionDetail.resx">
+      <DependentUpon>UIExceptionDetail.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Monitor\Windows\UILogMessage.resx">
+      <DependentUpon>UILogMessage.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Monitor\Windows\UILogMessageDetail.resx">
+      <DependentUpon>UILogMessageDetail.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Monitor\Windows\UISourceViewer.resx">
+      <DependentUpon>UISourceViewer.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Monitor\Windows\UIThreadsTracker.resx">
+      <DependentUpon>UIThreadsTracker.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="Resources\packaging-wizard-corner.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+    <PreBuildEvent>
+    </PreBuildEvent>
+  </PropertyGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties DocumentXCommentEditorState="&lt;HtmlEditState&gt;&#xA;  &lt;Attributes /&gt;&#xA;&lt;/HtmlEditState&gt;" />
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

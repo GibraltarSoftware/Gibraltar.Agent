@@ -1,0 +1,236 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{40FEE87C-13AA-4F81-9B9D-462E6E39300F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Gibraltar</RootNamespace>
+    <AssemblyName>Loupe.Common</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\..\Loupe.Agent.snk</AssemblyOriginatorKeyFile>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DocumentationFile>bin\Debug\Loupe.Common.xml</DocumentationFile>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <LangVersion>7.0</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\Loupe.Common.xml</DocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <LangVersion>7.0</LangVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BufferManager.cs" />
+    <Compile Include="CommonCentralLogic.cs" />
+    <Compile Include="Data\CollectingExtentBase.cs" />
+    <Compile Include="Data\CollectionExtentBase.cs" />
+    <Compile Include="Data\CollectionExtentPreamble.cs" />
+    <Compile Include="Data\DataSetTools.cs" />
+    <Compile Include="Data\ExtentBase.cs" />
+    <Compile Include="Data\ExtentFactoryBase.cs" />
+    <Compile Include="Data\ExtentPreamble.cs" />
+    <Compile Include="Data\ExtentTypeCode.cs" />
+    <Compile Include="Data\FileExtentBase.cs" />
+    <Compile Include="Data\FileLock.cs" />
+    <Compile Include="Data\InterprocessLock.cs" />
+    <Compile Include="Data\InterprocessLockManager.cs" />
+    <Compile Include="Data\InterprocessLockProxy.cs" />
+    <Compile Include="Data\MD5Core.cs" />
+    <Compile Include="Data\PathManager.cs" />
+    <Compile Include="Data\PathType.cs" />
+    <Compile Include="Data\Win32Helper.cs" />
+    <Compile Include="DisposableList.cs" />
+    <Compile Include="ErrorNotificationEventArgs.cs" />
+    <Compile Include="ErrorNotifier.cs" />
+    <Compile Include="ExceptionPolicy.cs" />
+    <Compile Include="Data\Field.cs" />
+    <Compile Include="GibraltarException.cs" />
+    <Compile Include="Data\BinarySerializer.cs" />
+    <Compile Include="Data\FileHeader.cs" />
+    <Compile Include="AsynchronousTask.cs" />
+    <Compile Include="AsyncTaskArgs.cs" />
+    <Compile Include="AsyncTaskResult.cs" />
+    <Compile Include="AsyncTaskResultEventArgs.cs" />
+    <Compile Include="Data\ILogicNode.cs" />
+    <Compile Include="Data\LogicNode.cs" />
+    <Compile Include="Data\LogicTree.cs" />
+    <Compile Include="Data\LogicTreeExpression.cs" />
+    <Compile Include="Data\MatchOperationType.cs" />
+    <Compile Include="EmailMessage.cs" />
+    <Compile Include="FileReferenceCollection.cs" />
+    <Compile Include="FileReference.cs" />
+    <Compile Include="FileSystemTools.cs" />
+    <Compile Include="NullOrEmptyStringComparer.cs" />
+    <Compile Include="OSVersionInfo.cs" />
+    <Compile Include="PipeStream.cs" />
+    <Compile Include="PrivateTaskErrorEventArgs.cs" />
+    <Compile Include="PrivateThreadPool.cs" />
+    <Compile Include="Server\Client\IServerConfiguration.cs" />
+    <Compile Include="Server\Client\NetworkConnectionOptions.cs" />
+    <Compile Include="SimpleTimer.cs" />
+    <Compile Include="SingletonArbitrator.cs" />
+    <Compile Include="StringReference.cs" />
+    <Compile Include="ContextSummary.cs" />
+    <Compile Include="SyncBindingList.cs" />
+    <Compile Include="Windows\UI\FormUserPreferences.cs" />
+    <Compile Include="Windows\UI\IUIView.cs" />
+    <Compile Include="Windows\UI\SelectedItemsEventArgs.cs" />
+    <Compile Include="Windows\UI\WaitCursorManager.cs" />
+    <Compile Include="Windows\Arguments.cs" />
+    <Compile Include="Windows\UI\FancyButtons.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>FancyButtons.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\UI\FormTools.cs" />
+    <Compile Include="NameValuePair.cs" />
+    <Compile Include="ProgressMonitor.cs" />
+    <Compile Include="ProgressMonitorEventArgs.cs" />
+    <Compile Include="ProgressMonitorStack.cs" />
+    <Compile Include="ProgressMonitorStackEventArgs.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Windows\UI\GibraltarLogo.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Windows\UI\GibraltarLogo.Designer.cs">
+      <DependentUpon>GibraltarLogo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\UI\GreenButton.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Windows\UI\GreenButton.Designer.cs">
+      <DependentUpon>GreenButton.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\UI\SessionIcons.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SessionIcons.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\UI\UICommandLink.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Windows\UI\UICommandLink.Designer.cs">
+      <DependentUpon>UICommandLink.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Windows\UI\FancyButtons.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>FancyButtons.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Windows\UI\GibraltarLogo.resx">
+      <DependentUpon>GibraltarLogo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Windows\UI\GreenButton.resx">
+      <DependentUpon>GreenButton.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Windows\UI\SessionIcons.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>SessionIcons.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Windows\UI\UICommandLink.resx">
+      <DependentUpon>UICommandLink.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CriticalError.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Error.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Information.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Verbose.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\warning.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\gibraltar-small-logo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\green-button.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\green-button-highlight.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

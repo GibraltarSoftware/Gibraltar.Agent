@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Gibraltar.Monitor.Serialization.Internal.SimplePacketFactory">
+    <Position X="6.25" Y="2.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAgAAAAAAAAQAAAAAAABgAAAAAA=</HashCode>
+      <FileName>Serialization\Internal\SimplePacketFactory.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Gibraltar.Monitor.Serialization.Internal.GenericPacketFactory">
+    <Position X="6.25" Y="5.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAA=</HashCode>
+      <FileName>Serialization\Internal\GenericPacketFactory.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Gibraltar.Monitor.Serialization.PacketReader">
+    <Position X="3.25" Y="3.25" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AACEAAAABAAAAAAggAAAAABoAAAAAAAAIAAAAAAAUAA=</HashCode>
+      <FileName>Serialization\PacketReader.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Gibraltar.Monitor.Serialization.PacketCache">
+    <Position X="8.75" Y="0.75" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAEAAAABAACAAAAAQAAAAAAAgAAIIAAABAAAA=</HashCode>
+      <FileName>Serialization\PacketCache.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Interface Name="Gibraltar.Monitor.Serialization.IPacket">
+    <Position X="0.5" Y="0.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAACAAAAAAAAQAAAAAAAAAACAAAAAAAA=</HashCode>
+      <FileName>Serialization\IPacket.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Gibraltar.Monitor.Serialization.IPacketFactory">
+    <Position X="6.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAA=</HashCode>
+      <FileName>Serialization\IPacketFactory.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Gibraltar.Monitor.Serialization.IPacketReader">
+    <Position X="3.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAAAAAAgAAAAAABgAAAAAAAAIAAAAAAAEAA=</HashCode>
+      <FileName>Serialization\IPacketReader.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Gibraltar.Monitor.Serialization.ICachedPacket">
+    <Position X="1.25" Y="2.75" Width="1.5" />
+    <InheritanceLine Type="Gibraltar.Monitor.Serialization.IPacket" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="0.75" Y="1.988" />
+        <Point X="0.75" Y="3.419" />
+        <Point X="1.25" Y="3.419" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Serialization\ICachedPacket.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Gibraltar.Monitor.Serialization.IDynamicPacket">
+    <Position X="1.25" Y="4.25" Width="1.5" />
+    <InheritanceLine Type="Gibraltar.Monitor.Serialization.IPacket" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="0.75" Y="1.988" />
+        <Point X="0.75" Y="4.919" />
+        <Point X="1.25" Y="4.919" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Serialization\IDynamicPacket.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

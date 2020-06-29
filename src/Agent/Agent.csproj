@@ -1,0 +1,207 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{1A2BBCAF-22CD-4C1B-8306-78CA3732867A}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Gibraltar.Agent</RootNamespace>
+    <AssemblyName>Loupe.Agent.Internal</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\..\Loupe.Agent.snk</AssemblyOriginatorKeyFile>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\Loupe.Agent.Internal.xml</DocumentationFile>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\Loupe.Agent.Internal.xml</DocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Loupe.Extensibility, Version=4.9.0.0, Culture=neutral, PublicKeyToken=ca42a1ee8d2e42d3, processorArchitecture=MSIL">
+      <HintPath>..\packages\Loupe.Extensibility.4.9.5\lib\net20\Loupe.Extensibility.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ApplicationType.cs" />
+    <Compile Include="ApplicationUserResolutionEventArgs.cs" />
+    <Compile Include="AsyncTaskResult.cs" />
+    <Content Include="app.config.transform" />
+    <None Include="AutoSendConsent.cs" />
+    <Compile Include="Configuration\AgentConfiguration.cs" />
+    <Compile Include="Configuration\AutoSendConsentConfiguration.cs" />
+    <Compile Include="Configuration\EmailConfiguration.cs" />
+    <Compile Include="Configuration\ExportFileConfiguration.cs" />
+    <Compile Include="Configuration\NetworkViewerConfiguration.cs" />
+    <Compile Include="Configuration\ServerConfiguration.cs" />
+    <Compile Include="Configuration\SessionFileConfiguration.cs" />
+    <Compile Include="Configuration\ListenerConfiguration.cs" />
+    <Compile Include="Configuration\PackagerConfiguration.cs" />
+    <Compile Include="Configuration\PublisherConfiguration.cs" />
+    <Compile Include="Configuration\ViewerConfiguration.cs" />
+    <Compile Include="Data\IApplicationUser.cs" />
+    <Compile Include="Data\IExceptionInfo.cs" />
+    <Compile Include="Data\ILogMessage.cs" />
+    <Compile Include="Data\ILogMessageCollection.cs" />
+    <Compile Include="IMessageSourceProvider.cs" />
+    <Compile Include="Internal\ApplicationUser.cs" />
+    <Compile Include="Internal\ExceptionInfo.cs" />
+    <Compile Include="Internal\LogMessageInfoCollection.cs" />
+    <Compile Include="Internal\LogMessageInfo.cs" />
+    <Compile Include="Internal\MessageSourceProvider.cs" />
+    <Compile Include="Internal\SessionSummaryPredicate.cs" />
+    <Compile Include="Internal\WebAuthenticationProvider.cs" />
+    <Compile Include="Log.cs" />
+    <Compile Include="Logging\ExceptionSourceProvider.cs" />
+    <Compile Include="Logging\MessageSourceProvider.cs" />
+    <Compile Include="LogInitializingEventArgs.cs" />
+    <Compile Include="LogMessageFilterEventArgs.cs" />
+    <Compile Include="LogMessageSeverity.cs" />
+    <Compile Include="LogWriteMode.cs" />
+    <Compile Include="LogListener.cs" />
+    <Compile Include="Metrics\EventMetric.cs" />
+    <Compile Include="Metrics\EventMetricAttribute.cs" />
+    <Compile Include="Metrics\EventMetricCollection.cs" />
+    <Compile Include="Metrics\EventMetricDefinition.cs" />
+    <Compile Include="Metrics\EventMetricSample.cs" />
+    <Compile Include="Metrics\EventMetricValueAttribute.cs" />
+    <Compile Include="Metrics\EventMetricValueDefinition.cs" />
+    <Compile Include="Metrics\EventMetricValueDefinitionCollection.cs" />
+    <Compile Include="Metrics\Internal\IMetricDefinition.cs" />
+    <Compile Include="Metrics\Internal\MetricDefinitionCollection.cs" />
+    <Compile Include="Metrics\SamplingInterval.cs" />
+    <Compile Include="Metrics\SampledMetric.cs" />
+    <Compile Include="Metrics\SampledMetricAttribute.cs" />
+    <Compile Include="Metrics\Internal\SampledMetricCollection.cs" />
+    <Compile Include="Metrics\SampledMetricDefinition.cs" />
+    <Compile Include="Metrics\SampledMetricValueAttribute.cs" />
+    <Compile Include="Metrics\SamplingType.cs" />
+    <Compile Include="Metrics\SummaryFunction.cs" />
+    <Compile Include="LogMessageAlertEventArgs.cs" />
+    <Compile Include="Net\IServerAuthenticationProvider.cs" />
+    <Compile Include="Net\BasicAuthenticationProvider.cs" />
+    <Compile Include="Packager.cs" />
+    <Compile Include="PackagerDialog.cs" />
+    <Compile Include="PackageSendEventArgs.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SessionCriteria.cs" />
+    <Compile Include="SessionStatus.cs" />
+    <Compile Include="SessionSummary.cs" />
+    <Compile Include="Windows\LiveLogViewer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Windows\LiveLogViewer.Designer.cs">
+      <DependentUpon>LiveLogViewer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\MessageChangedEventArgs.cs" />
+    <None Include="Loupe.Agent.nuspec" />
+    <Content Include="web.config.transform" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{40FEE87C-13AA-4F81-9B9D-462E6E39300F}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Core\Core.csproj">
+      <Project>{03B16B7D-594A-4EAC-908B-CC9969F7D647}</Project>
+      <Name>Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Server.Client.Net20\Server.Client.Net20.csproj">
+      <Project>{23a44549-4f9b-45f4-8b9d-a92bc62dd6ed}</Project>
+      <Name>Server.Client.Net20</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Windows\LiveLogViewer.resx">
+      <DependentUpon>LiveLogViewer.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <PropertyGroup>
+    <PostBuildEvent>$(ProjectDir)..\..\tools\ilmerge /log /keyfile:$(ProjectDir)..\..\Loupe.Agent.snk /internalize /closed /targetplatform:v2 /out:$(TargetDir)Gibraltar.Agent.dll $(TargetPath) $(TargetDir)Loupe.Extensibility.dll $(TargetDir)Loupe.Common.dll $(TargetDir)Loupe.Serialization.dll $(TargetDir)Loupe.Server.Client.Net20.dll $(TargetDir)Loupe.Core.dll $(ProjectDir)..\..\Dependencies\DevAge.Core.dll $(ProjectDir)..\..\Dependencies\DevAge.Windows.Forms.dll $(ProjectDir)..\..\Dependencies\SourceGrid.dll $(ProjectDir)..\..\Dependencies\SourceGrid.Extensions.dll $(ProjectDir)..\..\Dependencies\Ionic.Zip.Reduced.dll $(ProjectDir)..\..\Dependencies\Manoli.Utils.CSharpFormat.dll $(ProjectDir)..\..\Dependencies\CsvHelper.dll
+copy $(TargetDir)$(TargetName).xml $(TargetDir)Gibraltar.Agent.xml
+powershell.exe -command "&amp; {(Get-Content $(TargetDir)$(TargetName).xml) | Foreach-Object {$_ -replace '&lt;name&gt;Loupe.Agent.Internal', '&lt;name&gt;Gibraltar.Agent'} | Set-Content $(TargetDir)Gibraltar.Agent.xml}"
+if $(ConfigurationName) == Release $(ProjectDir)..\..\Tools\NuGet.exe Pack $(ProjectPath) -Symbols -Prop Configuration=Release -Exclude "**/Loupe.Agent.Internal.*"
+</PostBuildEvent>
+  </PropertyGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties DocumentXCommentEditorState="&lt;HtmlEditState&gt;&#xA;  &lt;Attributes&gt;&#xA;    &lt;Attribute key=&quot;dtscrollpos&quot; valuetype=&quot;integer&quot;&gt;0&lt;/Attribute&gt;&#xA;    &lt;Attribute key=&quot;lang_VB&quot; valuetype=&quot;string&quot;&gt;on&lt;/Attribute&gt;&#xA;    &lt;Attribute key=&quot;lang_VBUsage&quot; valuetype=&quot;string&quot;&gt;on&lt;/Attribute&gt;&#xA;    &lt;Attribute key=&quot;lang_CS&quot; valuetype=&quot;string&quot;&gt;on&lt;/Attribute&gt;&#xA;    &lt;Attribute key=&quot;lang_CPP2005&quot; valuetype=&quot;string&quot;&gt;on&lt;/Attribute&gt;&#xA;    &lt;Attribute key=&quot;inheritedMembers&quot; valuetype=&quot;string&quot;&gt;on&lt;/Attribute&gt;&#xA;    &lt;Attribute key=&quot;protectedMembers&quot; valuetype=&quot;string&quot;&gt;on&lt;/Attribute&gt;&#xA;    &lt;Attribute key=&quot;SyntaxGroup_SelectedTab&quot; valuetype=&quot;string&quot;&gt;SyntaxTab_VB&lt;/Attribute&gt;&#xA;    &lt;Attribute key=&quot;lang_Delphi&quot; valuetype=&quot;string&quot;&gt;on&lt;/Attribute&gt;&#xA;    &lt;Attribute key=&quot;lang_JScript&quot; valuetype=&quot;string&quot;&gt;on&lt;/Attribute&gt;&#xA;    &lt;Attribute key=&quot;lang_CPP&quot; valuetype=&quot;string&quot;&gt;on&lt;/Attribute&gt;&#xA;  &lt;/Attributes&gt;&#xA;&lt;/HtmlEditState&gt;" />
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>
