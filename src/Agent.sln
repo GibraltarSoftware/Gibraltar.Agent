@@ -24,6 +24,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dependencies", "Dependencie
 		..\.gitattributes = ..\.gitattributes
 		..\.gitignore = ..\.gitignore
 		..\azure-pipelines.yml = ..\azure-pipelines.yml
+		..\tools\BuildCommon.targets = ..\tools\BuildCommon.targets
 		Common Resharper Settings.DotSettings = Common Resharper Settings.DotSettings
 		..\README.md = ..\README.md
 	EndProjectSection

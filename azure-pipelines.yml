@@ -39,7 +39,7 @@ jobs:
       solution: '$(agentSolution)'
       platform: '$(buildPlatform)'
       configuration: '$(buildConfiguration)'
-      msbuildArgs: '/p:CustomVersion=$(fileVersion) /p:CustomInformationalVersion=$(fileVersion) /p:PackageVersion=$(fileVersion)'
+      msbuildArgs: '/p:CustomVersion=$(fileVersion)
   
   - task: CopyFiles@2
     inputs:
