@@ -41,6 +41,12 @@ namespace Gibraltar.Data
         private bool m_ErrorSessions;
         private bool m_WarningSessions;
 
+        /// <summary>
+        /// Create a new predicate with the provided filter criteria
+        /// </summary>
+        /// <param name="productName"></param>
+        /// <param name="applicationName"></param>
+        /// <param name="criteria"></param>
         public SessionCriteriaPredicate(string productName, string applicationName, SessionCriteria criteria)
         {
             m_ProductName = productName;
@@ -57,10 +63,24 @@ namespace Gibraltar.Data
             m_WarningSessions = ((m_Criteria & SessionCriteria.WarningSessions) == SessionCriteria.WarningSessions);
         }
 
+        /// <summary>
+        /// The simple criteria for the predicate.
+        /// </summary>
         public SessionCriteria Criteria { get { return m_Criteria; } }
+
+        /// <summary>
+        /// Optional. The name of the application to filter to.
+        /// </summary>
         public string Application { get { return m_ApplicationName; } }
+
+        /// <summary>
+        /// Optional. The name of the product to filter to.
+        /// </summary>
         public string Product { get { return m_ProductName; } }
 
+        /// <summary>
+        /// A predicate for evaluating the provided session summary.
+        /// </summary>
         public bool Predicate(ISessionSummary sessionSummary)
         {
             //see if this session matches our criteria.

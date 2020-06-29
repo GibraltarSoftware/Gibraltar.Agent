@@ -53,6 +53,9 @@ namespace Gibraltar.Serialization
         private readonly long m_Length;
         private long m_Position;
 
+        /// <summary>
+        /// Create a new buffered stream around the provided steam.
+        /// </summary>
         public BufferedMemoryStream(Stream stream)
         {
             m_FileStream = stream;
