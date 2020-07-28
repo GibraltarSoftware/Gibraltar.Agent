@@ -727,7 +727,10 @@ namespace Gibraltar.Server.Client
         public static void ValidateConfiguration(string applicationKey, bool useGibraltarService, string customerName, string server, int port, bool useSsl, string applicationBaseDirectory)
         {
             //check a special case:  There is NO configuration information to speak of.
-            if ((useGibraltarService == false) && string.IsNullOrEmpty(applicationKey) && string.IsNullOrEmpty(customerName) && string.IsNullOrEmpty(server))
+            if ((useGibraltarService == false) 
+                && string.IsNullOrEmpty(applicationKey) 
+                && string.IsNullOrEmpty(customerName) 
+                && string.IsNullOrEmpty(server))
             {
                 //no way you even tried to configure the SDS.  lets use a different message.
                 throw new InvalidOperationException("No server connection configuration could be found");

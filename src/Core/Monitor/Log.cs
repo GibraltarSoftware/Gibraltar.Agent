@@ -726,9 +726,9 @@ namespace Gibraltar.Monitor
             else if (server.UseGibraltarService)
             {
                 // Using the Loupe Service requires a customer name.
-                if (string.IsNullOrEmpty(server.CustomerName))
+                if (string.IsNullOrEmpty(server.CustomerName) && string.IsNullOrEmpty(server.ApplicationKey))
                 {
-                    message += "No customer name was provided for the Loupe Service.\r\n";
+                    message += "No API Key or customer name was provided for the Loupe Service.\r\n";
                     goodToGo = false; // Can't use Loupe Service if no customer name is configured.
                 }
             }
@@ -785,7 +785,7 @@ namespace Gibraltar.Monitor
                     return s_SendSessionsOnExit;
                 }
             }
-            [MethodImplAttribute(MethodImplOptions.NoInlining)] // Does this work here? Is it needed?
+            [MethodImpl(MethodImplOptions.NoInlining)]
             set
             {
                 SetSendSessionsOnExit(value);

@@ -247,23 +247,11 @@ namespace Gibraltar.Messaging
                 }
             }
 
-            if (string.IsNullOrEmpty(ApplicationKey))
-            {
-                ApplicationKey = null;
-            }
-            else
-            {
-                ApplicationKey = ApplicationKey.Trim();
-            }
+            ApplicationKey = string.IsNullOrEmpty(ApplicationKey) ? null : ApplicationKey.Trim();
 
-            if (string.IsNullOrEmpty(CustomerName))
-            {
-                CustomerName = null;
-            }
-            else
-            {
-                CustomerName = CustomerName.Trim();
-            }
+            CustomerName = string.IsNullOrEmpty(CustomerName) ? null : CustomerName.Trim();
+
+            Repository = string.IsNullOrEmpty(Repository) ? null : Repository.Trim();
 
             if (string.IsNullOrEmpty(ApplicationBaseDirectory))
             {
