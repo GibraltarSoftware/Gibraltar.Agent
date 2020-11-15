@@ -35,26 +35,6 @@ jobs:
     inputs:
       restoreSolution: '$(agentSolution)'
 
-  - task: richardfennellBM.BM-VSTS-Versioning-Task.Version-Assemblies-Task.VersionAssemblies@2
-    displayName: Version the assemblies
-    inputs:
-      Path: '$(Build.SourcesDirectory)'
-      VersionNumber: '$(fileVersion)'
-      InjectVersion: true
-      FilenamePattern: 'AssemblyInfo.*'
-      OutputVersion: 'OutputedVersion'
-      Field: 'AssemblyFileVersion'
-
-  - task: richardfennellBM.BM-VSTS-Versioning-Task.Version-Assemblies-Task.VersionAssemblies@2
-    displayName: Version the assemblies
-    inputs:
-      Path: '$(Build.SourcesDirectory)'
-      VersionNumber: '$(fileVersion)'
-      InjectVersion: true
-      FilenamePattern: 'AssemblyInfo.*'
-      OutputVersion: 'OutputedVersion'
-      Field: 'AssemblyInformationalVersion'
-
   - task: VSBuild@1
     inputs:
       solution: '$(agentSolution)'
