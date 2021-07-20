@@ -12,7 +12,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Gibraltar Software, Inc.")]
 [assembly: AssemblyProduct("Loupe")]
-[assembly: AssemblyCopyright("Copyright © 2008-2020 Gibraltar Software, Inc.")]
+[assembly: AssemblyCopyright("Copyright © 2008-2021 Gibraltar Software, Inc.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -24,7 +24,7 @@ using System.Runtime.InteropServices;
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("64de8cde-93d0-4688-8ed7-c44cb4dbf1e3")]
 
-[assembly: AssemblyVersion("4.9.0.0")]
-[assembly: AssemblyFileVersion("4.9.0.0")]
-[assembly: AssemblyInformationalVersion("4.9.0.0")]
+[assembly: AssemblyVersion("4.11.0.0")]
+[assembly: AssemblyFileVersion("4.11.0.0")]
+[assembly: AssemblyInformationalVersion("4.11.0.0")]
 [assembly: CLSCompliant(true)]
