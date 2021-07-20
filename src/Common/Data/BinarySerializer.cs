@@ -1,25 +1,8 @@
-﻿
-#region File Header
-
-/********************************************************************
- * COPYRIGHT:
- *    This software program is furnished to the user under license
- *    by Gibraltar Software, Inc, and use thereof is subject to applicable 
- *    U.S. and international law. This software program may not be 
- *    reproduced, transmitted, or disclosed to third parties, in 
- *    whole or in part, in any form or by any manner, electronic or
- *    mechanical, without the express written consent of Gibraltar Software, Inc,
- *    except to the extent provided for by applicable license.
- *
- *    Copyright © 2008 by Gibraltar Software, Inc.  All rights reserved.
- *******************************************************************/
-using System;
+﻿using System;
 using System.Globalization;
 using System.IO;
 using System.Net;
 using System.Text;
-
-#endregion File Header
 
 namespace Gibraltar.Data
 {
@@ -489,7 +472,16 @@ namespace Gibraltar.Data
             DeserializeValue(networkBytes, out serializedValue);
             if (s_MonoRuntime == false)
             {
-                hostValue = DateTimeOffset.ParseExact(serializedValue, "o", null);
+                try
+                {
+                    hostValue = DateTimeOffset.ParseExact(serializedValue, "o", null);
+                }
+                catch (FormatException ex)
+                {
+                    //improve the response so we include the raw value to help in diagnosing problems.
+                    throw new FormatException(string.Format("Unrecognized format for DateTimeOffset deserialization\r\n\"{0}\"",
+                        serializedValue), ex);
+                }
             }
             else
             {
@@ -500,7 +492,7 @@ namespace Gibraltar.Data
                 if (serializedValue.Length != 33 || serializedValue[4] != '-' || serializedValue[7] != '-' ||
                     serializedValue[10] != 'T' || serializedValue[13] != ':' || serializedValue[16] != ':' ||
                     serializedValue[19] != '.' || serializedValue[30] != ':')
-                    throw new FormatException(string.Format("Unrecognized format for DateTimeOffset deserialization: \"{0}\"",
+                    throw new FormatException(string.Format("Unrecognized format for DateTimeOffset deserialization\r\n\"{0}\"",
                                                             serializedValue));
 
                 string yearString = serializedValue.Substring(0, 4);

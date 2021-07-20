@@ -1,19 +1,3 @@
-#region File Header
-// /********************************************************************
-//  * COPYRIGHT:
-//  *    This software program is furnished to the user under license
-//  *    by Gibraltar Software Inc, and use thereof is subject to applicable 
-//  *    U.S. and international law. This software program may not be 
-//  *    reproduced, transmitted, or disclosed to third parties, in 
-//  *    whole or in part, in any form or by any manner, electronic or
-//  *    mechanical, without the express written consent of Gibraltar Software Inc,
-//  *    except to the extent provided for by applicable license.
-//  *
-//  *    Copyright © 2008 - 2015 by Gibraltar Software, Inc.  
-//  *    All rights reserved.
-//  *******************************************************************/
-#endregion
-
 using System;
 
 namespace Gibraltar.Serialization
@@ -31,8 +15,10 @@ namespace Gibraltar.Serialization
         /// <summary>
         /// Returns a UInt64 value from the stream without repositioning the stream
         /// </summary>
-        /// <returns>A UInt64 value.</returns>
-        UInt64 PeekUInt64();
+        /// <param name="data">The UInt64 value</param>
+        /// <param name="length">The number of bytes the encoded UInt64 was.</param>
+        /// <returns>True if the value could be read successfully, false otherwise.</returns>
+        bool TryPeekUInt64(out ulong data, out long length);
 
         /// <summary>
         /// Returns a bool value from the stream.

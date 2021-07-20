@@ -1,19 +1,4 @@
-﻿
-#region File Header
-
-// /********************************************************************
-//  * COPYRIGHT:
-//  *    This software program is furnished to the user under license
-//  *    by Gibraltar Software, Inc, and use thereof is subject to applicable 
-//  *    U.S. and international law. This software program may not be 
-//  *    reproduced, transmitted, or disclosed to third parties, in 
-//  *    whole or in part, in any form or by any manner, electronic or
-//  *    mechanical, without the express written consent of Gibraltar Software, Inc,
-//  *    except to the extent provided for by applicable license.
-//  *
-//  *    Copyright © 2008 by Gibraltar Software, Inc.  All rights reserved.
-//  *******************************************************************/
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
@@ -25,8 +10,6 @@ using Gibraltar.Monitor;
 using Gibraltar.Serialization;
 using Gibraltar.Server.Client;
 using Loupe.Extensibility.Data;
-
-#endregion
 
 namespace Gibraltar.Messaging.Net
 {
@@ -41,6 +24,7 @@ namespace Gibraltar.Messaging.Net
         /// </summary>
         public const string LogCategory = "Loupe.Network.Client";
         private const int NetworkReadBufferLength = 10240;
+        private const int NetworkWriteBufferLength = 10240;
 
         private readonly NetworkConnectionOptions m_Options;
         private bool m_RetryConnections;
@@ -59,7 +43,8 @@ namespace Gibraltar.Messaging.Net
 
         //these serializers are conversation-specific and have to be replaced every time we connect.
         private NetworkSerializer m_NetworkSerializer;
-        private Stream m_NetworkStream;
+        private BufferedStream m_NetworkWriteStream;
+        private Stream m_NetworkReadStream;
         private PipeStream m_PacketStream;
         private PacketReader m_PacketReader;
         private PacketWriter m_PacketWriter;
@@ -95,7 +80,7 @@ namespace Gibraltar.Messaging.Net
         protected NetworkClient(NetworkConnectionOptions options, bool retryConnections, int majorVersion, int minorVersion)
         {
             if (options == null)
-                throw new ArgumentNullException(nameof(options));
+                throw new ArgumentNullException("options");
 
             lock(m_Lock) //since we promptly access these variables from another thread, I'm adding this as paranoia to ensure they get synchronized.
             {
@@ -148,6 +133,19 @@ namespace Gibraltar.Messaging.Net
             catch (Exception ex)
             {
                 Log.RecordException(0, ex, null, LogCategory, true);
+            }
+        }
+
+        /// <summary>
+        /// Flush any buffered data to write.
+        /// </summary>
+        /// <remarks>The network writer is buffered since we do many small writes, but to eliminate latency we want
+        /// to flush periodically.</remarks>
+        public void Flush()
+        {
+            lock(m_Lock)
+            {
+                m_NetworkWriteStream?.Flush();
             }
         }
 
@@ -254,7 +252,7 @@ namespace Gibraltar.Messaging.Net
             {
                 try
                 {
-                    tempEvent.Invoke(this, EventArgs.Empty);
+                    tempEvent.Invoke(this, new EventArgs());
                 }
                 catch (Exception ex)
                 {
@@ -275,7 +273,7 @@ namespace Gibraltar.Messaging.Net
             {
                 try
                 {
-                    tempEvent.Invoke(this, EventArgs.Empty);
+                    tempEvent.Invoke(this, new EventArgs());
                 }
                 catch (Exception ex)
                 {
@@ -296,7 +294,7 @@ namespace Gibraltar.Messaging.Net
             {
                 try
                 {
-                    tempEvent(this, EventArgs.Empty);
+                    tempEvent(this, new EventArgs());
                 }
                 catch (Exception ex)
                 {
@@ -350,12 +348,13 @@ namespace Gibraltar.Messaging.Net
             {
                 bool commandSent = false;
                 Exception sendException = null;
-                if (m_NetworkStream != null)
+                if (m_NetworkWriteStream != null)
                 {
                     try
                     {
-                        message.Write(m_NetworkStream);
+                        message.Write(m_NetworkWriteStream);
                         commandSent = true;
+                        m_NetworkWriteStream.Flush(); //we assume all network messages are latency sensitive.
                     }
                     catch (Exception ex)
                     {
@@ -393,12 +392,12 @@ namespace Gibraltar.Messaging.Net
             {
                 bool packetSent = false;
                 Exception sendException = null;
-                if (m_NetworkStream != null)
+                if (m_NetworkWriteStream != null)
                 {
                     //make sure we have a packet serializer, if not hopefully this is the first time :)
                     if (m_PacketWriter == null)
                     {
-                        m_PacketWriter = new PacketWriter(m_NetworkStream, m_MajorVersion, m_MinorVersion);
+                        m_PacketWriter = new PacketWriter(m_NetworkWriteStream, m_MajorVersion, m_MinorVersion);
                     }
 
                     //since the packet writer goes directly to the network stream we have to do our full network exception handling.
@@ -682,7 +681,9 @@ namespace Gibraltar.Messaging.Net
 
                             lock (m_Lock)
                             {
-                                m_NetworkStream = tcpStream;
+                                //yes, it is in fact safe to buffer just one side or the other.
+                                m_NetworkReadStream = tcpStream;
+                                m_NetworkWriteStream = new BufferedStream(tcpStream, NetworkWriteBufferLength);
                             }
 
                             bool connected = Connect();
@@ -795,8 +796,9 @@ namespace Gibraltar.Messaging.Net
                 SafeDispose(m_PacketWriter);
                 m_PacketWriter = null;
 
-                SafeDispose(m_NetworkStream);
-                m_NetworkStream = null;
+                SafeDispose(m_NetworkWriteStream); //since this stream wraps the underlying network stream we  only do this path.
+                m_NetworkWriteStream = null;
+                m_NetworkReadStream = null;
 
                 SafeDispose(m_NetworkSerializer);
                 m_NetworkSerializer = null;
@@ -819,7 +821,9 @@ namespace Gibraltar.Messaging.Net
                 }
                 catch (Exception ex) //this is what makes it safe...
                 {
+#if DEBUG
                     Log.RecordException(0, ex, null, LogCategory, true);
+#endif
                 }
             }
         }
@@ -908,7 +912,7 @@ namespace Gibraltar.Messaging.Net
         /// <summary>
         /// sets our status to disconnected and fires the appropriate event.
         /// </summary>
-        /// <remarks>This is separate from the overrideable OnDisconnected to ensure our critical state management gets done even if inheritor messes up.</remarks>
+        /// <remarks>This is separate from the overrideable OnDisonnected to ensure our critical state management gets done even if inheritor messes up.</remarks>
         private void ActionOnDisconnected()
         {
             bool raiseEvent = false;
@@ -936,7 +940,7 @@ namespace Gibraltar.Messaging.Net
             try
             {
                 Thread backgroundThread = null;
-                Stream writerStream = null;
+                Stream writerStream = null; //Since the writer is buffered stream around the underlying stream we only dispose down that path
 
                 //we can get into a deadlock here: we have to peek if another thread is already closing
                 if (m_Closed == false)
@@ -947,7 +951,7 @@ namespace Gibraltar.Messaging.Net
                         {
                             performClose = true;
                             m_Closed = true; //so any other thread will know we're closed.
-                            writerStream = m_NetworkStream;
+                            writerStream = m_NetworkWriteStream;
                             backgroundThread = m_BackgroundReader;
                         }
                     }
@@ -1119,11 +1123,11 @@ namespace Gibraltar.Messaging.Net
             int newDataLength = 0;
             try
             {
-                var canRead = m_NetworkStream?.CanRead;
-                if (canRead.GetValueOrDefault(false))
+                var canRead = m_NetworkReadStream?.CanRead ?? false;
+                if (canRead)
                 {
-                    var readState = new AsyncSocketReadState(m_NetworkStream);
-                    m_NetworkStream.BeginRead(buffer, 0, buffer.Length, OnReadSocketEndRead, readState);
+                    var readState = new AsyncSocketReadState(m_NetworkReadStream);
+                    m_NetworkReadStream.BeginRead(buffer, 0, buffer.Length, OnReadSocketEndRead, readState);
                     readState.ResetEvent.WaitOne();
                     newDataLength = readState.DataLength;
 
@@ -1140,8 +1144,13 @@ namespace Gibraltar.Messaging.Net
             }
             catch (IOException ex)
             {
+                if (ex.InnerException is ObjectDisposedException)
+                {
+
+                    newDataLength = 0; //this is our graceful exit.
+                }
                 //the doc indicates you'll often get an IO exception that WRAPS a socket exception.
-                if ((ex.InnerException != null) && (ex.InnerException is SocketException))
+                else if (ex.InnerException is SocketException)
                 {
                     //most likely the socket is no good any more.
                     ActionSocketFailed(ex); //throws an exception

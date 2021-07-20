@@ -1,6 +1,4 @@
-﻿
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
@@ -719,7 +717,7 @@ namespace Gibraltar.Monitor.Internal
             {
                 ApplicationUser applicationUser;
                 m_SessionPacketCache.Users.TryGetValue(applicationUserId, out applicationUser);
-                UserPacket = applicationUser.Packet;
+                UserPacket = applicationUser?.Packet;
             }
 
             //these are supposed to be parallel arrays - assume they're all the same size.

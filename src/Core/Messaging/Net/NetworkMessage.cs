@@ -1,23 +1,6 @@
-﻿
-#region File Header
-
-/********************************************************************
- * COPYRIGHT:
- *    This software program is furnished to the user under license
- *    by Gibraltar Software, Inc, and use thereof is subject to applicable 
- *    U.S. and international law. This software program may not be 
- *    reproduced, transmitted, or disclosed to third parties, in 
- *    whole or in part, in any form or by any manner, electronic or
- *    mechanical, without the express written consent of Gibraltar Software, Inc,
- *    except to the extent provided for by applicable license.
- *
- *    Copyright © 2008 by Gibraltar Software, Inc.  All rights reserved.
- *******************************************************************/
-using System;
+﻿using System;
 using System.IO;
 using Gibraltar.Data;
-
-#endregion File Header
 
 namespace Gibraltar.Messaging.Net
 {
@@ -27,6 +10,14 @@ namespace Gibraltar.Messaging.Net
     public abstract class NetworkMessage
     {
         private const int BasePacketLength = 16; //our fixed size when serialized
+
+        /// <summary>
+        /// The maximum length of any network message, anything longer is invalid.
+        /// </summary>
+        /// <remarks>The only packet of any real size is a SessionHeader message.
+        /// They're generally around 3KB plus name/value pairs but lets assume no one goes
+        /// crazy so the biggest is 1MB.</remarks>
+        public const int MaxMessageLength = 1024 * 1024;
 
         private readonly object m_Lock = new object();
 

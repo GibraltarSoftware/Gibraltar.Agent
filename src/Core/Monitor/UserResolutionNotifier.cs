@@ -12,6 +12,10 @@ namespace Gibraltar.Monitor
     {
         private static readonly ApplicationUserCollection s_Users = new ApplicationUserCollection();
 
+
+        private readonly object m_Lock = new object();
+        private bool m_Enabled; //PROTECED BY LOCK
+
         /// <summary>
         /// Handler for the ResolveUser event.
         /// </summary>
@@ -29,10 +33,44 @@ namespace Gibraltar.Monitor
         /// <summary>
         /// Create a new instance of the user resolution notifier
         /// </summary>
-        public UserResolutionNotifier(bool anonymousMode)
-        {            
-            if (anonymousMode == false)
-                Publisher.MessageDispatching += PublisherOnMessageDispatching;
+        public UserResolutionNotifier()
+        {
+            m_Enabled = false;
+            Enabled = true; //enforce the default which will subscribe us to the event.
+        }
+
+        /// <summary>
+        /// True to have notifier attempt user resolution, false otherwise.
+        /// </summary>
+        public bool Enabled
+        {
+            get
+            {
+                lock(m_Lock)
+                {
+                    return m_Enabled;
+                }
+            }
+            set
+            {
+                lock(m_Lock)
+                {
+                    if (m_Enabled != value)
+                    {
+                        m_Enabled = value;
+
+                        //to maximize efficiency of the publisher only subscribe if we are enabled.
+                        if (m_Enabled)
+                        {
+                            Publisher.MessageDispatching += PublisherOnMessageDispatching;
+                        }
+                        else
+                        {
+                            Publisher.MessageDispatching -= PublisherOnMessageDispatching;
+                        }
+                    }
+                }
+            }
         }
 
         /// <summary>
