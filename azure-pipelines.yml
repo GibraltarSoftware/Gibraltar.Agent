@@ -1,6 +1,6 @@
 name: $(major).$(minor).$(revision)$(Rev:.r)
 trigger:
-- master
+- main
 
 variables:
   agentSolution: 'src/Agent.sln'
