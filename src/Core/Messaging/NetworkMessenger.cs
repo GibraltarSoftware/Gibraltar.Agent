@@ -1,36 +1,4 @@
-﻿#region File Header
-
-// /********************************************************************
-//  * COPYRIGHT:
-//  *    This software program is furnished to the user under license
-//  *    by Gibraltar Software Inc, and use thereof is subject to applicable 
-//  *    U.S. and international law. This software program may not be 
-//  *    reproduced, transmitted, or disclosed to third parties, in 
-//  *    whole or in part, in any form or by any manner, electronic or
-//  *    mechanical, without the express written consent of Gibraltar Software Inc,
-//  *    except to the extent provided for by applicable license.
-//  *
-//  *    Copyright © 2008 - 2015 by Gibraltar Software, Inc.  
-//  *    All rights reserved.
-//  *******************************************************************/
-
-#endregion
-
-#region File Header
-
-/********************************************************************
- * COPYRIGHT:
- *    This software program is furnished to the user under license
- *    by Gibraltar Software, Inc, and use thereof is subject to applicable 
- *    U.S. and international law. This software program may not be 
- *    reproduced, transmitted, or disclosed to third parties, in 
- *    whole or in part, in any form or by any manner, electronic or
- *    mechanical, without the express written consent of Gibraltar Software, Inc,
- *    except to the extent provided for by applicable license.
- *
- *    Copyright © 2008 by Gibraltar Software, Inc.  All rights reserved.
- *******************************************************************/
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
@@ -42,8 +10,6 @@ using Gibraltar.Messaging.Net;
 using Gibraltar.Monitor;
 using Gibraltar.Server.Client;
 using Loupe.Extensibility.Data;
-
-#endregion File Header
 
 namespace Gibraltar.Messaging
 {
@@ -76,6 +42,7 @@ namespace Gibraltar.Messaging
         private bool m_EnableOutbound;
         private NetworkConnectionOptions m_ConnectionOptions;
         private bool m_IsClosed;
+        private DateTimeOffset m_NextNetworkWriteFlushDue;
 
         private DateTimeOffset m_HubConfigurationExpiration; // LOCKED BY LOCK
 
@@ -181,8 +148,36 @@ namespace Gibraltar.Messaging
             {
                 if (!Log.SilentMode)
                     Log.Write(LogMessageSeverity.Error, LogWriteMode.Queued, ex, LiveSessionSubscriber.LogCategory,
-                              "Failed to send summary to the server or other network proxy", "An exception was thrown that prevents us from sending the latest session summary to the server:\r\n" +
-                                                                                             "Server or Proxy: {0}\r\n{1} Exception:\r\n{2}", publisher, ex.GetType(), ex.Message);
+                              "Failed to send summary to the server or other network proxy",
+                              "An exception was thrown that prevents us from sending the latest session summary to the server:\r\n" +
+                            "Server or Proxy: {0}\r\n{1} Exception:\r\n{2}", publisher, ex.GetType(), ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Flush any buffered messages waiting to send to our active network log viewers
+        /// </summary>
+        private void FlushActiveClients()
+        {
+            lock (m_ActiveClients)
+            {
+                foreach (var activeClient in m_ActiveClients)
+                {
+                    try
+                    {
+                        //if we run into a failed active client it's because it hasn't yet been pruned from the active list, 
+                        //so we need to go into maintenance
+                        if ((activeClient.IsFailed) || (activeClient.IsClosed))
+                            continue;
+
+                        activeClient.Flush();
+                    }
+                    catch (Exception ex)
+                    {
+                        //this, we don't know.
+                        ErrorNotifier.Notify(this, ex);
+                    }
+                }
             }
         }
 
@@ -315,7 +310,7 @@ namespace Gibraltar.Messaging
                     m_EnableOutbound = true;
 
                     if (!Log.SilentMode)
-                        Log.Write(LogMessageSeverity.Verbose, LogCategory, "Remote live view enabled, will be available once connected to server", "Server Configuration:\r\n{0}", server);
+                        Log.Write(LogMessageSeverity.Verbose, LogCategory, "Remote live view enabled, will be availalble once connected to server", "Server Configuraiton:\r\n{0}", server);
                 }
             }
 
@@ -437,13 +432,20 @@ namespace Gibraltar.Messaging
 
             if (NetworkWriter.CanWritePacket(packet))
             {
+                bool flushWriters = writeThrough;
+                if (DateTimeOffset.Now > m_NextNetworkWriteFlushDue)
+                {
+                    m_NextNetworkWriteFlushDue = DateTimeOffset.Now.AddSeconds(2);
+                    flushWriters = true;
+                }
+
                 lock(m_ActiveClients) //between caching and writing to the active clients we need to be consistent.
                 {
                     //queue it for later clients
                     CachePacket(packet);
 
                     //send the packet to all our clients
-                    foreach (NetworkWriter activeClient in m_ActiveClients)
+                    foreach (var activeClient in m_ActiveClients)
                     {
                         try
                         {
@@ -456,6 +458,7 @@ namespace Gibraltar.Messaging
                             else
                             {
                                 activeClient.Write(packet);
+                                if (flushWriters) activeClient.Flush();
                             }
                         }
                         catch (Exception ex)
@@ -473,6 +476,8 @@ namespace Gibraltar.Messaging
             AttemptRemoteConnectionAsync();
 
             SendSummary();
+
+            FlushActiveClients();
         }
 
         protected override void OnMaintenance()
@@ -602,7 +607,7 @@ namespace Gibraltar.Messaging
                 catch (Exception ex)
                 {
                     if (!Log.SilentMode)
-                        Log.Write(LogMessageSeverity.Warning, LogWriteMode.Queued, ex, LogCategory, "Remote viewer connection attempt failed",
+                        Log.Write(LogMessageSeverity.Warning, LogWriteMode.Queued, ex, LogCategory, "Remote viewer connecton attempt failed",
                                   "While attempting to open our outbound connection to the proxy server an exception was thrown.  We will retry again later.\r\nException: {0}", ex.Message);
                 }
 
@@ -619,7 +624,7 @@ namespace Gibraltar.Messaging
                 catch (Exception ex)
                 {
                     if (!Log.SilentMode)
-                        Log.Write(LogMessageSeverity.Warning, LogWriteMode.Queued, ex, LogCategory, "Remote viewer connection attempt failed",
+                        Log.Write(LogMessageSeverity.Warning, LogWriteMode.Queued, ex, LogCategory, "Remote viewer connecton attempt failed",
                                   "While attempting to open our outbound connection to the proxy server an exception was thrown.  We will retry again later.\r\nException: {0}", ex.Message);
                 }
 
@@ -697,7 +702,14 @@ namespace Gibraltar.Messaging
             {
                 foreach (NetworkWriter networkWriter in deadClients)
                 {
-                    UnregisterWriter(networkWriter);
+                    try
+                    {
+                        UnregisterWriter(networkWriter);
+                    }
+                    catch (Exception ex)
+                    {
+                        ErrorNotifier.Notify(this, ex);
+                    }
                 }
             }
         }

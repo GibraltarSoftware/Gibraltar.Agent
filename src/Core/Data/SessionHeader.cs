@@ -1,18 +1,4 @@
-﻿#region File Header
-// /********************************************************************
-//  * COPYRIGHT:
-//  *    This software program is furnished to the user under license
-//  *    by Gibraltar Software Inc, and use thereof is subject to applicable 
-//  *    U.S. and international law. This software program may not be 
-//  *    reproduced, transmitted, or disclosed to third parties, in 
-//  *    whole or in part, in any form or by any manner, electronic or
-//  *    mechanical, without the express written consent of Gibraltar Software Inc,
-//  *    except to the extent provided for by applicable license.
-//  *
-//  *    Copyright © 2008 - 2015 by Gibraltar Software, Inc.  
-//  *    All rights reserved.
-//  *******************************************************************/
-#endregion
+﻿
 
 using System;
 using System.Collections.Generic;
@@ -1713,9 +1699,9 @@ namespace Gibraltar.Data
                 BinarySerializer.DeserializeValue(rawData, out m_PromotionLevelName);
             }
 
-            string applicationVersionRaw;
-            BinarySerializer.DeserializeValue(rawData, out applicationVersionRaw);
-            m_ApplicationVersion = new Version(applicationVersionRaw);
+            BinarySerializer.DeserializeValue(rawData, out string applicationVersionRaw);
+            if (!string.IsNullOrEmpty(applicationVersionRaw)) //be as tolerant as possible on read
+                m_ApplicationVersion = new Version(applicationVersionRaw);
 
             BinarySerializer.DeserializeValue(rawData, out m_ApplicationTypeName);
             BinarySerializer.DeserializeValue(rawData, out m_ApplicationDescription);
@@ -1727,9 +1713,9 @@ namespace Gibraltar.Data
             BinarySerializer.DeserializeValue(rawData, out m_SessionStartDateTime);
             BinarySerializer.DeserializeValue(rawData, out m_SessionEndDateTime);
 
-            string agentVersionRaw;
-            BinarySerializer.DeserializeValue(rawData, out agentVersionRaw);
-            m_AgentVersion = new Version(agentVersionRaw);
+            BinarySerializer.DeserializeValue(rawData, out string agentVersionRaw);
+            if (!string.IsNullOrEmpty(agentVersionRaw)) //be as tolerant as possible on read
+                m_AgentVersion = new Version(agentVersionRaw);
 
             BinarySerializer.DeserializeValue(rawData, out m_UserName);
             BinarySerializer.DeserializeValue(rawData, out m_UserDomainName);
@@ -1742,31 +1728,31 @@ namespace Gibraltar.Data
 
             //The session Details
             BinarySerializer.DeserializeValue(rawData, out m_OSPlatformCode);
-            string rawOSVersion;
-            BinarySerializer.DeserializeValue(rawData, out rawOSVersion);
-            m_OSVersion = new Version(rawOSVersion);
+            BinarySerializer.DeserializeValue(rawData, out string rawOSVersion);
+            if (!string.IsNullOrEmpty(rawOSVersion)) //be as tolerant as possible on read
+                m_OSVersion = new Version(rawOSVersion);
 
             BinarySerializer.DeserializeValue(rawData, out m_OSServicePack);
             BinarySerializer.DeserializeValue(rawData, out m_OSCultureName);
 
-            string osArchitectureRaw;
-            BinarySerializer.DeserializeValue(rawData, out osArchitectureRaw);
-            m_OSArchitecture = (ProcessorArchitecture)Enum.Parse(typeof(ProcessorArchitecture), osArchitectureRaw, true);
+            BinarySerializer.DeserializeValue(rawData, out string osArchitectureRaw);
+            if (!string.IsNullOrEmpty(osArchitectureRaw)) //be as tolerant as possible on read
+                m_OSArchitecture = (ProcessorArchitecture)Enum.Parse(typeof(ProcessorArchitecture), osArchitectureRaw, true);
 
-            string osBootModeRaw;
-            BinarySerializer.DeserializeValue(rawData, out osBootModeRaw);
-            m_OSBootMode = (BootMode)Enum.Parse(typeof(BootMode), osBootModeRaw, true);
+            BinarySerializer.DeserializeValue(rawData, out string osBootModeRaw);
+            if (!string.IsNullOrEmpty(osBootModeRaw)) //be as tolerant as possible on read
+                m_OSBootMode = (BootMode)Enum.Parse(typeof(BootMode), osBootModeRaw, true);
 
             BinarySerializer.DeserializeValue(rawData, out m_OSSuiteMaskCode);
             BinarySerializer.DeserializeValue(rawData, out m_OSProductTypeCode);
 
-            string rawRuntimeVersion;
-            BinarySerializer.DeserializeValue(rawData, out rawRuntimeVersion);
-            m_RuntimeVersion = new Version(rawRuntimeVersion);
+            BinarySerializer.DeserializeValue(rawData, out string rawRuntimeVersion);
+            if (!string.IsNullOrEmpty(rawRuntimeVersion)) //be as tolerant as possible on read
+                m_RuntimeVersion = new Version(rawRuntimeVersion);
 
-            string runtimeArchitectureRaw;
-            BinarySerializer.DeserializeValue(rawData, out runtimeArchitectureRaw);
-            m_RuntimeArchitecture = (ProcessorArchitecture)Enum.Parse(typeof(ProcessorArchitecture), runtimeArchitectureRaw, true);
+            BinarySerializer.DeserializeValue(rawData, out string runtimeArchitectureRaw);
+            if (!string.IsNullOrEmpty(runtimeArchitectureRaw)) //be as tolerant as possible on read
+                m_RuntimeArchitecture = (ProcessorArchitecture)Enum.Parse(typeof(ProcessorArchitecture), runtimeArchitectureRaw, true);
 
             BinarySerializer.DeserializeValue(rawData, out m_CurrentCultureName);
             BinarySerializer.DeserializeValue(rawData, out m_CurrentUICultureName);
@@ -1781,8 +1767,7 @@ namespace Gibraltar.Data
             BinarySerializer.DeserializeValue(rawData, out m_CommandLine);
 
             //now the application properties
-            int numberOfProperties;
-            BinarySerializer.DeserializeValue(rawData, out numberOfProperties);
+            BinarySerializer.DeserializeValue(rawData, out int numberOfProperties);
 
             for (int curProperty = 0; curProperty < numberOfProperties; curProperty++)
             {
@@ -1790,7 +1775,7 @@ namespace Gibraltar.Data
 
                 BinarySerializer.DeserializeValue(rawData, out name);
                 BinarySerializer.DeserializeValue(rawData, out value);
-                m_Properties.Add(name, value);
+                m_Properties[name] = value; //if they're dumb enough to send us a duplicate, take the last one.
             }
 
             //we may have been passed a length or not - if so trust it.

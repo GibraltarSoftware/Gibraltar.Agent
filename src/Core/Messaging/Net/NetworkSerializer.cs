@@ -1,36 +1,8 @@
-﻿#region File Header
-// /********************************************************************
-//  * COPYRIGHT:
-//  *    This software program is furnished to the user under license
-//  *    by Gibraltar Software Inc, and use thereof is subject to applicable 
-//  *    U.S. and international law. This software program may not be 
-//  *    reproduced, transmitted, or disclosed to third parties, in 
-//  *    whole or in part, in any form or by any manner, electronic or
-//  *    mechanical, without the express written consent of Gibraltar Software Inc,
-//  *    except to the extent provided for by applicable license.
-//  *
-//  *    Copyright © 2008 - 2015 by Gibraltar Software, Inc.  
-//  *    All rights reserved.
-//  *******************************************************************/
-#endregion
-#region File Header
-
-/********************************************************************
- * COPYRIGHT:
- *    This software program is furnished to the user under license
- *    by Gibraltar Software, Inc, and use thereof is subject to applicable 
- *    U.S. and international law. This software program may not be 
- *    reproduced, transmitted, or disclosed to third parties, in 
- *    whole or in part, in any form or by any manner, electronic or
- *    mechanical, without the express written consent of Gibraltar Software, Inc,
- *    except to the extent provided for by applicable license.
- *
- *    Copyright © 2008 by Gibraltar Software, Inc.  All rights reserved.
- *******************************************************************/
-using System;
+﻿using System;
 using System.IO;
-
-#endregion File Header
+using Gibraltar.Monitor;
+using Gibraltar.Server.Client;
+using Loupe.Extensibility.Data;
 
 namespace Gibraltar.Messaging.Net
 {
@@ -39,8 +11,10 @@ namespace Gibraltar.Messaging.Net
     /// </summary>
     public class NetworkSerializer: IDisposable
     {
+        private const string LogCategory = NetworkClient.LogCategory;
         private readonly object m_Lock = new object();
-        private readonly MemoryStream m_Stream = new MemoryStream();
+        private MemoryStream m_Stream = new MemoryStream();
+        private const int MemoryReclaimThreshold = 1024 * 16; //16KB
         private int m_BytesRequired;
 
         /// <summary>
@@ -63,7 +37,7 @@ namespace Gibraltar.Messaging.Net
                         byte[] output = null;
                         if (bytesRemaining > 0)
                         {
-                            output = new byte[m_Stream.Length - m_Stream.Position];
+                            output = new byte[bytesRemaining];
                             long originalPosition = m_Stream.Position;
                             m_Stream.Read(output, 0, output.Length);
                             m_Stream.Position = originalPosition; //set it back so people can get the buffer again.
@@ -123,26 +97,54 @@ namespace Gibraltar.Messaging.Net
             {
                 //now lets figure out if we have one or more packets    
                 NetworkMessage nextPacket = null;
-                Version version;
-                NetworkMessageTypeCode typeCode;
-                int packetLength;
-                if ((NetworkMessage.ReadHeader(m_Stream, out packetLength, out typeCode, out version))
+                if ((NetworkMessage.ReadHeader(m_Stream, out var packetLength, out var typeCode, out var version))
                     && ((m_Stream.Length - m_Stream.Position) >= packetLength))
                 {
                     //we have enough data to read a packet
                     nextPacket = NetworkMessage.Read(m_Stream);
+                }
+                else if (packetLength > NetworkMessage.MaxMessageLength)
+                {
+                    //something has gone horribly awry: The length the user is specifying is just
+                    //not reasonable.
+                    Log.Write(LogMessageSeverity.Error, LogWriteMode.Queued, null, 0,
+                              LogCategory, "The network message indicates it's longer than our maximum supported message, will abort.",
+                              "Message Length: {0:N0}\r\n" +
+                              "Maximum Length: {1:N0}", packetLength, NetworkMessage.MaxMessageLength);
+                    throw new GibraltarNetworkException("The network message indicates it's longer than supported.");
                 }
 
                 if (m_Stream.Length != m_Stream.Position)
                 {
                     //we have some unused data - record how many bytes we still need.
                     m_BytesRequired = packetLength - (int)(m_Stream.Length - m_Stream.Position);
+
+                    //but be wary of keeping too much memory tied up in the stream.
+                    if (m_Stream.Position > MemoryReclaimThreshold) //we've read more than our reclaim threshold
+                    {
+                        //to be sure the buffer gets sized back *down* we don't just move to the start, 
+                        //we ditch the stream and restart.
+                        var newStream = new MemoryStream();
+                        m_Stream.WriteTo(newStream);
+                        m_Stream.Dispose();
+                        m_Stream = newStream;
+                    }
                 }
                 else
                 {
                     //clear things, we ended on a packet boundary.
-                    m_Stream.Position = 0;
-                    m_Stream.SetLength(0);
+                    //but be wary of keeping too much memory tied up in the stream.
+                    if (m_Stream.Position > MemoryReclaimThreshold)
+                    {
+                        m_Stream.Dispose();
+                        m_Stream = new MemoryStream();
+                    }
+                    else
+                    {
+                        m_Stream.Position = 0;
+                        m_Stream.SetLength(0);
+                    }
+
                     m_BytesRequired = 0;
                 }
 
@@ -156,7 +158,7 @@ namespace Gibraltar.Messaging.Net
         /// <filterpriority>2</filterpriority>
         public void Dispose()
         {
-            m_Stream.Dispose();
+            m_Stream?.Dispose();
         }
     }
 }

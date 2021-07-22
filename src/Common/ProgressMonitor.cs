@@ -1,38 +1,6 @@
-﻿#region File Header
-// /********************************************************************
-//  * COPYRIGHT:
-//  *    This software program is furnished to the user under license
-//  *    by Gibraltar Software Inc, and use thereof is subject to applicable 
-//  *    U.S. and international law. This software program may not be 
-//  *    reproduced, transmitted, or disclosed to third parties, in 
-//  *    whole or in part, in any form or by any manner, electronic or
-//  *    mechanical, without the express written consent of Gibraltar Software Inc,
-//  *    except to the extent provided for by applicable license.
-//  *
-//  *    Copyright © 2008 - 2015 by Gibraltar Software, Inc.  
-//  *    All rights reserved.
-//  *******************************************************************/
-#endregion
-#region File Header
-
-/********************************************************************
- * COPYRIGHT:
- *    This software program is furnished to the user under license
- *    by Gibraltar Software, Inc, and use thereof is subject to applicable 
- *    U.S. and international law. This software program may not be 
- *    reproduced, transmitted, or disclosed to third parties, in 
- *    whole or in part, in any form or by any manner, electronic or
- *    mechanical, without the express written consent of Gibraltar Software, Inc,
- *    except to the extent provided for by applicable license.
- *
- *    Copyright © 2008 by Gibraltar Software, Inc.  All rights reserved.
- *******************************************************************/
-
-using System;
+﻿using System;
 using System.Data;
 using System.Diagnostics;
-
-#endregion File Header
 
 namespace Gibraltar
 {
@@ -54,7 +22,7 @@ namespace Gibraltar
         private bool m_PercentCompleteValid;
         private bool m_Complete;
         private bool m_ReadOnly;
-
+        private volatile bool m_CancellationRequested;
 
         /// <summary>
         /// Raised when the monitor stack is in the process of cancelling.
@@ -325,6 +293,14 @@ namespace Gibraltar
             }
         }
 
+        /// <summary>
+        /// Indicates if the user is requesting the monitored task be canceled.
+        /// </summary>
+        public bool CancellationRequested
+        {
+            get => m_CancellationRequested;
+        }
+
         #endregion
 
         #region Protected Properties and Methods
@@ -335,6 +311,8 @@ namespace Gibraltar
         /// <remarks>Any inheritors that override this event must add a call to Base.OnMonitorCanceled at the end of their routine to ensure the event is raised.</remarks>
         protected virtual void OnMonitorCanceled()
         {
+            m_CancellationRequested = true;
+
             ProgressMonitorEventArgs e = new ProgressMonitorEventArgs(m_ProgressMonitors, this);
 
             //save the delegate field in a temporary field for thread safety

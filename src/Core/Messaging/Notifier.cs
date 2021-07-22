@@ -1,34 +1,4 @@
-﻿#region File Header
-// /********************************************************************
-//  * COPYRIGHT:
-//  *    This software program is furnished to the user under license
-//  *    by Gibraltar Software Inc, and use thereof is subject to applicable 
-//  *    U.S. and international law. This software program may not be 
-//  *    reproduced, transmitted, or disclosed to third parties, in 
-//  *    whole or in part, in any form or by any manner, electronic or
-//  *    mechanical, without the express written consent of Gibraltar Software Inc,
-//  *    except to the extent provided for by applicable license.
-//  *
-//  *    Copyright © 2008 - 2015 by Gibraltar Software, Inc.  
-//  *    All rights reserved.
-//  *******************************************************************/
-#endregion
-#region File Header
-
-/********************************************************************
- * COPYRIGHT:
- *    This software program is furnished to the user under license
- *    by Gibraltar Software, Inc, and use thereof is subject to applicable 
- *    U.S. and international law. This software program may not be 
- *    reproduced, transmitted, or disclosed to third parties, in 
- *    whole or in part, in any form or by any manner, electronic or
- *    mechanical, without the express written consent of Gibraltar Software, Inc,
- *    except to the extent provided for by applicable license.
- *
- *    Copyright © 2008-2010 by Gibraltar Software, Inc.  All rights reserved.
- *******************************************************************/
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
@@ -37,18 +7,17 @@ using Gibraltar.Monitor;
 using Gibraltar.Monitor.Internal;
 using Loupe.Extensibility.Data;
 
-#endregion File Header
-
 namespace Gibraltar.Messaging
 {
     /// <summary>
     /// Generates notifications from scanning log messages
     /// </summary>
-    public class Notifier
+    public class Notifier : IDisposable
     {
         private const string NotifierCategoryBase = "Gibraltar.Agent.Notifier";
         private const string NotifierThreadBase = "Gibraltar Notifier";
         private const int BurstMillisecondLatency = 28;
+        private readonly object m_Lock = new object();
         private readonly object m_MessageQueueLock = new object();
         private readonly object m_MessageDispatchThreadLock = new object();
         private readonly LogMessageSeverity m_MinimumSeverity;
@@ -56,6 +25,7 @@ namespace Gibraltar.Messaging
         private readonly string m_NotifierCategoryName;
         private readonly Queue<LogMessagePacket> m_MessageQueue; // LOCKED BY QUEUELOCK
 
+        private bool m_Enabled; //LOCKED BY LOCK
         private Thread m_MessageDispatchThread; // LOCKED BY THREADLOCK
         private volatile bool m_MessageDispatchThreadFailed; // LOCKED BY THREADLOCK (and volatile to allow quick reading outside the lock)
         private int m_MessageQueueMaxLength = 2000; // LOCKED BY QUEUELOCK
@@ -73,7 +43,7 @@ namespace Gibraltar.Messaging
         /// </summary>
         /// <param name="minimumSeverity">The minimum LogMessageSeverity to look for.</param>
         /// <param name="notifierName">A name for this notifier (may be null for generic).</param>
-        public Notifier(LogMessageSeverity minimumSeverity, string notifierName) // Note: Add config, etc?
+        public Notifier(LogMessageSeverity minimumSeverity, string notifierName) 
         {
             m_MessageQueue = new Queue<LogMessagePacket>(50); // a more or less arbitrary initial size.
             m_MinimumSeverity = minimumSeverity;
@@ -90,6 +60,43 @@ namespace Gibraltar.Messaging
                 m_NotifierName = notifierName;
                 m_NotifierCategoryName = string.Format("{0}.{1}", NotifierCategoryBase, notifierName);
             }
+
+            m_Enabled = false;
+            Enabled = true; //kick this on by default to subscribe to the events.
+        }
+
+        /// <summary>
+        /// True to have notifier attempt user resolution, false otherwise.
+        /// </summary>
+        public bool Enabled
+        {
+            get
+            {
+                lock (m_Lock)
+                {
+                    return m_Enabled;
+                }
+            }
+            set
+            {
+                lock (m_Lock)
+                {
+                    if (m_Enabled != value)
+                    {
+                        m_Enabled = value;
+
+                        //to maximize efficiency of the publisher only subscribe if we are enabled.
+                        if (m_Enabled)
+                        {
+                            Publisher.LogMessageNotify += Publisher_LogMessageNotify;
+                        }
+                        else
+                        {
+                            Publisher.LogMessageNotify -= Publisher_LogMessageNotify;
+                        }
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -104,13 +111,6 @@ namespace Gibraltar.Messaging
 
                 lock (m_MessageQueueLock)
                 {
-                    if (m_NotificationEvent == null)
-                    {
-                        // This is the first subscriber.  We need to initialize our own subscription to the publisher's event.
-                        Publisher.LogMessageNotify -= Publisher_LogMessageNotify; // Ensure no duplicates.
-                        Publisher.LogMessageNotify += Publisher_LogMessageNotify; // We need to subscribe.
-                    }
-
                     m_NotificationEvent += value; // Subscribe them to the underlying event.
                 }
             }
@@ -128,9 +128,6 @@ namespace Gibraltar.Messaging
 
                     if (m_NotificationEvent == null)
                     {
-                        // That was the last subscriber.  We need to clean out our own subscription to the publisher's event.
-                        Publisher.LogMessageNotify -= Publisher_LogMessageNotify; // Unsubscribe for efficiency.
-
                         m_MessageQueue.Clear(); // No more subscribers, dump the queue.
                         System.Threading.Monitor.PulseAll(m_MessageQueueLock); // Kick out of the wait so it can reset the times.
                     }
@@ -142,6 +139,17 @@ namespace Gibraltar.Messaging
         /// Get the CategoryName for this Notifier instance, as determined from the provided notifier name.
         /// </summary>
         public string NotifierCategoryName { get { return m_NotifierCategoryName; } }
+
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        /// <filterpriority>2</filterpriority>
+        public void Dispose()
+        {
+            Publisher.LogMessageNotify -= Publisher_LogMessageNotify;
+
+            GC.SuppressFinalize(this);
+        }
 
         private void Publisher_LogMessageNotify(object sender, LogMessageNotifyEventArgs e)
         {
@@ -159,9 +167,6 @@ namespace Gibraltar.Messaging
 
             lock (m_MessageQueueLock)
             {
-                if (m_NotificationEvent == null) // Check for unsubscribe race condition.
-                    return; // Don't add it to the queue if there are no subscribers.
-
                 int messageQueueLength = m_MessageQueue.Count;
                 if (messageQueueLength < m_MessageQueueMaxLength)
                 {
@@ -238,13 +243,6 @@ namespace Gibraltar.Messaging
                         while (m_MessageQueue.Count <= 0)
                         {
                             System.Threading.Monitor.Wait(m_MessageQueueLock); // Wait indefinitely until we get a message.
-
-                            if (m_NotificationEvent == null)
-                            {
-                                m_MinimumWaitNextNotify = TimeSpan.Zero; // Reset default wait time.
-                                m_NextNotifyAfter = DateTimeOffset.UtcNow; // Reset any forced wait pending.
-                                m_MessageQueue.Clear(); // And dump the queue since we have no subscribers.  Loop again to wait.
-                            }
                         }
 
                         DateTimeOffset now = DateTimeOffset.UtcNow;
@@ -266,14 +264,8 @@ namespace Gibraltar.Messaging
                             now = DateTimeOffset.UtcNow;
                         }
 
-                        // The wait has ended.  Get our subscriber(s) and messages, if any.
-                        notificationEvent = m_NotificationEvent;
-                        if (notificationEvent == null) // Have we lost all of our subscribers while waiting?
-                        {
-                            m_MinimumWaitNextNotify = TimeSpan.Zero; // Reset default wait time.
-                            m_NextNotifyAfter = DateTimeOffset.UtcNow; // Reset any forced wait pending.
-                        }
-                        else if (m_MessageQueue.Count > 0) // Just to double-check; usually true here.
+                        // The wait has ended. 
+                        if (m_MessageQueue.Count > 0) // Just to double-check; usually true here.
                         {
                             messages = m_MessageQueue.ToArray();
                         }
@@ -297,9 +289,12 @@ namespace Gibraltar.Messaging
                             eventArgs.MinimumNotificationDelay = new TimeSpan(0, 5, 0);
                         }
 
+                        //Get our subscriber(s) and messages, if any.
+                        notificationEvent = m_NotificationEvent;
                         try
                         {
-                            notificationEvent(this, eventArgs); // Call our subscriber(s) (should just be the Agent layer).
+                            if (notificationEvent != null)
+                                notificationEvent(this, eventArgs); // Call our subscriber(s) (should just be the Agent layer).
                         }
                         catch (Exception ex)
                         {

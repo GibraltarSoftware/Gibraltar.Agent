@@ -1,19 +1,3 @@
-#region File Header
-// /********************************************************************
-//  * COPYRIGHT:
-//  *    This software program is furnished to the user under license
-//  *    by Gibraltar Software Inc, and use thereof is subject to applicable 
-//  *    U.S. and international law. This software program may not be 
-//  *    reproduced, transmitted, or disclosed to third parties, in 
-//  *    whole or in part, in any form or by any manner, electronic or
-//  *    mechanical, without the express written consent of Gibraltar Software Inc,
-//  *    except to the extent provided for by applicable license.
-//  *
-//  *    Copyright © 2008 - 2015 by Gibraltar Software, Inc.  
-//  *    All rights reserved.
-//  *******************************************************************/
-#endregion
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -53,17 +37,17 @@ namespace Gibraltar.Monitor
         /// <summary>
         /// A standard file filter for standard file dialogs that allows selection of packages and logs.
         /// </summary>
-        public const string FileFilter = "Package File|*." + PackageExtension + "|Log File|*." + LogExtension + "|All Loupe Files|"+ "*." + PackageExtension + ";*." + LogExtension+ "|All Files|*.*";
+        public const string FileFilter = "Package File(*." + PackageExtension + ")|*." + PackageExtension + "|Log File (*." + LogExtension + ")|*." + LogExtension + "|All Files (*.*)|*.*";
 
         /// <summary>
         /// A standard file filter for standard file dialogs that allows selection of logs.
         /// </summary>
-        public const string FileFilterLogsOnly = "Log File|*." + LogExtension + "|All Files|*.*";
+        public const string FileFilterLogsOnly = "Log File (*." + LogExtension + ")|*." + LogExtension + "|All Files (*.*)|*.*";
 
         /// <summary>
         /// A standard file filter for standard file dialogs that allows selection of packages.
         /// </summary>
-        public const string FileFilterPackagesOnly = "Package File|*." + PackageExtension + "|All Files|*.*";
+        public const string FileFilterPackagesOnly = "Package File(*." + PackageExtension + ")|*." + PackageExtension + "|All Files (*.*)|*.*";
 
         /// <summary>
         /// The log system name for Gibraltar
@@ -368,7 +352,15 @@ namespace Gibraltar.Monitor
                     lock (s_NotifierLock) // Must get the lock to make sure only one thread can try this at a time.
                     {
                         if (s_UserResolutionNotifier == null) // Double-check that it's actually still null.
-                            s_UserResolutionNotifier = new UserResolutionNotifier(s_RunningConfiguration.Publisher.EnableAnonymousMode);
+                        {
+                            s_UserResolutionNotifier = new UserResolutionNotifier();
+
+                            //if we have a configuration and they've enabled anonymous mode we want to immediately suppress the notifier.
+                            if (s_RunningConfiguration?.Publisher.EnableAnonymousMode == true)
+                            {
+                                s_UserResolutionNotifier.Enabled = false;
+                            }
+                        }
                     }
                 }
 
@@ -2435,6 +2427,13 @@ namespace Gibraltar.Monitor
 
             s_Publisher = new Publisher(sessionName, s_RunningConfiguration, s_SessionStartInfo);
 
+            //initialize the user resolution notifier
+            if (s_UserResolutionNotifier != null)
+            {
+                s_UserResolutionNotifier.Enabled = (s_RunningConfiguration.Publisher.EnableAnonymousMode == false);
+            }
+
+
             //record our session start info right now so we're sure it's the first packet we have.
             Write(s_SessionStartInfo.Packet);
             
@@ -2514,7 +2513,9 @@ namespace Gibraltar.Monitor
 
                         if (s_RunningConfiguration.Server.AutoSendOnError)
                         {
-                            var notifier = MessageAlertNotifier; //poking this creates our background threads.
+                            //create our one true notifier and enable it so we're watching for errors to send.
+                            var notifier = MessageAlertNotifier;
+                            notifier.Enabled = true; //it really will be because that's the default on construct, but ignore that.
                         }
                     }
 

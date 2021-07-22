@@ -1,34 +1,4 @@
-﻿#region File Header
-// /********************************************************************
-//  * COPYRIGHT:
-//  *    This software program is furnished to the user under license
-//  *    by Gibraltar Software Inc, and use thereof is subject to applicable 
-//  *    U.S. and international law. This software program may not be 
-//  *    reproduced, transmitted, or disclosed to third parties, in 
-//  *    whole or in part, in any form or by any manner, electronic or
-//  *    mechanical, without the express written consent of Gibraltar Software Inc,
-//  *    except to the extent provided for by applicable license.
-//  *
-//  *    Copyright © 2008 - 2015 by Gibraltar Software, Inc.  
-//  *    All rights reserved.
-//  *******************************************************************/
-#endregion
-#region File Header
-
-// /********************************************************************
-//  * COPYRIGHT:
-//  *    This software program is furnished to the user under license
-//  *    by Gibraltar Software, Inc, and use thereof is subject to applicable 
-//  *    U.S. and international law. This software program may not be 
-//  *    reproduced, transmitted, or disclosed to third parties, in 
-//  *    whole or in part, in any form or by any manner, electronic or
-//  *    mechanical, without the express written consent of Gibraltar Software, Inc,
-//  *    except to the extent provided for by applicable license.
-//  *
-//  *    Copyright © 2008 by Gibraltar Software, Inc.  All rights reserved.
-//  *******************************************************************/
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.Design;
@@ -43,8 +13,7 @@ using Gibraltar.Messaging;
 using Gibraltar.Server.Client;
 using Gibraltar.Windows.UI;
 using Loupe.Extensibility.Data;
-
-#endregion
+using Timer = System.Windows.Forms.Timer;
 
 #pragma warning disable 1591
 
@@ -68,6 +37,7 @@ namespace Gibraltar.Monitor.Windows
 
         private readonly Queue<ILogMessage> m_MessageQueue = new Queue<ILogMessage>();
         private volatile bool m_PendingInQueue; // Only update inside lock.  Safe to read outside of lock.
+        private volatile bool m_ActivePoll;
         private readonly object m_QueueLock = new object();
         private readonly bool m_InProcess;
         private readonly bool m_InternalGibraltar;
@@ -94,6 +64,7 @@ namespace Gibraltar.Monitor.Windows
         private bool m_OnLoadProcessed;
         private bool m_IdleEventRegistered;
         private bool m_FirstMessages = true; //indicates if we've processed the first messages yet (we use that for session header processing)
+        private Timer m_DisplayTimer;
 
         private delegate void ActionSetAutoScrollDelegate(bool value);
         private delegate void ActionSetMinSeverityDelegate(LogMessageSeverity minSeverity);
@@ -620,11 +591,8 @@ namespace Gibraltar.Monitor.Windows
 
         internal void QueueViewerMessage(ILogMessage newMessage)
         {
-            bool pokePoll;
             lock (m_QueueLock)
             {
-                pokePoll = (m_MessageQueue.Count == 0); // If none in the queue, we need to poke a polling check below.
-
                 // Verbose is numerically the highest value, so this comparison only SEEMS backwards.
                 if (m_ShowVerboseMessages || newMessage.Severity < LogMessageSeverity.Verbose)
                 {
@@ -641,11 +609,14 @@ namespace Gibraltar.Monitor.Windows
                     UpdateViewStatus();
                     // ActionPoll() won't do anything if it's Frozen, anyway. (Plus this will probably trigger another Idle event.)
                 }
-                else if (pokePoll)
+                else
                 {
                     // We need to poke a polling check.
-                    if (IsHandleCreated) // Don't try to BeginInvoke if our handle is gone.
+                    if (IsHandleCreated && m_ActivePoll == false) // Don't try to BeginInvoke if our handle is gone.
+                    {
+                        m_ActivePoll = true;
                         BeginInvoke(new MethodInvoker(ActionPoll));
+                    }
                 }
             }
         }
@@ -680,9 +651,9 @@ namespace Gibraltar.Monitor.Windows
         protected override void OnVisibleChanged(EventArgs e)
         {
             base.OnVisibleChanged(e);
-            m_GridViewer.Visible = Visible; // Do we need to pass this on ourselves?
+            m_GridViewer.Visible = Visible; 
             if (Visible)
-                m_GridViewer.PerformResize(); // Is this needed?
+                m_GridViewer.PerformResize();
         }
 
         protected override void OnParentChanged(EventArgs e)
@@ -988,12 +959,12 @@ namespace Gibraltar.Monitor.Windows
             if (Frozen)
                 return;
 
-            try // ToDo: Can this be improved by try/catching more selectively instead of bailing on the whole section?
+            try
             {
                 //Get the messages as fast as possible from the queue so we can release it.
                 ILogMessage[] newMessageArray = null; // Avoid work if there are no new messages.
 
-                lock (m_QueueLock)
+                lock(m_QueueLock)
                 {
                     if (m_AutoScroll == false && MaxMessages > 0 && m_GridViewer.MessageCount >= MaxMessages)
                     {
@@ -1009,16 +980,20 @@ namespace Gibraltar.Monitor.Windows
                         m_MessageQueue.Clear();
                     }
                     else
-                        return; // Skip ProcessNewMessages() if there aren't any new ones. ???
+                        return; // Skip ProcessNewMessages() if there aren't any new ones.
                 }
 
                 ProcessNewMessages(newMessageArray);
             }
-                // ReSharper disable EmptyGeneralCatchClause
+            // ReSharper disable EmptyGeneralCatchClause
             catch
                 // ReSharper restore EmptyGeneralCatchClause
             {
                 //we want to ignore this exception and keep polling
+            }
+            finally
+            {
+                m_ActivePoll = false;
             }
         }
 
@@ -1353,32 +1328,42 @@ namespace Gibraltar.Monitor.Windows
             if (m_IdleEventRegistered)
                 return;
 
-            m_IdleEventRegistered = true;
             if (m_ViewerEnabled)
             {
-#if USE_POLLING_TIMER
-                m_DisplayTimer = new Timer {Interval = 500};
+                m_IdleEventRegistered = true;
+                m_DisplayTimer = new Timer {Interval = 100};
                 m_DisplayTimer.Start();
                 m_DisplayTimer.Tick += m_DisplayTimer_Tick;
-#else
-                Application.Idle += Application_Idle;
-#endif
             }
         }
 
         private void UnregisterIdleEvent()
         {
             m_IdleEventRegistered = false;
-            Application.Idle -= Application_Idle; //it's always safe to unsubscribe multiple times...
 
-#if USE_POLLING_TIMER
             if (m_DisplayTimer != null)
             {
                 m_DisplayTimer.Stop();
                 m_DisplayTimer.Tick -= m_DisplayTimer_Tick;
                 m_DisplayTimer.Dispose();
             }
-#endif            
+        }
+
+        private void m_DisplayTimer_Tick(object sender, EventArgs e)
+        {
+            try
+            {
+                //if we aren't currently in a poll go ahead and update the UI.
+                if (m_ActivePoll == false && m_PendingInQueue)
+                {
+                    m_ActivePoll = true;
+                    BeginInvoke(new MethodInvoker(ActionPoll));
+                }
+            }
+            // ReSharper disable once EmptyGeneralCatchClause
+            catch (Exception ex)
+            {
+            }
         }
 
         #endregion
@@ -1435,7 +1420,14 @@ namespace Gibraltar.Monitor.Windows
 
         private void Application_Idle(object sender, EventArgs e)
         {
-            ActionPoll();
+            try
+            {
+                //we don't want any failure to chuck back on the form thread...
+                ActionPoll();
+            }
+            catch (Exception ex)
+            {
+            }
         }
 
         private void RunToolStripButton_Click(object sender, EventArgs e)

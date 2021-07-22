@@ -1,42 +1,10 @@
-﻿#region File Header
-// /********************************************************************
-//  * COPYRIGHT:
-//  *    This software program is furnished to the user under license
-//  *    by Gibraltar Software Inc, and use thereof is subject to applicable 
-//  *    U.S. and international law. This software program may not be 
-//  *    reproduced, transmitted, or disclosed to third parties, in 
-//  *    whole or in part, in any form or by any manner, electronic or
-//  *    mechanical, without the express written consent of Gibraltar Software Inc,
-//  *    except to the extent provided for by applicable license.
-//  *
-//  *    Copyright © 2008 - 2015 by Gibraltar Software, Inc.  
-//  *    All rights reserved.
-//  *******************************************************************/
-#endregion
-#region File Header
-
-/********************************************************************
- * COPYRIGHT:
- *    This software program is furnished to the user under license
- *    by Gibraltar Software, Inc, and use thereof is subject to applicable 
- *    U.S. and international law. This software program may not be 
- *    reproduced, transmitted, or disclosed to third parties, in 
- *    whole or in part, in any form or by any manner, electronic or
- *    mechanical, without the express written consent of Gibraltar Software, Inc,
- *    except to the extent provided for by applicable license.
- *
- *    Copyright © 2008 by Gibraltar Software, Inc.  All rights reserved.
- *******************************************************************/
-
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Text;
 using Gibraltar.Data;
 using Gibraltar.Serialization.Internal;
-
-#endregion File Header
 
 namespace Gibraltar.Serialization
 {
@@ -133,18 +101,29 @@ namespace Gibraltar.Serialization
         /// <summary>
         /// Returns a UInt64 value from the stream without repositioning the stream
         /// </summary>
-        /// <returns>A UInt64 value.</returns>
-        public UInt64 PeekUInt64()
+        /// <param name="data">The UInt64 value</param>
+        /// <param name="length">The number of bytes the encoded UInt64 was.</param>
+        /// <returns>True if the value could be read successfully, false otherwise.</returns>
+        public bool TryPeekUInt64(out ulong data, out long length)
         {
-            long originalPosition = m_Stream.Position;
+            data = 0;
+            var originalPosition = m_Stream.Position;
             try
             {
-                return ReadUInt64();
+                if (TryReadUInt64(out var peekValue))
+                {
+                    data = peekValue;
+                    return true;
+                }
             }
-            finally 
+            finally
             {
+                //return however many bytes we read
+                length = m_Stream.Position - originalPosition;
                 m_Stream.Position = originalPosition;
             }
+
+            return false;
         }
 
         /// <summary>
@@ -409,35 +388,19 @@ namespace Gibraltar.Serialization
             return array;
         }
 
+
         /// <summary>
         /// Returns a UInt64 value from the stream.
         /// </summary>
         /// <returns>A UInt64 value.</returns>
         public UInt64 ReadUInt64()
         {
-            ulong result = 0;
-            int bitCount = 0;
-            while (true)
+            if (TryReadUInt64(out var data) == false)
             {
-                byte nextByte = ReadByte();
-                // Normally, we are reading 7 bits at a time.
-                // But once we've read 8*7=56 bits, if we still
-                // have more bits, there can at most be 8 bits
-                // so we read all 8 bits for that last byte.
-                if (bitCount < 56)
-                {
-                    result |= ((ulong)nextByte & 0x7f) << bitCount;
-                    bitCount += 7;
-                    if ((nextByte & 0x80) == 0)
-                        break;
-                }
-                else
-                {
-                    result |= ((ulong)nextByte & 0xff) << 56;
-                    break;
-                }
+                throw new IOException("Unable to read beyond the end of the stream.");
             }
-            return result;
+            
+            return data;
         }
 
         /// <summary>
@@ -821,6 +784,63 @@ namespace Gibraltar.Serialization
         #endregion
 
         #region Private Helper Methods
+
+        /// <summary>
+        /// Read the next byte
+        /// </summary>
+        /// <param name="data">The byte read, if available</param>
+        /// <returns>True if a byte could be read, false otherwise.</returns>
+        private bool TryReadByte(out byte data)
+        {
+            int value = m_Stream.ReadByte();
+            if (value < 0)
+            {
+                data = 0;
+                return false;
+            }
+
+            data = (byte)value;
+            return true;
+        }
+
+        /// <summary>
+        /// Read a UInt64 from the stream
+        /// </summary>
+        /// <param name="data">The UInt64 value, if read successfully. 0 otherwise.</param>
+        /// <returns>True if the value could be read, false otherwise.</returns>
+        private bool TryReadUInt64(out ulong data)
+        {
+            ulong result = 0;
+            int bitCount = 0;
+            while (true)
+            {
+                if (TryReadByte(out var nextByte) == false)
+                {
+                    data = 0;
+                    return false;
+                }
+
+                // Normally, we are reading 7 bits at a time.
+                // But once we've read 8*7=56 bits, if we still
+                // have more bits, there can at most be 8 bits
+                // so we read all 8 bits for that last byte.
+                if (bitCount < 56)
+                {
+                    result |= ((ulong)nextByte & 0x7f) << bitCount;
+                    bitCount += 7;
+                    if ((nextByte & 0x80) == 0)
+                        break;
+                }
+                else
+                {
+                    result |= ((ulong)nextByte & 0xff) << 56;
+                    break;
+                }
+            }
+
+            data = result;
+            return true;
+        }
 
         /// <summary>
         /// Helper method to read a single byte from the underlying stream

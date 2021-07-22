@@ -1,42 +1,10 @@
-﻿#region File Header
-// /********************************************************************
-//  * COPYRIGHT:
-//  *    This software program is furnished to the user under license
-//  *    by Gibraltar Software Inc, and use thereof is subject to applicable 
-//  *    U.S. and international law. This software program may not be 
-//  *    reproduced, transmitted, or disclosed to third parties, in 
-//  *    whole or in part, in any form or by any manner, electronic or
-//  *    mechanical, without the express written consent of Gibraltar Software Inc,
-//  *    except to the extent provided for by applicable license.
-//  *
-//  *    Copyright © 2008 - 2015 by Gibraltar Software, Inc.  
-//  *    All rights reserved.
-//  *******************************************************************/
-#endregion
-#region File Header
-
-/********************************************************************
- * COPYRIGHT:
- *    This software program is furnished to the user under license
- *    by Gibraltar Software, Inc, and use thereof is subject to applicable 
- *    U.S. and international law. This software program may not be 
- *    reproduced, transmitted, or disclosed to third parties, in 
- *    whole or in part, in any form or by any manner, electronic or
- *    mechanical, without the express written consent of Gibraltar Software, Inc,
- *    except to the extent provided for by applicable license.
- *
- *    Copyright © 2008 by Gibraltar Software, Inc.  All rights reserved.
- *******************************************************************/
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using Gibraltar.Data;
 using Gibraltar.Serialization.Internal;
-
-#endregion File Header
 
 #pragma warning disable 1591
 namespace Gibraltar.Serialization
@@ -126,11 +94,17 @@ namespace Gibraltar.Serialization
 
                 try
                 {
-                    int packetSize = (int)m_Reader.PeekUInt64();
+                    //The payload size is the first field, but we want to know the whole
+                    //buffer we need to read the packet, so we have to account for the first
+                    //field length too.
+                    if (m_Reader.TryPeekUInt64(out var payloadSize, out var lengthBytes) == false)
+                        return false; // we couldn't read any.
 
 #if DEBUG
-                    if ((packetSize == 0) && Debugger.IsAttached)
+                    if ((payloadSize == 0) && Debugger.IsAttached)
+                    {
                         Debugger.Break();
+                    }
 #endif
 
 #if ADD_GUARD_BYTES
@@ -138,7 +112,7 @@ namespace Gibraltar.Serialization
                     packetSize += 4;
 #endif
                     //there is only data available if our stream is long enough to contain a whole packet
-                    return ((streamLength - m_Stream.Position) >= packetSize);
+                    return ((streamLength - m_Stream.Position) >= (long)payloadSize + lengthBytes);
                 }
                 catch (Exception)
                 {
