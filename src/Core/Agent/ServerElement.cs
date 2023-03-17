@@ -1,6 +1,4 @@
-﻿
-
-using System.Configuration;
+﻿using System.Configuration;
 
 namespace Gibraltar.Agent
 {
@@ -45,7 +43,7 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("sendAllApplications", DefaultValue = false, IsRequired = false)]
         public bool SendAllApplications
         {
-            get { return (bool)this["sendAllApplications"]; } 
+            get { return (bool)this["sendAllApplications"]; }
             set { this["sendAllApplications"] = value; }
         }
 
