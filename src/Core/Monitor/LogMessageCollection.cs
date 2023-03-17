@@ -1,13 +1,7 @@
-﻿
-
-#region Usings
-
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using Loupe.Extensibility.Data;
-
-#endregion
 
 namespace Gibraltar.Monitor
 {
@@ -280,10 +274,7 @@ namespace Gibraltar.Monitor
         {
             get
             {
-                if (m_List.Count == 0) return null;
-
                 EnsureSorted();
-
                 return m_List.Values[0];
             }
         }
@@ -295,11 +286,8 @@ namespace Gibraltar.Monitor
         {
             get
             {
-                if (m_List.Count == 0) return null;
-
                 EnsureSorted();
-
-                return m_List.Values[m_List.Count - 1];
+                return m_List.Count == 0 ? null :  m_List.Values[m_List.Count - 1];
             }
         }
 

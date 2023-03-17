@@ -287,7 +287,7 @@
             this.ShowDetailsToolStripButton.Size = new System.Drawing.Size(23, 22);
             this.ShowDetailsToolStripButton.Text = "Show Details";
             this.ShowDetailsToolStripButton.ToolTipText = "Include details about the thread and call information like class, method, and sou" +
-                "rce code location.";
+    "rce code location.";
             this.ShowDetailsToolStripButton.Click += new System.EventHandler(this.ShowDetailsToolStripButton_Click);
             // 
             // ClearToolStripButton
@@ -383,11 +383,11 @@
             this.SearchToolStripTextBox.ForeColor = System.Drawing.SystemColors.InactiveCaptionText;
             this.SearchToolStripTextBox.Margin = new System.Windows.Forms.Padding(6, 0, 1, 0);
             this.SearchToolStripTextBox.Name = "SearchToolStripTextBox";
-            this.SearchToolStripTextBox.Size = new System.Drawing.Size(100, 25);
+            this.SearchToolStripTextBox.Size = new System.Drawing.Size(150, 25);
             this.SearchToolStripTextBox.Text = "Search Messages";
+            this.SearchToolStripTextBox.Enter += new System.EventHandler(this.SearchToolStripTextBox_Enter);
             this.SearchToolStripTextBox.Leave += new System.EventHandler(this.SearchToolStripTextBox_Leave);
             this.SearchToolStripTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.SearchToolStripTextBox_KeyDown);
-            this.SearchToolStripTextBox.Enter += new System.EventHandler(this.SearchToolStripTextBox_Enter);
             this.SearchToolStripTextBox.TextChanged += new System.EventHandler(this.SearchToolStripTextBox_TextChanged);
             // 
             // SearchToolStripButton

@@ -1667,6 +1667,7 @@ namespace Gibraltar.Data
         {
             bool isValid = false;
             long startingPosition = rawData.Position;
+            length = (length == 0) ? (int)(rawData.Length - rawData.Position) : length;
 
             //The current file version information.
             BinarySerializer.DeserializeValue(rawData, out m_MajorVersion);
@@ -1778,9 +1779,8 @@ namespace Gibraltar.Data
                 m_Properties[name] = value; //if they're dumb enough to send us a duplicate, take the last one.
             }
 
-            //we may have been passed a length or not - if so trust it.
-            long remainingLength = (length == 0) ? rawData.Length : length;
-            if (rawData.Position < remainingLength - 4)
+            //not all headers have file information.  If it doesn't, it'll just have the CRC.
+            if ((rawData.Position - startingPosition) < length - 4) //The -4 is for the size of the CRC.
             {
                 m_HasFileInfo = true;
 
@@ -1794,6 +1794,14 @@ namespace Gibraltar.Data
 
             //now lets get the CRC and check it...
             long dataLength = rawData.Position - startingPosition; //be sure to offset for wherever the stream was when it started
+
+#if DEBUG
+            if ((dataLength > length - 4) && (Debugger.IsAttached))
+            {
+                //we read more bytes than our stream expected.  Something is off!
+                Debugger.Break();
+            }
+#endif
 
             //make a new copy of the header up to the start of the CRC
             byte[] headerBytes = new byte[dataLength];
