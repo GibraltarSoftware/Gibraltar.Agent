@@ -60,8 +60,7 @@ jobs:
       configuration: '$(buildConfiguration)'
       testSelector: 'testAssemblies'
       testAssemblyVer2: |
-        **/bin/Release/**/*.Test.dll
-        **/bin/Release/**/*.Tests.dll
+        **/bin/Release/Loupe.Agent.Test.dll
       searchFolder: '$(Build.SourcesDirectory)'
       vsTestVersion: '16.0'
       codeCoverageEnabled: true
