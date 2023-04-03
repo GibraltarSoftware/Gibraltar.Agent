@@ -1,21 +1,4 @@
-﻿
-#region File Header
-
-/********************************************************************
- * COPYRIGHT:
- *    This software program is furnished to the user under license
- *    by Gibraltar Software, Inc, and use thereof is subject to applicable 
- *    U.S. and international law. This software program may not be 
- *    reproduced, transmitted, or disclosed to third parties, in 
- *    whole or in part, in any form or by any manner, electronic or
- *    mechanical, without the express written consent of Gibraltar Software, Inc,
- *    except to the extent provided for by applicable license.
- *
- *    Copyright © 2008 by Gibraltar Software, Inc.  All rights reserved.
- *******************************************************************/
-using System.Configuration;
-
-#endregion File Header
+﻿using System.Configuration;
 
 namespace Gibraltar.Agent
 {
@@ -28,7 +11,9 @@ namespace Gibraltar.Agent
         /// True by default, disables storing a session file when false.
         /// </summary>
         [ConfigurationProperty("enabled", DefaultValue = true, IsRequired = false)]
-        public bool Enabled { get { return (bool)this["enabled"]; } set { this["enabled"] = value; } }
+        public bool Enabled { get => (bool)this["enabled"];
+            set => this["enabled"] = value;
+        }
 
         /// <summary>
         /// The folder to store log files in unless explicitly overridden at runtime.
@@ -37,14 +22,8 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("folder", DefaultValue = "", IsRequired = false)]
         public string Folder
         {
-            get
-            {
-                return this["folder"].ToString();
-            }
-            set
-            {
-                this["folder"] = value;
-            }
+            get => this["folder"].ToString();
+            set => this["folder"] = value;
         }
 
 
@@ -57,14 +36,8 @@ namespace Gibraltar.Agent
         [IntegerValidator(MinValue = 0, MaxValue = 2147483647)]
         public int AutoFlushInterval
         {
-            get
-            {
-                return (int)this["autoFlushInterval"];
-            }
-            set
-            {
-                this["autoFlushInterval"] = value;
-            }
+            get => (int)this["autoFlushInterval"];
+            set => this["autoFlushInterval"] = value;
         }
 
 
@@ -78,14 +51,8 @@ namespace Gibraltar.Agent
         [IntegerValidator(MinValue = 0, MaxValue = 2147483647)]
         public int IndexUpdateInterval
         {
-            get
-            {
-                return (int)this["indexUpdateInterval"];
-            }
-            set
-            {
-                this["indexUpdateInterval"] = value;
-            }
+            get => (int)this["indexUpdateInterval"];
+            set => this["indexUpdateInterval"] = value;
         }
 
         /// <summary>
@@ -99,14 +66,8 @@ namespace Gibraltar.Agent
         [IntegerValidator(MinValue = 0, MaxValue = 2147483647)]
         public int MaxFileSize
         {
-            get
-            {
-                return (int)this["maxFileSize"];
-            }
-            set
-            {
-                this["maxFileSize"] = value;
-            }
+            get => (int)this["maxFileSize"];
+            set => this["maxFileSize"] = value;
         }
 
 
@@ -118,14 +79,8 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("maxFileDuration", DefaultValue = 1440, IsRequired = false)]
         public int MaxFileDuration
         {
-            get
-            {
-                return (int)this["maxFileDuration"];
-            }
-            set
-            {
-                this["maxFileDuration"] = value;
-            }
+            get => (int)this["maxFileDuration"];
+            set => this["maxFileDuration"] = value;
         }
 
 
@@ -138,14 +93,8 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("enableFilePruning", DefaultValue = true, IsRequired = false)]
         public bool EnableFilePruning
         {
-            get
-            {
-                return (bool)this["enableFilePruning"];
-            }
-            set
-            {
-                this["enableFilePruning"] = value;
-            }
+            get => (bool)this["enableFilePruning"];
+            set => this["enableFilePruning"] = value;
         }
 
         /// <summary>
@@ -158,14 +107,8 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("maxLocalDiskUsage", DefaultValue = 150, IsRequired = false)]
         public int MaxLocalDiskUsage
         {
-            get
-            {
-                return (int)this["maxLocalDiskUsage"];
-            }
-            set
-            {
-                this["maxLocalDiskUsage"] = value;
-            }
+            get => (int)this["maxLocalDiskUsage"];
+            set => this["maxLocalDiskUsage"] = value;
         }
 
 
@@ -179,14 +122,8 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("maxLocalFileAge", DefaultValue = 90, IsRequired = false)]
         public int MaxLocalFileAge
         {
-            get
-            {
-                return (int)this["maxLocalFileAge"];
-            }
-            set
-            {
-                this["maxLocalFileAge"] = value;
-            }
+            get => (int)this["maxLocalFileAge"];
+            set => this["maxLocalFileAge"] = value;
         }
 
         /// <summary>
@@ -198,14 +135,8 @@ namespace Gibraltar.Agent
         [IntegerValidator(MinValue = 1, MaxValue = 2147483647)]
         public int MinimumFreeDisk
         {
-            get
-            {
-                return (int)this["minimumFreeDisk"];
-            }
-            set
-            {
-                this["minimumFreeDisk"] = value;
-            }
+            get => (int)this["minimumFreeDisk"];
+            set => this["minimumFreeDisk"] = value;
         }
 
         /// <summary>
@@ -218,14 +149,8 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("forceSynchronous", DefaultValue = false, IsRequired = false)]
         public bool ForceSynchronous
         {
-            get
-            {
-                return (bool)this["forceSynchronous"];
-            }
-            set
-            {
-                this["forceSynchronous"] = value;
-            }
+            get => (bool)this["forceSynchronous"];
+            set => this["forceSynchronous"] = value;
         }
 
         /// <summary>
@@ -239,14 +164,8 @@ namespace Gibraltar.Agent
         [IntegerValidator(MinValue = 1, MaxValue = 50000)]
         public int MaxQueueLength
         {
-            get
-            {
-                return (int)this["maxQueueLength"];
-            }
-            set
-            {
-                this["maxQueueLength"] = value;
-            }
+            get => (int)this["maxQueueLength"];
+            set => this["maxQueueLength"] = value;
         }
     }
 }

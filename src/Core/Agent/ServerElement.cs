@@ -11,7 +11,9 @@ namespace Gibraltar.Agent
         /// True by default, disables server communication when false..
         /// </summary>
         [ConfigurationProperty("enabled", DefaultValue = true, IsRequired = false)]
-        public bool Enabled { get { return (bool)this["enabled"]; } set { this["enabled"] = value; } }
+        public bool Enabled { get => (bool)this["enabled"];
+            set => this["enabled"] = value;
+        }
 
         /// <summary>
         /// Indicates whether to automatically send session data to the server in the background.
@@ -20,8 +22,8 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("autoSendSessions", DefaultValue = false, IsRequired = false)]
         public bool AutoSendSessions
         {
-            get { return (bool)this["autoSendSessions"]; }
-            set { this["autoSendSessions"] = value; }
+            get => (bool)this["autoSendSessions"];
+            set => this["autoSendSessions"] = value;
         }
 
         /// <summary>
@@ -32,8 +34,8 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("autoSendOnError", DefaultValue = true, IsRequired = false)]
         public bool AutoSendOnError
         {
-            get { return (bool)this["autoSendOnError"]; }
-            set { this["autoSendOnError"] = value; }
+            get => (bool)this["autoSendOnError"];
+            set => this["autoSendOnError"] = value;
         }
 
         /// <summary>
@@ -43,8 +45,8 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("sendAllApplications", DefaultValue = false, IsRequired = false)]
         public bool SendAllApplications
         {
-            get { return (bool)this["sendAllApplications"]; }
-            set { this["sendAllApplications"] = value; }
+            get => (bool)this["sendAllApplications"];
+            set => this["sendAllApplications"] = value;
         }
 
         /// <summary>
@@ -54,8 +56,8 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("purgeSentSessions", DefaultValue = false, IsRequired = false)]
         public bool PurgeSentSessions
         {
-            get { return (bool)this["purgeSentSessions"]; }
-            set { this["purgeSentSessions"] = value; }
+            get => (bool)this["purgeSentSessions"];
+            set => this["purgeSentSessions"] = value;
         }
 
         /// <summary>
@@ -67,14 +69,8 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("applicationKey", DefaultValue = "", IsRequired = false)]
         public string ApplicationKey
         {
-            get
-            {
-                return (string)this["applicationKey"];
-            }
-            set
-            {
-                this["applicationKey"] = value;
-            }
+            get => (string)this["applicationKey"];
+            set => this["applicationKey"] = value;
         }
 
         /// <summary>
@@ -83,14 +79,8 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("customerName", DefaultValue = "", IsRequired = false)]
         public string CustomerName
         {
-            get
-            {
-                return (string)this["customerName"];
-            }
-            set
-            {
-                this["customerName"] = value;
-            }
+            get => (string)this["customerName"];
+            set => this["customerName"] = value;
         }
 
         /// <summary>
@@ -100,14 +90,8 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("useGibraltarService", DefaultValue = false, IsRequired = false)]
         public bool UseGibraltarService
         {
-            get
-            {
-                return (bool)this["useGibraltarService"];
-            }
-            set
-            {
-                this["useGibraltarService"] = value;
-            }
+            get => (bool)this["useGibraltarService"];
+            set => this["useGibraltarService"] = value;
         }
 
         /// <summary>
@@ -117,14 +101,8 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("useSsl", DefaultValue = false, IsRequired = false)]
         public bool UseSsl
         {
-            get
-            {
-                return (bool)this["useSsl"];
-            }
-            set
-            {
-                this["useSsl"] = value;
-            }
+            get => (bool)this["useSsl"];
+            set => this["useSsl"] = value;
         }
 
         /// <summary>
@@ -134,14 +112,8 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("server", DefaultValue = "", IsRequired = false)]
         public string Server
         {
-            get
-            {
-                return (string)this["server"];
-            }
-            set
-            {
-                this["server"] = value;
-            }
+            get => (string)this["server"];
+            set => this["server"] = value;
         }
 
         /// <summary>
@@ -151,14 +123,8 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("port", DefaultValue = 0, IsRequired = false)]
         public int Port
         {
-            get
-            {
-                return (int)this["port"];
-            }
-            set
-            {
-                this["port"] = value;
-            }
+            get => (int)this["port"];
+            set => this["port"] = value;
         }
 
         /// <summary>
@@ -168,14 +134,8 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("applicationBaseDirectory", DefaultValue = "", IsRequired = false)]
         public string ApplicationBaseDirectory
         {
-            get
-            {
-                return (string)this["applicationBaseDirectory"];
-            }
-            set
-            {
-                this["applicationBaseDirectory"] = value;
-            }
+            get => (string)this["applicationBaseDirectory"];
+            set => this["applicationBaseDirectory"] = value;
         }
 
         /// <summary>
@@ -185,14 +145,8 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("repository", DefaultValue = "", IsRequired = false)]
         public string Repository
         {
-            get
-            {
-                return (string)this["repository"];
-            }
-            set
-            {
-                this["repository"] = value;
-            }
+            get => (string)this["repository"];
+            set => this["repository"] = value;
         }
     }
 }

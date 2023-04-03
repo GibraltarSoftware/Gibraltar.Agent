@@ -32,8 +32,8 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("server", DefaultValue = "", IsRequired = false)]
         public string Server
         {
-            get { return (string)this["server"]; }
-            set { this["server"] = value; }
+            get => (string)this["server"];
+            set => this["server"] = value;
         }
 
         /// <summary>
@@ -42,8 +42,8 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("user", DefaultValue = "", IsRequired = false)]
         public string User
         {
-            get { return (string)this["user"]; }
-            set { this["user"] = value; }
+            get => (string)this["user"];
+            set => this["user"] = value;
         }
 
         /// <summary>
@@ -52,8 +52,8 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("password", DefaultValue = "", IsRequired = false)]
         public string Password
         {
-            get { return (string)this["password"]; }
-            set { this["password"] = value; }
+            get => (string)this["password"];
+            set => this["password"] = value;
         }
 
         /// <summary>
@@ -63,8 +63,8 @@ namespace Gibraltar.Agent
         [IntegerValidator(MinValue = 0, MaxValue = 65535)]
         public int Port
         {
-            get { return (int)this["port"]; }
-            set { this["port"] = value; }
+            get => (int)this["port"];
+            set => this["port"] = value;
         }
 
         /// <summary>
@@ -73,8 +73,8 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("useSsl", DefaultValue = false, IsRequired = false)]
         public bool UseSsl
         {
-            get { return (bool)this["useSsl"]; }
-            set { this["useSsl"] = value; }
+            get => (bool)this["useSsl"];
+            set => this["useSsl"] = value;
         }
 
         /// <summary>
@@ -84,8 +84,8 @@ namespace Gibraltar.Agent
         [IntegerValidator(MinValue = 0, MaxValue = 2048)]
         public int MaxMessageSize
         {
-            get { return (int)this["maxMessageSize"]; }
-            set { this["maxMessageSizeMb"] = value; }
+            get => (int)this["maxMessageSize"];
+            set => this["maxMessageSizeMb"] = value;
         }
 
         /// <summary>
@@ -94,8 +94,8 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("fromAddress", DefaultValue = "", IsRequired = false)]
         public string FromAddress
         {
-            get { return (string)this["fromAddress"]; }
-            set { this["fromAddress"] = value; }
+            get => (string)this["fromAddress"];
+            set => this["fromAddress"] = value;
         }
 
         #endregion

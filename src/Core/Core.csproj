@@ -108,6 +108,7 @@
   <ItemGroup>
     <Compile Include="Agent\ExportFileElement.cs" />
     <Compile Include="Agent\LiveStreamElement.cs" />
+    <Compile Include="Agent\LoupeElementBase.cs" />
     <Compile Include="Agent\NetworkViewerElement.cs" />
     <Compile Include="BindingListController.cs" />
     <Compile Include="BindingListEx.cs" />

@@ -29,20 +29,26 @@ namespace Gibraltar.Agent
         /// False by default, enables connecting a viewer remotely over a network when true.
         /// </summary>
         [ConfigurationProperty("enabled", DefaultValue = true, IsRequired = false)]
-        public bool Enabled { get { return (bool)this["enabled"]; } set { this["enabled"] = value; } }
+        public bool Enabled { get => (bool)this["enabled"];
+            set => this["enabled"] = value;
+        }
 
         /// <summary>
         /// True by default, enables connecting a viewer on the local computer when true.
         /// </summary>
         [ConfigurationProperty("allowLocalClients", DefaultValue = true, IsRequired = false)]
-        public bool AllowLocalClients { get { return (bool)this["allowLocalClients"]; } set { this["allowLocalClients"] = value; } }
+        public bool AllowLocalClients { get => (bool)this["allowLocalClients"];
+            set => this["allowLocalClients"] = value;
+        }
 
         /// <summary>
         /// False by default, enables connecting a viewer from another computer when true.
         /// </summary>
         /// <remarks>Requires a server configuration section</remarks>
         [ConfigurationProperty("allowRemoteClients", DefaultValue = false, IsRequired = false)]
-        public bool AllowRemoteClients { get { return (bool)this["allowRemoteClients"]; } set { this["allowRemoteClients"] = value; } }
+        public bool AllowRemoteClients { get => (bool)this["allowRemoteClients"];
+            set => this["allowRemoteClients"] = value;
+        }
 
         /// <summary>
         /// The maximum number of queued messages waiting to be dispatched to viewers.
@@ -53,6 +59,8 @@ namespace Gibraltar.Agent
         /// behavior unless the publisher queue is also filled.</remarks>
         [ConfigurationProperty("maxQueueLength", DefaultValue = 2000, IsRequired = false)]
         [IntegerValidator(MinValue = 1, MaxValue = 50000)]
-        public int MaxQueueLength { get { return (int)this["maxQueueLength"]; } set { this["maxQueueLength"] = value; } }
+        public int MaxQueueLength { get => (int)this["maxQueueLength"];
+            set => this["maxQueueLength"] = value;
+        }
     }
 }

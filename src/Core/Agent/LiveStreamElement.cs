@@ -42,8 +42,8 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("enabled", DefaultValue = false, IsRequired = false)]
         public bool Enabled
         {
-            get { return (bool)this["enabled"]; }
-            set { this["enabled"] = value; }
+            get => (bool)this["enabled"];
+            set => this["enabled"] = value;
         }
 
         /// <summary>
@@ -53,8 +53,8 @@ namespace Gibraltar.Agent
         [IntegerValidator(MinValue = 1, MaxValue = 65535)]
         public int AgentPort
         {
-            get { return (int)this["agentPort"]; }
-            set { this["agentPort"] = value; }
+            get => (int)this["agentPort"];
+            set => this["agentPort"] = value;
         }
 
         /// <summary>
@@ -64,8 +64,8 @@ namespace Gibraltar.Agent
         [IntegerValidator(MinValue = 1, MaxValue = 65535)]
         public int ClientPort
         {
-            get { return (int)this["clientPort"]; }
-            set { this["clientPort"] = value; }
+            get => (int)this["clientPort"];
+            set => this["clientPort"] = value;
         }
 
         /// <summary>
@@ -74,14 +74,8 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("useSsl", DefaultValue = false, IsRequired = false)]
         public bool UseSsl
         {
-            get
-            {
-                return (bool)this["useSsl"];
-            }
-            set
-            {
-                this["useSsl"] = value;
-            }
+            get => (bool)this["useSsl"];
+            set => this["useSsl"] = value;
         }
 
         /// <summary>
@@ -90,14 +84,8 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("certificateName", DefaultValue = "", IsRequired = false)]
         public string CertificateName
         {
-            get
-            {
-                return (string)this["certificateName"];
-            }
-            set
-            {
-                this["certificateName"] = value;
-            }
+            get => (string)this["certificateName"];
+            set => this["certificateName"] = value;
         }
 
         #endregion
