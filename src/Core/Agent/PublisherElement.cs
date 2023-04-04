@@ -1,5 +1,5 @@
-﻿#define STRING_APPTYPE
-using System.Collections;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Configuration;
 
 namespace Gibraltar.Agent
@@ -18,7 +18,7 @@ namespace Gibraltar.Agent
         }
 
         /// <inheritdoc />
-        protected override void OnLoadEnvironmentVars(IDictionary environmentVars)
+        protected override void OnLoadEnvironmentVars(IDictionary<string, string> environmentVars)
         {
             LoadEnvironmentVariable(environmentVars, "productName");
             LoadEnvironmentVariable(environmentVars, "applicationDescription");
@@ -139,7 +139,7 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("forceSynchronous", DefaultValue = false, IsRequired = false)]
         public bool ForceSynchronous
         {
-            get => ReadBoolean("foreSynchronous");
+            get => ReadBoolean("forceSynchronous");
             set => this["forceSynchronous"] = value;
         }
 
@@ -166,7 +166,7 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("enableAnonymousMode", DefaultValue = false, IsRequired = false)]
         public bool EnableAnonymousMode
         {
-            get => ReadBoolean("foreSynchronous");
+            get => ReadBoolean("enableAnonymousMode");
             set => this["enableAnonymousMode"] = value;
         }
         /// <summary>
@@ -181,7 +181,7 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("enableDebugMode", DefaultValue = false, IsRequired = false)]
         public bool EnableDebugMode
         {
-            get => ReadBoolean("foreSynchronous");
+            get => ReadBoolean("enableDebugMode");
             set => this["enableDebugMode"] = value;
         }
     }

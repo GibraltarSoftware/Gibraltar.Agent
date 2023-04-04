@@ -1,5 +1,6 @@
 ﻿
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net;
@@ -16,6 +17,9 @@ namespace Gibraltar
     {
         private static bool g_MonoRuntime = CheckForMono(); // Are we running in Mono or full .NET CLR?
         private static bool s_SilentMode = false;
+
+        private static Dictionary<string, string> g_EnvironmentVariablesLookup;
+
         volatile private static bool s_BreakPointEnable = false; // Can be changed in the debugger
 
         // Basic log implementation.
@@ -331,5 +335,51 @@ namespace Gibraltar
 #endif
             return selectedFrame;
         }
+
+        /// <summary>
+        /// Load OS environment variables into a lookup dictionary.
+        /// </summary>
+        /// <returns></returns>
+        public static Dictionary<string, string> LoadEnvironmentVariables()
+        {
+            //we aren't treating g_EnvironmentVariablesLookup in a threadsafe way, but
+            //we're banking on this being just a cache and it's about performance so 
+            //it should be safe enough...
+            if (g_EnvironmentVariablesLookup == null)
+            {
+                try
+                {
+                    var environmentVars = Environment.GetEnvironmentVariables();
+
+                    if (environmentVars != null)
+                    {
+                        //to speed up processing and do case-insensitive matching lets copy everything into a new dictionary.
+                        var envVarsLookup =
+                            new Dictionary<string, string>(environmentVars.Count, StringComparer.OrdinalIgnoreCase);
+
+                        foreach (DictionaryEntry dictionaryEntry in environmentVars)
+                        {
+                            var value = dictionaryEntry.Value?.ToString()?.Trim();
+
+                            if (string.IsNullOrEmpty(value) == false)
+                            {
+                                envVarsLookup.Add(dictionaryEntry.Key.ToString(), value);
+                            }
+                        }
+
+                        g_EnvironmentVariablesLookup = envVarsLookup;
+
+                        return envVarsLookup; //so we guarantee if we loaded it, we will return it regardless of the shared variable.
+                    }
+                }
+                catch (Exception ex)
+                {
+
+                }
+            }
+
+            return g_EnvironmentVariablesLookup;
+        }
+
     }
 }

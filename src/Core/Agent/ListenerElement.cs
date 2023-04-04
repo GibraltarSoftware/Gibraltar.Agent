@@ -1,12 +1,41 @@
-﻿using System.Configuration;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Configuration;
 
 namespace Gibraltar.Agent
 {
     /// <summary>
     /// Configuration information for the trace listener.
     /// </summary>
-    public class ListenerElement : ConfigurationSection
+    public class ListenerElement : LoupeElementBase
     {
+        /// <inheritdoc />
+        public ListenerElement() : base("LOUPE__LISTENER__")
+        {
+
+        }
+
+        /// <inheritdoc />
+        protected override void OnLoadEnvironmentVars(IDictionary<string, string> environmentVars)
+        {
+            LoadEnvironmentVariable(environmentVars, "autoTraceRegistration");
+            LoadEnvironmentVariable(environmentVars, "enableCommandLine");
+            LoadEnvironmentVariable(environmentVars, "enableConsole");
+            LoadEnvironmentVariable(environmentVars, "enableProcessPerformance");
+            LoadEnvironmentVariable(environmentVars, "enableDiskPerformance");
+            LoadEnvironmentVariable(environmentVars, "enableMemoryPerformance");
+            LoadEnvironmentVariable(environmentVars, "enableNetworkPerformance");
+            LoadEnvironmentVariable(environmentVars, "enableSystemPerformance");
+            LoadEnvironmentVariable(environmentVars, "enableNetworkEvents");
+            LoadEnvironmentVariable(environmentVars, "enablePowerEvents");
+            LoadEnvironmentVariable(environmentVars, "enableUserEvents");
+            LoadEnvironmentVariable(environmentVars, "enableAssemblyEvents");
+            LoadEnvironmentVariable(environmentVars, "enableAssemblyLoadFailureEvents");
+            LoadEnvironmentVariable(environmentVars, "catchUnhandledExceptions");
+            LoadEnvironmentVariable(environmentVars, "catchApplicationExceptions");
+            LoadEnvironmentVariable(environmentVars, "reportErrorsToUser");
+            LoadEnvironmentVariable(environmentVars, "endSessionOnTraceClose");
+        }
 
         /// <summary>
         /// Configures whether Gibraltar should automatically make sure it is registered as a Trace Listener.
@@ -19,7 +48,7 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("autoTraceRegistration", DefaultValue = true, IsRequired = false)]
         public bool AutoTraceRegistration
         {
-            get => (bool)this["autoTraceRegistration"];
+            get => ReadBoolean("autoTraceRegistration");
             set => this["autoTraceRegistration"] = value;
         }
 
@@ -34,7 +63,7 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("enableCommandLine", DefaultValue = true, IsRequired = false)]
         public bool EnableCommandLine
         {
-            get => (bool) this["enableCommandLine"];
+            get => ReadBoolean("enableCommandLine");
             set => this["enableCommandLine"] = value;
         }
 
@@ -46,7 +75,7 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("enableConsole", DefaultValue = true, IsRequired = false)]
         public bool EnableConsole
         {
-            get => (bool)this["enableConsole"];
+            get => ReadBoolean("enableConsole");
             set => this["enableConsole"] = value;
         }
 
@@ -56,7 +85,7 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("enableProcessPerformance", DefaultValue = true, IsRequired = false)]
         public bool EnableProcessPerformance
         {
-            get => (bool)this["enableProcessPerformance"];
+            get => ReadBoolean("enableProcessPerformance");
             set => this["enableProcessPerformance"] = value;
         }
 
@@ -66,7 +95,7 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("enableDiskPerformance", DefaultValue = true, IsRequired = false)]
         public bool EnableDiskPerformance
         {
-            get => (bool)this["enableDiskPerformance"];
+            get => ReadBoolean("enableDiskPerformance");
             set => this["enableDiskPerformance"] = value;
         }
 
@@ -76,7 +105,7 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("enableMemoryPerformance", DefaultValue = false, IsRequired = false)]
         public bool EnableMemoryPerformance
         {
-            get => (bool)this["enableMemoryPerformance"];
+            get => ReadBoolean("enableMemoryPerformance");
             set => this["enableMemoryPerformance"] = value;
         }
 
@@ -86,7 +115,7 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("enableNetworkPerformance", DefaultValue = true, IsRequired = false)]
         public bool EnableNetworkPerformance
         {
-            get => (bool)this["enableNetworkPerformance"];
+            get => ReadBoolean("enableNetworkPerformance");
             set => this["enableNetworkPerformance"] = value;
         }
 
@@ -96,7 +125,7 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("enableSystemPerformance", DefaultValue = true, IsRequired = false)]
         public bool EnableSystemPerformance
         {
-            get => (bool)this["enableSystemPerformance"];
+            get => ReadBoolean("enableSystemPerformance");
             set => this["enableSystemPerformance"] = value;
         }
 
@@ -106,7 +135,7 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("enableNetworkEvents", DefaultValue = true, IsRequired = false)]
         public bool EnableNetworkEvents
         {
-            get => (bool)this["enableNetworkEvents"];
+            get => ReadBoolean("enableNetworkEvents");
             set => this["enableNetworkEvents"] = value;
         }
 
@@ -116,7 +145,7 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("enablePowerEvents", DefaultValue = true, IsRequired = false)]
         public bool EnablePowerEvents
         {
-            get => (bool)this["enablePowerEvents"];
+            get => ReadBoolean("enablePowerEvents");
             set => this["enablePowerEvents"] = value;
         }
 
@@ -126,7 +155,7 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("enableUserEvents", DefaultValue = true, IsRequired = false)]
         public bool EnableUserEvents
         {
-            get => (bool)this["enableUserEvents"];
+            get => ReadBoolean("enableUserEvents");
             set => this["enableUserEvents"] = value;
         }
 
@@ -136,7 +165,7 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("enableAssemblyEvents", DefaultValue = true, IsRequired = false)]
         public bool EnableAssemblyEvents
         {
-            get => (bool)this["enableAssemblyEvents"];
+            get => ReadBoolean("enableAssemblyEvents");
             set => this["enableAssemblyEvents"] = value;
         }
 
@@ -146,7 +175,7 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("enableAssemblyLoadFailureEvents", DefaultValue = false, IsRequired = false)]
         public bool EnableAssemblyLoadFailureEvents
         {
-            get => (bool)this["enableAssemblyLoadFailureEvents"];
+            get => ReadBoolean("enableAssemblyLoadFailureEvents");
             set => this["enableAssemblyLoadFailureEvents"] = value;
         }
 
@@ -165,7 +194,7 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("catchUnhandledExceptions", DefaultValue = true, IsRequired = false)]
         public bool CatchUnhandledExceptions
         {
-            get => (bool)this["catchUnhandledExceptions"];
+            get => ReadBoolean("catchUnhandledExceptions");
             set => this["catchUnhandledExceptions"] = value;
         }
 
@@ -196,7 +225,7 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("catchApplicationExceptions", DefaultValue = true, IsRequired = false)]
         public bool CatchApplicationExceptions
         {
-            get => (bool)this["catchApplicationExceptions"];
+            get => ReadBoolean("catchApplicationExceptions");
             set => this["catchApplicationExceptions"] = value;
         }
 
@@ -215,7 +244,7 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("reportErrorsToUser", DefaultValue = true, IsRequired = false)]
         public bool ReportErrorsToUser
         {
-            get => (bool)this["reportErrorsToUser"];
+            get => ReadBoolean("reportErrorsToUser");
             set => this["reportErrorsToUser"] = value;
         }
 
@@ -228,7 +257,7 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("endSessionOnTraceClose", DefaultValue = true, IsRequired = false)]
         public bool EndSessionOnTraceClose
         {
-            get => (bool)this["endSessionOnTraceClose"];
+            get => ReadBoolean("endSessionOnTraceClose");
             set => this["endSessionOnTraceClose"] = value;
         }
 

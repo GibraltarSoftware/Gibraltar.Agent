@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using System.Configuration;
 
 namespace Gibraltar.Agent
@@ -14,7 +15,8 @@ namespace Gibraltar.Agent
 
         }
 
-        protected override void OnLoadEnvironmentVars(IDictionary environmentVars)
+        /// <inheritdoc />
+        protected override void OnLoadEnvironmentVars(IDictionary<string, string> environmentVars)
         {
             LoadEnvironmentVariable(environmentVars, "enabled");
             LoadEnvironmentVariable(environmentVars, "consentDefault");

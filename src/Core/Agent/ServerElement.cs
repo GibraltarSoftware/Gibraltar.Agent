@@ -1,17 +1,45 @@
-﻿using System.Configuration;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Configuration;
 
 namespace Gibraltar.Agent
 {
     /// <summary>
     /// The application configuration information for sending session summaries and data to a Loupe Server
     /// </summary>
-    public class ServerElement : ConfigurationSection
+    public class ServerElement : LoupeElementBase
     {
+        /// <inheritdoc />
+        public ServerElement() : base("LOUPE__SERVER__")
+        {
+
+        }
+
+        /// <inheritdoc />
+        protected override void OnLoadEnvironmentVars(IDictionary<string, string> environmentVars)
+        {
+            LoadEnvironmentVariable(environmentVars, "enabled");
+            LoadEnvironmentVariable(environmentVars, "autoSendSessions");
+            LoadEnvironmentVariable(environmentVars, "autoSendOnError");
+            LoadEnvironmentVariable(environmentVars, "sendAllApplications");
+            LoadEnvironmentVariable(environmentVars, "purgeSentSessions");
+            LoadEnvironmentVariable(environmentVars, "applicationKey");
+            LoadEnvironmentVariable(environmentVars, "customerName");
+            LoadEnvironmentVariable(environmentVars, "useGibraltarService");
+            LoadEnvironmentVariable(environmentVars, "useSsl");
+            LoadEnvironmentVariable(environmentVars, "server");
+            LoadEnvironmentVariable(environmentVars, "port");
+            LoadEnvironmentVariable(environmentVars, "applicationBaseDirectory");
+            LoadEnvironmentVariable(environmentVars, "repository");
+        }
+
         /// <summary>
         /// True by default, disables server communication when false..
         /// </summary>
         [ConfigurationProperty("enabled", DefaultValue = true, IsRequired = false)]
-        public bool Enabled { get => (bool)this["enabled"];
+        public bool Enabled 
+        { 
+            get => ReadBoolean("enabled");
             set => this["enabled"] = value;
         }
 
@@ -22,7 +50,7 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("autoSendSessions", DefaultValue = false, IsRequired = false)]
         public bool AutoSendSessions
         {
-            get => (bool)this["autoSendSessions"];
+            get => ReadBoolean("autoSendSessions");
             set => this["autoSendSessions"] = value;
         }
 
@@ -34,7 +62,7 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("autoSendOnError", DefaultValue = true, IsRequired = false)]
         public bool AutoSendOnError
         {
-            get => (bool)this["autoSendOnError"];
+            get => ReadBoolean("autoSendOnError");
             set => this["autoSendOnError"] = value;
         }
 
@@ -45,7 +73,7 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("sendAllApplications", DefaultValue = false, IsRequired = false)]
         public bool SendAllApplications
         {
-            get => (bool)this["sendAllApplications"];
+            get => ReadBoolean("sendAllApplications");
             set => this["sendAllApplications"] = value;
         }
 
@@ -56,7 +84,7 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("purgeSentSessions", DefaultValue = false, IsRequired = false)]
         public bool PurgeSentSessions
         {
-            get => (bool)this["purgeSentSessions"];
+            get => ReadBoolean("purgeSentSessions");
             set => this["purgeSentSessions"] = value;
         }
 
@@ -69,7 +97,7 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("applicationKey", DefaultValue = "", IsRequired = false)]
         public string ApplicationKey
         {
-            get => (string)this["applicationKey"];
+            get => ReadString("applicationKey");
             set => this["applicationKey"] = value;
         }
 
@@ -79,7 +107,7 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("customerName", DefaultValue = "", IsRequired = false)]
         public string CustomerName
         {
-            get => (string)this["customerName"];
+            get => ReadString("customerName");
             set => this["customerName"] = value;
         }
 
@@ -90,7 +118,7 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("useGibraltarService", DefaultValue = false, IsRequired = false)]
         public bool UseGibraltarService
         {
-            get => (bool)this["useGibraltarService"];
+            get => ReadBoolean("useGibraltarService");
             set => this["useGibraltarService"] = value;
         }
 
@@ -101,7 +129,7 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("useSsl", DefaultValue = false, IsRequired = false)]
         public bool UseSsl
         {
-            get => (bool)this["useSsl"];
+            get => ReadBoolean("useSsl");
             set => this["useSsl"] = value;
         }
 
@@ -112,7 +140,7 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("server", DefaultValue = "", IsRequired = false)]
         public string Server
         {
-            get => (string)this["server"];
+            get => ReadString("server");
             set => this["server"] = value;
         }
 
@@ -123,7 +151,7 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("port", DefaultValue = 0, IsRequired = false)]
         public int Port
         {
-            get => (int)this["port"];
+            get => ReadInt("port");
             set => this["port"] = value;
         }
 
@@ -134,7 +162,7 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("applicationBaseDirectory", DefaultValue = "", IsRequired = false)]
         public string ApplicationBaseDirectory
         {
-            get => (string)this["applicationBaseDirectory"];
+            get => ReadString("applicationBaseDirectory");
             set => this["applicationBaseDirectory"] = value;
         }
 
@@ -145,7 +173,7 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("repository", DefaultValue = "", IsRequired = false)]
         public string Repository
         {
-            get => (string)this["repository"];
+            get => ReadString("repository");
             set => this["repository"] = value;
         }
     }
