@@ -16,6 +16,7 @@ namespace Gibraltar.Agent
 
         private readonly Dictionary<string, string> _environmentVars = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
+        /// <inheritdoc />
         protected LoupeElementBase(string environmentVariablePrefix)
         {
             _environmentVariablePrefix = environmentVariablePrefix;
