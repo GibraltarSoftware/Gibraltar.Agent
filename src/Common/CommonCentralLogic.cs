@@ -372,7 +372,7 @@ namespace Gibraltar
                         return envVarsLookup; //so we guarantee if we loaded it, we will return it regardless of the shared variable.
                     }
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
 
                 }
