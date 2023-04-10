@@ -1,5 +1,7 @@
 ﻿
 
+using System.Collections;
+using System.Collections.Generic;
 using System.Configuration;
 
 namespace Gibraltar.Agent
@@ -7,13 +9,38 @@ namespace Gibraltar.Agent
     /// <summary>
     /// The application configuration information for storing session data to a file.
     /// </summary>
-    public class ExportFileElement : ConfigurationSection
+    public class ExportFileElement : LoupeElementBase
     {
+        /// <inheritdoc />
+        public ExportFileElement() : base("LOUPE__EXPORTFILE__")
+        {
+
+        }
+
+        /// <inheritdoc />
+        protected override void OnLoadEnvironmentVars(IDictionary<string, string> environmentVars)
+        {
+            LoadEnvironmentVariable(environmentVars, "enabled");
+            LoadEnvironmentVariable(environmentVars, "folder");
+            LoadEnvironmentVariable(environmentVars, "autoFlushInterval");
+            LoadEnvironmentVariable(environmentVars, "maxFileSize");
+            LoadEnvironmentVariable(environmentVars, "maxFileDuration");
+            LoadEnvironmentVariable(environmentVars, "enableFilePruning");
+            LoadEnvironmentVariable(environmentVars, "maxLocalDiskUsage");
+            LoadEnvironmentVariable(environmentVars, "minimumFreeDisk");
+            LoadEnvironmentVariable(environmentVars, "forceSynchronous");
+            LoadEnvironmentVariable(environmentVars, "maxQueueLength");
+        }
+
         /// <summary>
         /// True by default, disables storing a session file when false.
         /// </summary>
         [ConfigurationProperty("enabled", DefaultValue = true, IsRequired = false)]
-        public bool Enabled { get { return (bool)this["enabled"]; } set { this["enabled"] = value; } }
+        public bool Enabled 
+        { 
+            get => ReadBoolean("enabled");
+            set => this["enabled"] = value;
+        }
 
         /// <summary>
         /// The folder to store log files in unless explicitly overridden at runtime.
@@ -22,14 +49,8 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("folder", DefaultValue = "", IsRequired = false)]
         public string Folder
         {
-            get
-            {
-                return this["folder"].ToString();
-            }
-            set
-            {
-                this["folder"] = value;
-            }
+            get => ReadString("folder");
+            set => this["folder"] = value;
         }
 
 
@@ -42,14 +63,8 @@ namespace Gibraltar.Agent
         [IntegerValidator(MinValue = 0, MaxValue = 2147483647)]
         public int AutoFlushInterval
         {
-            get
-            {
-                return (int)this["autoFlushInterval"];
-            }
-            set
-            {
-                this["autoFlushInterval"] = value;
-            }
+            get => ReadInt("autoFlushInterval");
+            set => this["autoFlushInterval"] = value;
         }
 
         /// <summary>
@@ -63,14 +78,8 @@ namespace Gibraltar.Agent
         [IntegerValidator(MinValue = 0, MaxValue = 2147483647)]
         public int MaxFileSize
         {
-            get
-            {
-                return (int)this["maxFileSize"];
-            }
-            set
-            {
-                this["maxFileSize"] = value;
-            }
+            get => ReadInt("maxFileSize");
+            set => this["maxFileSize"] = value;
         }
 
 
@@ -82,14 +91,8 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("maxFileDuration", DefaultValue = 60, IsRequired = false)]
         public int MaxFileDuration
         {
-            get
-            {
-                return (int)this["maxFileDuration"];
-            }
-            set
-            {
-                this["maxFileDuration"] = value;
-            }
+            get => ReadInt("maxFileDuration");
+            set => this["maxFileDuration"] = value;
         }
 
 
@@ -102,14 +105,8 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("enableFilePruning", DefaultValue = true, IsRequired = false)]
         public bool EnableFilePruning
         {
-            get
-            {
-                return (bool)this["enableFilePruning"];
-            }
-            set
-            {
-                this["enableFilePruning"] = value;
-            }
+            get => ReadBoolean("enableFilePruning");
+            set => this["enableFilePruning"] = value;
         }
 
         /// <summary>
@@ -122,14 +119,8 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("maxLocalDiskUsage", DefaultValue = 150, IsRequired = false)]
         public int MaxLocalDiskUsage
         {
-            get
-            {
-                return (int)this["maxLocalDiskUsage"];
-            }
-            set
-            {
-                this["maxLocalDiskUsage"] = value;
-            }
+            get => ReadInt("maxLocalDiskUsage");
+            set => this["maxLocalDiskUsage"] = value;
         }
 
 
@@ -143,14 +134,8 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("maxLocalFileAge", DefaultValue = 90, IsRequired = false)]
         public int MaxLocalFileAge
         {
-            get
-            {
-                return (int)this["maxLocalFileAge"];
-            }
-            set
-            {
-                this["maxLocalFileAge"] = value;
-            }
+            get => ReadInt("maxLocalFileAge");
+            set => this["maxLocalFileAge"] = value;
         }
 
         /// <summary>
@@ -162,14 +147,8 @@ namespace Gibraltar.Agent
         [IntegerValidator(MinValue = 1, MaxValue = 2147483647)]
         public int MinimumFreeDisk
         {
-            get
-            {
-                return (int)this["minimumFreeDisk"];
-            }
-            set
-            {
-                this["minimumFreeDisk"] = value;
-            }
+            get => ReadInt("minimumFreeDisk");
+            set => this["minimumFreeDisk"] = value;
         }
 
         /// <summary>
@@ -182,14 +161,8 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("forceSynchronous", DefaultValue = false, IsRequired = false)]
         public bool ForceSynchronous
         {
-            get
-            {
-                return (bool)this["forceSynchronous"];
-            }
-            set
-            {
-                this["forceSynchronous"] = value;
-            }
+            get => ReadBoolean("forceSynchronous");
+            set => this["forceSynchronous"] = value;
         }
 
         /// <summary>
@@ -203,14 +176,8 @@ namespace Gibraltar.Agent
         [IntegerValidator(MinValue = 1, MaxValue = 50000)]
         public int MaxQueueLength
         {
-            get
-            {
-                return (int)this["maxQueueLength"];
-            }
-            set
-            {
-                this["maxQueueLength"] = value;
-            }
+            get => ReadInt("maxQueueLength");
+            set => this["maxQueueLength"] = value;
         }
     }
 }

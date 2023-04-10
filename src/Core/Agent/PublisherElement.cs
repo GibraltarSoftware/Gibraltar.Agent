@@ -1,7 +1,5 @@
-﻿
-
-#define STRING_APPTYPE
-
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Configuration;
 
 namespace Gibraltar.Agent
@@ -9,10 +7,32 @@ namespace Gibraltar.Agent
     /// <summary>
     /// The configuration of the publisher.
     /// </summary>
-    public class PublisherElement : ConfigurationSection
+    public class PublisherElement : LoupeElementBase
     {
-        #region Public Properties and Methods
+        private const string EnvironmentVariablePrefix = "LOUPE__PUBLISHER__";
 
+        /// <inheritdoc />
+        public PublisherElement() : base(EnvironmentVariablePrefix)
+        {
+
+        }
+
+        /// <inheritdoc />
+        protected override void OnLoadEnvironmentVars(IDictionary<string, string> environmentVars)
+        {
+            LoadEnvironmentVariable(environmentVars, "productName");
+            LoadEnvironmentVariable(environmentVars, "applicationDescription");
+            LoadEnvironmentVariable(environmentVars, "applicationName");
+            LoadEnvironmentVariable(environmentVars, "environmentName");
+            LoadEnvironmentVariable(environmentVars, "promotionLevelName");
+            LoadEnvironmentVariable(environmentVars, "applicationType");
+            LoadEnvironmentVariable(environmentVars, "applicationVersion");
+            LoadEnvironmentVariable(environmentVars, "forceSynchronous");
+            LoadEnvironmentVariable(environmentVars, "maxQueueLength");
+            LoadEnvironmentVariable(environmentVars, "enableAnonymousMode");
+            LoadEnvironmentVariable(environmentVars, "enableDebugMode");
+        }
+        
         /// <summary>
         /// Optional.  The name of the product for logging purposes.
         /// </summary>
@@ -22,14 +42,8 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("productName", DefaultValue = "", IsRequired = false)]
         public string ProductName
         {
-            get
-            {
-                return (string)this["productName"];
-            }
-            set
-            {
-                this["productName"] = value;
-            }
+            get => ReadString("productName");
+            set => this["productName"] = value;
         }
 
         /// <summary>
@@ -41,14 +55,8 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("applicationDescription", DefaultValue = "", IsRequired = false)]
         public string ApplicationDescription
         {
-            get
-            {
-                return (string)this["applicationDescription"];
-            }
-            set
-            {
-                this["applicationDescription"] = value;
-            }
+            get => ReadString("applicationDescription");
+            set => this["applicationDescription"] = value;
         }
 
         /// <summary>
@@ -60,14 +68,8 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("applicationName", DefaultValue = "", IsRequired = false)]
         public string ApplicationName
         {
-            get
-            {
-                return (string)this["applicationName"];
-            }
-            set
-            {
-                this["applicationName"] = value;
-            }
+            get => ReadString("applicationName");
+            set => this["applicationName"] = value;
         }
 
         /// <summary>
@@ -80,14 +82,8 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("environmentName", DefaultValue = "", IsRequired = false)]
         public string EnvironmentName
         {
-            get
-            {
-                return (string)this["environmentName"];
-            }
-            set
-            {
-                this["environmentName"] = value;
-            }
+            get => ReadString("environmentName");
+            set => this["environmentName"] = value;
         }
 
         /// <summary>
@@ -100,14 +96,8 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("promotionLevelName", DefaultValue = "", IsRequired = false)]
         public string PromotionLevelName
         {
-            get
-            {
-                return (string)this["promotionLevelName"];
-            }
-            set
-            {
-                this["promotionLevelName"] = value;
-            }
+            get => ReadString("promotionLevelName");
+            set => this["promotionLevelName"] = value;
         }
 
         /// <summary>
@@ -121,14 +111,8 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("applicationType", DefaultValue = "Unknown", IsRequired = false)]
         public string ApplicationType
         {
-            get
-            {
-                return (string)this["applicationType"];
-            }
-            set
-            {
-                this["applicationType"] = value;
-            }
+            get => ReadString("applicationType");
+            set => this["applicationType"] = value;
         }
 
         /// <summary>
@@ -142,14 +126,8 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("applicationVersion", DefaultValue = "", IsRequired = false)]
         public string ApplicationVersion
         {
-            get
-            {
-                return (string)this["applicationVersion"];
-            }
-            set
-            {
-                this["applicationVersion"] = value;
-            }
+            get => ReadString("applicationVersion");
+            set => this["applicationVersion"] = value;
         }
         /// <summary>
         /// When true, the publisher will treat all publish requests as write-through requests.
@@ -161,14 +139,8 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("forceSynchronous", DefaultValue = false, IsRequired = false)]
         public bool ForceSynchronous
         {
-            get
-            {
-                return (bool)this["forceSynchronous"];
-            }
-            set
-            {
-                this["forceSynchronous"] = value;
-            }
+            get => ReadBoolean("forceSynchronous");
+            set => this["forceSynchronous"] = value;
         }
 
         /// <summary>
@@ -181,14 +153,8 @@ namespace Gibraltar.Agent
         [IntegerValidator(MinValue = 1, MaxValue = 50000)]
         public int MaxQueueLength
         {
-            get
-            {
-                return (int)this["maxQueueLength"];
-            }
-            set
-            {
-                this["maxQueueLength"] = value;
-            }
+            get => ReadInt("maxQueueLength");
+            set => this["maxQueueLength"] = value;
         }
 
         /// <summary>
@@ -200,14 +166,8 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("enableAnonymousMode", DefaultValue = false, IsRequired = false)]
         public bool EnableAnonymousMode
         {
-            get
-            {
-                return (bool)this["enableAnonymousMode"];
-            }
-            set
-            {
-                this["enableAnonymousMode"] = value;
-            }
+            get => ReadBoolean("enableAnonymousMode");
+            set => this["enableAnonymousMode"] = value;
         }
         /// <summary>
         /// When true, the Agent will include debug messages in logs. Not intended for production use
@@ -221,16 +181,8 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("enableDebugMode", DefaultValue = false, IsRequired = false)]
         public bool EnableDebugMode
         {
-            get
-            {
-                return (bool)this["enableDebugMode"];
-            }
-            set
-            {
-                this["enableDebugMode"] = value;
-            }
+            get => ReadBoolean("enableDebugMode");
+            set => this["enableDebugMode"] = value;
         }
-
-        #endregion
     }
 }

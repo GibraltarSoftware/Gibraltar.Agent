@@ -1,30 +1,19 @@
-﻿
-#region File Header
-
-/********************************************************************
- * COPYRIGHT:
- *    This software program is furnished to the user under license
- *    by Gibraltar Software, Inc, and use thereof is subject to applicable 
- *    U.S. and international law. This software program may not be 
- *    reproduced, transmitted, or disclosed to third parties, in 
- *    whole or in part, in any form or by any manner, electronic or
- *    mechanical, without the express written consent of Gibraltar Software, Inc,
- *    except to the extent provided for by applicable license.
- *
- *    Copyright © 2008 by Gibraltar Software, Inc.  All rights reserved.
- *******************************************************************/
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Configuration;
-
-#endregion File Header
 
 namespace Gibraltar.Agent
 {
     /// <summary>
     /// The email communication configuration
     /// </summary>
-    public class EmailElement : ConfigurationSection
+    public class EmailElement : LoupeElementBase
     {
-        #region Public Properties and Methods
+        /// <inheritdoc />
+        public EmailElement() 
+            : base("LOUPE__EMAIL__")
+        {
+        }
 
         /// <summary>
         /// The full DNS name of the server to use for exchanging email
@@ -32,8 +21,8 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("server", DefaultValue = "", IsRequired = false)]
         public string Server
         {
-            get { return (string)this["server"]; }
-            set { this["server"] = value; }
+            get => ReadString("server");
+            set => this["server"] = value;
         }
 
         /// <summary>
@@ -42,8 +31,8 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("user", DefaultValue = "", IsRequired = false)]
         public string User
         {
-            get { return (string)this["user"]; }
-            set { this["user"] = value; }
+            get => ReadString("user");
+            set => this["user"] = value;
         }
 
         /// <summary>
@@ -52,8 +41,8 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("password", DefaultValue = "", IsRequired = false)]
         public string Password
         {
-            get { return (string)this["password"]; }
-            set { this["password"] = value; }
+            get => ReadString("password");
+            set => this["password"] = value;
         }
 
         /// <summary>
@@ -63,8 +52,8 @@ namespace Gibraltar.Agent
         [IntegerValidator(MinValue = 0, MaxValue = 65535)]
         public int Port
         {
-            get { return (int)this["port"]; }
-            set { this["port"] = value; }
+            get => ReadInt("port");
+            set => this["port"] = value;
         }
 
         /// <summary>
@@ -73,8 +62,8 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("useSsl", DefaultValue = false, IsRequired = false)]
         public bool UseSsl
         {
-            get { return (bool)this["useSsl"]; }
-            set { this["useSsl"] = value; }
+            get => ReadBoolean("useSsl");
+            set => this["useSsl"] = value;
         }
 
         /// <summary>
@@ -84,8 +73,8 @@ namespace Gibraltar.Agent
         [IntegerValidator(MinValue = 0, MaxValue = 2048)]
         public int MaxMessageSize
         {
-            get { return (int)this["maxMessageSize"]; }
-            set { this["maxMessageSizeMb"] = value; }
+            get => ReadInt("maxMessageSize");
+            set => this["maxMessageSizeMb"] = value;
         }
 
         /// <summary>
@@ -94,10 +83,20 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("fromAddress", DefaultValue = "", IsRequired = false)]
         public string FromAddress
         {
-            get { return (string)this["fromAddress"]; }
-            set { this["fromAddress"] = value; }
+            get => ReadString("fromAddress");
+            set => this["fromAddress"] = value;
         }
 
-        #endregion
+        /// <inheritdoc />
+        protected override void OnLoadEnvironmentVars(IDictionary<string, string> environmentVars)
+        {
+            LoadEnvironmentVariable(environmentVars, "server");
+            LoadEnvironmentVariable(environmentVars, "user");
+            LoadEnvironmentVariable(environmentVars, "password");
+            LoadEnvironmentVariable(environmentVars, "port");
+            LoadEnvironmentVariable(environmentVars, "useSsl");
+            LoadEnvironmentVariable(environmentVars, "maxMessageSize");
+            LoadEnvironmentVariable(environmentVars, "fromAddress");
+        }
     }
 }

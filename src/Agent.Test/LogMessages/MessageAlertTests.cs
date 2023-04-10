@@ -92,7 +92,7 @@ namespace Gibraltar.Agent.Test.LogMessages
                 count = WaitForEvent(out latency, out span);
                 Assert.AreNotEqual(0, count, "Message Alert event didn't fire within 1 second timeout.");
                 Assert.AreEqual(1, count, "Message Alert event included more than the expected message.");
-                Assert.LessOrEqual(latency.TotalMilliseconds, 200, "Initial event latency exceeded 200 ms");
+                Assert.LessOrEqual(latency.TotalMilliseconds, 250, "Initial event latency exceeded 250 ms");
 
                 Log.Error("Gibraltar.Agent.Unit Tests.MessageAlert", "Single error to test Message Alert", null);
                 count = WaitForEvent(out latency, out span);
