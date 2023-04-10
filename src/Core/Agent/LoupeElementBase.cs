@@ -73,7 +73,8 @@ namespace Gibraltar.Agent
             EnsureEnvironmentVariablesLoaded();
 
             //we default to using the environment variable if it's present.
-            if (_environmentVars?.TryGetValue(configPropertyName, out var rawValue) == true)
+            if (ReferenceEquals(_environmentVars, null) == false
+                && _environmentVars.TryGetValue(configPropertyName, out var rawValue) == true)
             {
                 if (string.IsNullOrEmpty(rawValue) == false)
                 {
@@ -97,7 +98,8 @@ namespace Gibraltar.Agent
             EnsureEnvironmentVariablesLoaded();
 
             //we default to using the environment variable if it's present.
-            if (_environmentVars?.TryGetValue(configPropertyName, out var rawValue) == true)
+            if (ReferenceEquals(_environmentVars, null) == false
+                && _environmentVars.TryGetValue(configPropertyName, out var rawValue) == true)
             {
                 if (string.IsNullOrEmpty(rawValue) == false)
                 {
@@ -121,7 +123,8 @@ namespace Gibraltar.Agent
             EnsureEnvironmentVariablesLoaded();
 
             //we default to using the environment variable if it's present.
-            if (_environmentVars?.TryGetValue(configPropertyName, out var rawValue) == true)
+            if (ReferenceEquals(_environmentVars, null) == false
+                && _environmentVars.TryGetValue(configPropertyName, out var rawValue) == true)
             {
                 if (string.IsNullOrEmpty(rawValue) == false)
                 {
