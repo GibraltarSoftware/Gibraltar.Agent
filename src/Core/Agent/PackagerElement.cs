@@ -1,13 +1,33 @@
-﻿using System.Configuration;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Configuration;
 
 namespace Gibraltar.Agent
 {
     /// <summary>
     /// The configuration of the packager.
     /// </summary>
-    public class PackagerElement : ConfigurationSection
+    public class PackagerElement : LoupeElementBase
     {
-        #region Public Properties and Methods
+        /// <inheritdoc />
+        public PackagerElement() : base("LOUPE__PACKAGER__")
+        {
+
+        }
+
+        /// <inheritdoc />
+        protected override void OnLoadEnvironmentVars(IDictionary<string, string> environmentVars)
+        {
+            LoadEnvironmentVariable(environmentVars, "hotKey");
+            LoadEnvironmentVariable(environmentVars, "allowFile");
+            LoadEnvironmentVariable(environmentVars, "allowRemovableMedia");
+            LoadEnvironmentVariable(environmentVars, "allowServer");
+            LoadEnvironmentVariable(environmentVars, "allowEmail");
+            LoadEnvironmentVariable(environmentVars, "fromEmailAddress");
+            LoadEnvironmentVariable(environmentVars, "destinationEmailAddress");
+            LoadEnvironmentVariable(environmentVars, "productName");
+            LoadEnvironmentVariable(environmentVars, "applicationName");
+        }
 
         /// <summary>
         /// The default HotKey configuration string for the packager.
@@ -18,34 +38,51 @@ namespace Gibraltar.Agent
         /// The key sequence used to pop up the packager.
         /// </summary>
         [ConfigurationProperty("hotKey", DefaultValue = DefaultHotKey, IsRequired = false)]
-        public string HotKey { get { return (string)this["hotKey"]; } set { this["hotKey"] = value; } }
+        public string HotKey 
+        { 
+            get => ReadString("hotKey");
+            set => this["hotKey"] = value;
+        }
 
         /// <summary>
         /// When true the user will be allowed to save the package to a file.
         /// </summary>
         [ConfigurationProperty("allowFile", DefaultValue = true, IsRequired = false)]
-        public bool AllowFile { get { return (bool)this["allowFile"]; } set { this["allowFile"] = value; } }
+        public bool AllowFile 
+        { 
+            get => ReadBoolean("allowFile");
+            set => this["allowFile"] = value;
+        }
 
         /// <summary>
         /// When true the user will be allowed to save the package directly to the root of a removable media volume
         /// </summary>
         [ConfigurationProperty("allowRemovableMedia", DefaultValue = true, IsRequired = false)]
-        public bool AllowRemovableMedia {
-            get { return (bool)this["allowRemovableMedia"]; }
-            set { this["allowRemovableMedia"] = value; }
+        public bool AllowRemovableMedia 
+        {
+            get => ReadBoolean("allowRemovableMedia");
+            set => this["allowRemovableMedia"] = value;
         }
 
         /// <summary>
         /// When true the user will be allowed to send sessions to a session data server
         /// </summary>
         [ConfigurationProperty("allowServer", DefaultValue = true, IsRequired = false)]
-        public bool AllowServer { get { return (bool)this["allowServer"]; } set { this["allowServer"] = value; } }
+        public bool AllowServer 
+        { 
+            get => ReadBoolean("allowServer");
+            set => this["allowServer"] = value;
+        }
 
         /// <summary>
         /// When true the user will be allowed to send the package via email
         /// </summary>
         [ConfigurationProperty("allowEmail", DefaultValue = true, IsRequired = false)]
-        public bool AllowEmail { get { return (bool)this["allowEmail"]; } set { this["allowEmail"] = value; } }
+        public bool AllowEmail 
+        { 
+            get => ReadBoolean("allowEmail");
+            set => this["allowEmail"] = value;
+        }
 
         /// <summary>
         /// The email address to use as the sender&apos;s address
@@ -54,8 +91,8 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("fromEmailAddress", DefaultValue = "", IsRequired = false)]
         public string FromEmailAddress
         {
-            get { return (string)this["fromEmailAddress"]; }
-            set { this["fromEmailAddress"] = value; }
+            get => ReadString("fromEmailAddress");
+            set => this["fromEmailAddress"] = value;
         }
 
         /// <summary>
@@ -65,8 +102,8 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("destinationEmailAddress", DefaultValue = "", IsRequired = false)]
         public string DestinationEmailAddress
         {
-            get { return (string)this["destinationEmailAddress"]; }
-            set { this["destinationEmailAddress"] = value; }
+            get => ReadString("destinationEmailAddress");
+            set => this["destinationEmailAddress"] = value;
         }
 
         /// <summary>
@@ -79,7 +116,11 @@ namespace Gibraltar.Agent
         /// as the productName.  Specifying just the product name will cause the package to contain all applications
         /// for the specified product.</para></remarks>
         [ConfigurationProperty("productName", DefaultValue = "", IsRequired = false)]
-        public string ProductName { get { return (string)this["productName"]; } set { this["productName"] = value; } }
+        public string ProductName 
+        { 
+            get => ReadString("productName");
+            set => this["productName"] = value;
+        }
 
         /// <summary>
         /// The application name to use instead of the current application.
@@ -91,10 +132,8 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("applicationName", DefaultValue = "", IsRequired = false)]
         public string ApplicationName
         {
-            get { return (string)this["applicationName"]; }
-            set { this["applicationName"] = value; }
+            get => ReadString("applicationName");
+            set => this["applicationName"] = value;
         }
-
-        #endregion
     }
 }

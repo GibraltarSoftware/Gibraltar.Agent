@@ -1,17 +1,47 @@
-﻿using System.Configuration;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Configuration;
 
 namespace Gibraltar.Agent
 {
     /// <summary>
     /// The application configuration information for sending session summaries and data to a Loupe Server
     /// </summary>
-    public class ServerElement : ConfigurationSection
+    public class ServerElement : LoupeElementBase
     {
+        /// <inheritdoc />
+        public ServerElement() : base("LOUPE__SERVER__")
+        {
+
+        }
+
+        /// <inheritdoc />
+        protected override void OnLoadEnvironmentVars(IDictionary<string, string> environmentVars)
+        {
+            LoadEnvironmentVariable(environmentVars, "enabled");
+            LoadEnvironmentVariable(environmentVars, "autoSendSessions");
+            LoadEnvironmentVariable(environmentVars, "autoSendOnError");
+            LoadEnvironmentVariable(environmentVars, "sendAllApplications");
+            LoadEnvironmentVariable(environmentVars, "purgeSentSessions");
+            LoadEnvironmentVariable(environmentVars, "applicationKey");
+            LoadEnvironmentVariable(environmentVars, "customerName");
+            LoadEnvironmentVariable(environmentVars, "useGibraltarService");
+            LoadEnvironmentVariable(environmentVars, "useSsl");
+            LoadEnvironmentVariable(environmentVars, "server");
+            LoadEnvironmentVariable(environmentVars, "port");
+            LoadEnvironmentVariable(environmentVars, "applicationBaseDirectory");
+            LoadEnvironmentVariable(environmentVars, "repository");
+        }
+
         /// <summary>
         /// True by default, disables server communication when false..
         /// </summary>
         [ConfigurationProperty("enabled", DefaultValue = true, IsRequired = false)]
-        public bool Enabled { get { return (bool)this["enabled"]; } set { this["enabled"] = value; } }
+        public bool Enabled 
+        { 
+            get => ReadBoolean("enabled");
+            set => this["enabled"] = value;
+        }
 
         /// <summary>
         /// Indicates whether to automatically send session data to the server in the background.
@@ -20,8 +50,8 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("autoSendSessions", DefaultValue = false, IsRequired = false)]
         public bool AutoSendSessions
         {
-            get { return (bool)this["autoSendSessions"]; }
-            set { this["autoSendSessions"] = value; }
+            get => ReadBoolean("autoSendSessions");
+            set => this["autoSendSessions"] = value;
         }
 
         /// <summary>
@@ -32,8 +62,8 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("autoSendOnError", DefaultValue = true, IsRequired = false)]
         public bool AutoSendOnError
         {
-            get { return (bool)this["autoSendOnError"]; }
-            set { this["autoSendOnError"] = value; }
+            get => ReadBoolean("autoSendOnError");
+            set => this["autoSendOnError"] = value;
         }
 
         /// <summary>
@@ -43,8 +73,8 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("sendAllApplications", DefaultValue = false, IsRequired = false)]
         public bool SendAllApplications
         {
-            get { return (bool)this["sendAllApplications"]; }
-            set { this["sendAllApplications"] = value; }
+            get => ReadBoolean("sendAllApplications");
+            set => this["sendAllApplications"] = value;
         }
 
         /// <summary>
@@ -54,8 +84,8 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("purgeSentSessions", DefaultValue = false, IsRequired = false)]
         public bool PurgeSentSessions
         {
-            get { return (bool)this["purgeSentSessions"]; }
-            set { this["purgeSentSessions"] = value; }
+            get => ReadBoolean("purgeSentSessions");
+            set => this["purgeSentSessions"] = value;
         }
 
         /// <summary>
@@ -67,14 +97,8 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("applicationKey", DefaultValue = "", IsRequired = false)]
         public string ApplicationKey
         {
-            get
-            {
-                return (string)this["applicationKey"];
-            }
-            set
-            {
-                this["applicationKey"] = value;
-            }
+            get => ReadString("applicationKey");
+            set => this["applicationKey"] = value;
         }
 
         /// <summary>
@@ -83,14 +107,8 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("customerName", DefaultValue = "", IsRequired = false)]
         public string CustomerName
         {
-            get
-            {
-                return (string)this["customerName"];
-            }
-            set
-            {
-                this["customerName"] = value;
-            }
+            get => ReadString("customerName");
+            set => this["customerName"] = value;
         }
 
         /// <summary>
@@ -100,14 +118,8 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("useGibraltarService", DefaultValue = false, IsRequired = false)]
         public bool UseGibraltarService
         {
-            get
-            {
-                return (bool)this["useGibraltarService"];
-            }
-            set
-            {
-                this["useGibraltarService"] = value;
-            }
+            get => ReadBoolean("useGibraltarService");
+            set => this["useGibraltarService"] = value;
         }
 
         /// <summary>
@@ -117,14 +129,8 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("useSsl", DefaultValue = false, IsRequired = false)]
         public bool UseSsl
         {
-            get
-            {
-                return (bool)this["useSsl"];
-            }
-            set
-            {
-                this["useSsl"] = value;
-            }
+            get => ReadBoolean("useSsl");
+            set => this["useSsl"] = value;
         }
 
         /// <summary>
@@ -134,14 +140,8 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("server", DefaultValue = "", IsRequired = false)]
         public string Server
         {
-            get
-            {
-                return (string)this["server"];
-            }
-            set
-            {
-                this["server"] = value;
-            }
+            get => ReadString("server");
+            set => this["server"] = value;
         }
 
         /// <summary>
@@ -151,14 +151,8 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("port", DefaultValue = 0, IsRequired = false)]
         public int Port
         {
-            get
-            {
-                return (int)this["port"];
-            }
-            set
-            {
-                this["port"] = value;
-            }
+            get => ReadInt("port");
+            set => this["port"] = value;
         }
 
         /// <summary>
@@ -168,14 +162,8 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("applicationBaseDirectory", DefaultValue = "", IsRequired = false)]
         public string ApplicationBaseDirectory
         {
-            get
-            {
-                return (string)this["applicationBaseDirectory"];
-            }
-            set
-            {
-                this["applicationBaseDirectory"] = value;
-            }
+            get => ReadString("applicationBaseDirectory");
+            set => this["applicationBaseDirectory"] = value;
         }
 
         /// <summary>
@@ -185,14 +173,8 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("repository", DefaultValue = "", IsRequired = false)]
         public string Repository
         {
-            get
-            {
-                return (string)this["repository"];
-            }
-            set
-            {
-                this["repository"] = value;
-            }
+            get => ReadString("repository");
+            set => this["repository"] = value;
         }
     }
 }
