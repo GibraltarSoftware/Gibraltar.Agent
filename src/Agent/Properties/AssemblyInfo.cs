@@ -27,7 +27,7 @@ using System.Security;
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("e959f88b-8311-4107-8e94-10359de25c18")]
 
-[assembly: AssemblyVersion("4.11.0.0")]
-[assembly: AssemblyFileVersion("4.11.0.0")]
-[assembly: AssemblyInformationalVersion("4.11.0.0")]
+[assembly: AssemblyVersion("5.0.0.0")]
+[assembly: AssemblyFileVersion("5.0.0.0")]
+[assembly: AssemblyInformationalVersion("5.0.0.0.0")]
 [assembly: AllowPartiallyTrustedCallers]
