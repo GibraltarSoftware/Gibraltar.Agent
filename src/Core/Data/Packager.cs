@@ -408,8 +408,8 @@ namespace Gibraltar.Data
             if (sessions == SessionCriteria.None)
                 return new PackageSendEventArgs(0, AsyncTaskResult.Success, "No sessions requested", null);
 
-            return ActionSendToServer(new object[] { sessions, markAsRead, purgeSentSessions, overrideConfiguration, applicationKey, useGibraltarService, customerName, server, port, useSsl, 
-                applicationBaseDirectory, repository, progressMonitors });
+            return ActionSendToServer(new object[] { sessions, markAsRead, purgeSentSessions, overrideConfiguration, applicationKey, 
+                useGibraltarService, customerName, server, port, useSsl, applicationBaseDirectory, repository, progressMonitors });
         }
 
         /// <summary>
@@ -1708,7 +1708,7 @@ namespace Gibraltar.Data
                 useSsl = (bool)arguments[9];
                 applicationBaseDirectory = (string)arguments[10];
                 repository = (string)arguments[11];
-                progressMonitors = (ProgressMonitorStack)arguments[11];
+                progressMonitors = (ProgressMonitorStack)arguments[12];
             }
 
             LogSendToServer(connectionSpecified, useGibraltarService, markAsRead, purgeSentSessions, customerName, server, port, useSsl, applicationBaseDirectory, repository);

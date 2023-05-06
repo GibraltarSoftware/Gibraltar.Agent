@@ -1,29 +1,32 @@
 ﻿
-#region File Header
-
-/********************************************************************
- * COPYRIGHT:
- *    This software program is furnished to the user under license
- *    by Gibraltar Software, Inc, and use thereof is subject to applicable 
- *    U.S. and international law. This software program may not be 
- *    reproduced, transmitted, or disclosed to third parties, in 
- *    whole or in part, in any form or by any manner, electronic or
- *    mechanical, without the express written consent of Gibraltar Software, Inc,
- *    except to the extent provided for by applicable license.
- *
- *    Copyright © 2008 by Gibraltar Software, Inc.  All rights reserved.
- *******************************************************************/
+using System.Collections;
+using System.Collections.Generic;
 using System.Configuration;
-
-#endregion File Header
 
 namespace Gibraltar.Agent
 {
     /// <summary>
     /// Live session data stream configuration
     /// </summary>
-    public class LiveStreamElement : ConfigurationSection
+    public class LiveStreamElement : LoupeElementBase
     {
+        /// <inheritdoc />
+        public LiveStreamElement() : base("LOUPE__LIVESTREAM__")
+        {
+
+        }
+
+        /// <inheritdoc />
+        protected override void OnLoadEnvironmentVars(IDictionary<string, string> environmentVars)
+        {
+            LoadEnvironmentVariable(environmentVars, "enabled");
+            LoadEnvironmentVariable(environmentVars, "agentPort");
+            LoadEnvironmentVariable(environmentVars, "clientPort");
+            LoadEnvironmentVariable(environmentVars, "useSsl");
+            LoadEnvironmentVariable(environmentVars, "certificateName");
+        }
+
+
         /// <summary>
         /// The default port for agents to connect on
         /// </summary>
@@ -34,16 +37,14 @@ namespace Gibraltar.Agent
         /// </summary>
         public const int DefaultClientPort = 29970;
 
-        #region Public Properties and Methods
-
         /// <summary>
         /// Indicates if live stream is available at all in the agent.  Defaults to true.
         /// </summary>
         [ConfigurationProperty("enabled", DefaultValue = false, IsRequired = false)]
         public bool Enabled
         {
-            get { return (bool)this["enabled"]; }
-            set { this["enabled"] = value; }
+            get => ReadBoolean("enabled");
+            set => this["enabled"] = value;
         }
 
         /// <summary>
@@ -53,8 +54,8 @@ namespace Gibraltar.Agent
         [IntegerValidator(MinValue = 1, MaxValue = 65535)]
         public int AgentPort
         {
-            get { return (int)this["agentPort"]; }
-            set { this["agentPort"] = value; }
+            get => ReadInt("agentPort");
+            set => this["agentPort"] = value;
         }
 
         /// <summary>
@@ -64,8 +65,8 @@ namespace Gibraltar.Agent
         [IntegerValidator(MinValue = 1, MaxValue = 65535)]
         public int ClientPort
         {
-            get { return (int)this["clientPort"]; }
-            set { this["clientPort"] = value; }
+            get => ReadInt("clientPort");
+            set => this["clientPort"] = value;
         }
 
         /// <summary>
@@ -74,14 +75,8 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("useSsl", DefaultValue = false, IsRequired = false)]
         public bool UseSsl
         {
-            get
-            {
-                return (bool)this["useSsl"];
-            }
-            set
-            {
-                this["useSsl"] = value;
-            }
+            get => ReadBoolean("useSsl");
+            set => this["useSsl"] = value;
         }
 
         /// <summary>
@@ -90,16 +85,8 @@ namespace Gibraltar.Agent
         [ConfigurationProperty("certificateName", DefaultValue = "", IsRequired = false)]
         public string CertificateName
         {
-            get
-            {
-                return (string)this["certificateName"];
-            }
-            set
-            {
-                this["certificateName"] = value;
-            }
+            get => ReadString("certificateName");
+            set => this["certificateName"] = value;
         }
-
-        #endregion
     }
 }

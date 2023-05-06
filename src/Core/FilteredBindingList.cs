@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -291,7 +290,7 @@ namespace Gibraltar
 
                 foreach (var item in m_DataSource)
                 {
-                    if (m_Filter(item))
+                    if (m_Filter == null || m_Filter(item))
                     {
                         foreach (var listener in activeListeners)
                             listener.Add(item);

@@ -1118,7 +1118,6 @@ namespace Gibraltar.Messaging.Net
         /// <returns></returns>
         private int ReadSocket(out byte[] buffer)
         {
-            //go into a blocking wait on the socket..  we'll loop until we get the whole buffer into the stream.
             buffer = new byte[NetworkReadBufferLength];
             int newDataLength = 0;
             try
@@ -1126,15 +1125,8 @@ namespace Gibraltar.Messaging.Net
                 var canRead = m_NetworkReadStream?.CanRead ?? false;
                 if (canRead)
                 {
-                    var readState = new AsyncSocketReadState(m_NetworkReadStream);
-                    m_NetworkReadStream.BeginRead(buffer, 0, buffer.Length, OnReadSocketEndRead, readState);
-                    readState.ResetEvent.WaitOne();
-                    newDataLength = readState.DataLength;
-
-                    if (readState.Exception != null)
-                    {
-                        throw readState.Exception;
-                    }
+                    //go into a blocking read on the socket - returns the actual number of bytes read.
+                    return m_NetworkReadStream.Read(buffer, 0, buffer.Length);
                 }
             }
             catch (SocketException ex)
@@ -1162,28 +1154,6 @@ namespace Gibraltar.Messaging.Net
             }
 
             return newDataLength;
-        }
-
-        /// <summary>
-        /// Completes an asynchronous socket read
-        /// </summary>
-        /// <param name="result"></param>
-        private void OnReadSocketEndRead(IAsyncResult result)
-        {
-            var readState = (AsyncSocketReadState)result.AsyncState;
-            try
-            {
-                readState.DataLength = readState.Stream.EndRead(result);
-            }
-            catch (Exception ex)
-            {
-                //we want to marshal that back..
-                readState.Exception = ex;
-            }
-            finally
-            {
-                readState.ResetEvent.Set();
-            }
         }
 
         #endregion

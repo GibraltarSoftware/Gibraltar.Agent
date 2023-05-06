@@ -1,6 +1,6 @@
 name: $(major).$(minor).$(revision)$(Rev:.r)
 trigger:
-- master
+- main
 
 variables:
   agentSolution: 'src/Agent.sln'
@@ -14,7 +14,7 @@ variables:
 jobs:
 - job: build
   pool:
-    vmImage: 'windows-latest'
+    vmImage: 'windows-2019'
 
   steps:
   - task: DownloadSecureFile@1
@@ -60,8 +60,7 @@ jobs:
       configuration: '$(buildConfiguration)'
       testSelector: 'testAssemblies'
       testAssemblyVer2: |
-        **/bin/Release/**/*.Test.dll
-        **/bin/Release/**/*.Tests.dll
+        **/bin/Release/Loupe.Agent.Test.dll
       searchFolder: '$(Build.SourcesDirectory)'
       vsTestVersion: '16.0'
       codeCoverageEnabled: true

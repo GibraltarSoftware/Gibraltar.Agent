@@ -1,20 +1,4 @@
-﻿
-#region File Header
-
-// /********************************************************************
-//  * COPYRIGHT:
-//  *    This software program is furnished to the user under license
-//  *    by Gibraltar Software, Inc, and use thereof is subject to applicable 
-//  *    U.S. and international law. This software program may not be 
-//  *    reproduced, transmitted, or disclosed to third parties, in 
-//  *    whole or in part, in any form or by any manner, electronic or
-//  *    mechanical, without the express written consent of Gibraltar Software, Inc,
-//  *    except to the extent provided for by applicable license.
-//  *
-//  *    Copyright © 2008 by Gibraltar Software, Inc.  All rights reserved.
-//  *******************************************************************/
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -35,8 +19,6 @@ using SourceGrid.Cells.Views;
 using DataGrid=SourceGrid.DataGrid;
 using Image=System.Drawing.Image;
 using SortableHeader=SourceGrid.Cells.Models.SortableHeader;
-
-#endregion
 
 namespace Gibraltar.Monitor.Windows.Internal
 {
@@ -293,7 +275,7 @@ namespace Gibraltar.Monitor.Windows.Internal
 
             foreach (var message in m_LogMessages)
             {
-                if (MatchesSeverityFilter(message.Severity) && MatchesSearchText(message.Message))
+                if (MatchesSeverityFilter(message.Severity) && MatchesSearchText(message))
                     m_FilteredLogMessages.Add(message);
             }
 
@@ -425,7 +407,7 @@ namespace Gibraltar.Monitor.Windows.Internal
 
                 m_LogMessages.Add(message);
 
-                if (MatchesSeverityFilter(message.Severity) && MatchesSearchText(message.Message))
+                if (MatchesSeverityFilter(message.Severity) && MatchesSearchText(message))
                     m_FilteredLogMessages.Add(message);
             }
 
@@ -612,12 +594,12 @@ namespace Gibraltar.Monitor.Windows.Internal
             return null;
         }
 
-        private bool MatchesSearchText(string messageText)
+        private bool MatchesSearchText(ViewerLogMessageWrapper message)
         {
             if (string.IsNullOrEmpty(m_SearchText))
                 return true;
 
-            return messageText.ToLower().Contains(m_SearchText);
+            return message.ContainsText(m_SearchText);
         }
 
         private bool MatchesSeverityFilter(LogMessageSeverity severity)
@@ -718,8 +700,6 @@ namespace Gibraltar.Monitor.Windows.Internal
                     builder.Append("\x0D\x0A");
                 }
             }
-
-            //builder.Append(LogMessage.WelcomeMessage);
 
             if (builder.Length > 0)
                Clipboard.SetText(builder.ToString());
@@ -1061,6 +1041,7 @@ namespace Gibraltar.Monitor.Windows.Internal
         {
             private readonly ILogMessage m_LogMessage;
             private string m_Message;
+            private string m_SearchableText;
 
             public ViewerLogMessageWrapper(ILogMessage logMessage)
             {
@@ -1076,6 +1057,16 @@ namespace Gibraltar.Monitor.Windows.Internal
             public bool Equals(ILogMessage other)
             {
                 return m_LogMessage.Equals(other);
+            }
+
+            /// <summary>
+            /// Indicates if the message contains the provided text (which should be lowered to provide the best match)
+            /// </summary>
+            /// <param name="searchText">The text to search for</param>
+            /// <returns>True if the text is found, false otherwise.</returns>
+            public bool ContainsText(string searchText)
+            {
+                return SearchableText.Contains(searchText);
             }
 
             public ISession Session { get { return m_LogMessage.Session; } }
@@ -1169,6 +1160,46 @@ namespace Gibraltar.Monitor.Windows.Internal
                     }
 
                     return m_Message;
+                }
+            }
+
+            /// <summary>
+            /// All of the text of the log message for searching and filtering.
+            /// </summary>
+            public string SearchableText
+            {
+                get
+                {
+                    if (m_SearchableText == null)
+                    {
+                        //add the details and exception to the message.
+                        var stringBuilder = new StringBuilder();
+
+                        if (!string.IsNullOrEmpty(m_Message))
+                            stringBuilder.AppendLine(m_Message?.ToLower());
+
+                        if (!string.IsNullOrEmpty(m_LogMessage.Details))
+                            stringBuilder.AppendLine(m_LogMessage.Details.ToLower());
+
+                        var currentException = Exception;
+                        while (currentException != null)
+                        {
+                            if (!string.IsNullOrEmpty(currentException.Message))
+                                stringBuilder.AppendLine(currentException.Message.ToLower());
+
+                            if (!string.IsNullOrEmpty(currentException.Source))
+                                stringBuilder.AppendLine(currentException.Source.ToLower());
+
+                            if (!string.IsNullOrEmpty(currentException.StackTrace))
+                                stringBuilder.AppendLine(currentException.StackTrace.ToLower());
+
+                            currentException = currentException.InnerException;
+                        }
+
+                        m_SearchableText = stringBuilder.ToString();
+                    }
+
+                    return m_SearchableText;
                 }
             }
 
