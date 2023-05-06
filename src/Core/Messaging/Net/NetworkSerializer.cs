@@ -1,4 +1,6 @@
-﻿using System;
+﻿
+using System;
+using System.Diagnostics;
 using System.IO;
 using Gibraltar.Monitor;
 using Gibraltar.Server.Client;
@@ -105,6 +107,10 @@ namespace Gibraltar.Messaging.Net
                 }
                 else if (packetLength > NetworkMessage.MaxMessageLength)
                 {
+#if DEBUG
+                    if (Debugger.IsAttached)
+                        Debugger.Break();
+#endif                    
                     //something has gone horribly awry: The length the user is specifying is just
                     //not reasonable.
                     Log.Write(LogMessageSeverity.Error, LogWriteMode.Queued, null, 0,

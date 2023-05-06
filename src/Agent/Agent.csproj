@@ -37,6 +37,7 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -194,7 +195,7 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>$(ProjectDir)..\..\tools\ilmerge /log /keyfile:$(ProjectDir)..\Loupe.Agent.snk /internalize /closed /targetplatform:v2 /out:$(TargetDir)Gibraltar.Agent.dll $(TargetPath) $(TargetDir)Loupe.Extensibility.dll $(TargetDir)Loupe.Common.dll $(TargetDir)Loupe.Serialization.dll $(TargetDir)Loupe.Server.Client.Net20.dll $(TargetDir)Loupe.Core.dll $(ProjectDir)..\..\Dependencies\DevAge.Core.dll $(ProjectDir)..\..\Dependencies\DevAge.Windows.Forms.dll $(ProjectDir)..\..\Dependencies\SourceGrid.dll $(ProjectDir)..\..\Dependencies\SourceGrid.Extensions.dll $(ProjectDir)..\..\Dependencies\Ionic.Zip.Reduced.dll $(ProjectDir)..\..\Dependencies\Manoli.Utils.CSharpFormat.dll $(ProjectDir)..\..\Dependencies\CsvHelper.dll
+    <PostBuildEvent>$(ProjectDir)..\..\tools\ilmerge /log /keyfile:$(ProjectDir)..\..\Loupe.Agent.snk /internalize /closed /targetplatform:v2 /out:$(TargetDir)Gibraltar.Agent.dll $(TargetPath) $(TargetDir)Loupe.Extensibility.dll $(TargetDir)Loupe.Common.dll $(TargetDir)Loupe.Serialization.dll $(TargetDir)Loupe.Server.Client.Net20.dll $(TargetDir)Loupe.Core.dll $(ProjectDir)..\..\Dependencies\DevAge.Core.dll $(ProjectDir)..\..\Dependencies\DevAge.Windows.Forms.dll $(ProjectDir)..\..\Dependencies\SourceGrid.dll $(ProjectDir)..\..\Dependencies\SourceGrid.Extensions.dll $(ProjectDir)..\..\Dependencies\Ionic.Zip.Reduced.dll $(ProjectDir)..\..\Dependencies\Manoli.Utils.CSharpFormat.dll $(ProjectDir)..\..\Dependencies\CsvHelper.dll
 copy $(TargetDir)$(TargetName).xml $(TargetDir)Gibraltar.Agent.xml
 powershell.exe -command "&amp; {(Get-Content $(TargetDir)$(TargetName).xml) | Foreach-Object {$_ -replace '&lt;name&gt;Loupe.Agent.Internal', '&lt;name&gt;Gibraltar.Agent'} | Set-Content $(TargetDir)Gibraltar.Agent.xml}"
 if $(ConfigurationName) == Release $(ProjectDir)..\..\Tools\NuGet.exe Pack $(ProjectPath) -Symbols -Prop Configuration=Release -Exclude "**/Loupe.Agent.Internal.*"

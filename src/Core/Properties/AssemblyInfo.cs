@@ -14,7 +14,7 @@ using System.Resources;
 [assembly: AssemblyConfiguration( "" )]
 [assembly: AssemblyCompany("Gibraltar Software, Inc.")]
 [assembly: AssemblyProduct("Loupe")]
-[assembly: AssemblyCopyright("Copyright © 2008-2021 Gibraltar Software, Inc.")]
+[assembly: AssemblyCopyright("Copyright © 2008-2023 Gibraltar Software, Inc.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture( "" )]
 
@@ -31,6 +31,5 @@ using System.Resources;
 [assembly: AssemblyVersion("5.0.0.0")]
 [assembly: AssemblyFileVersion("5.0.0.0")]
 [assembly: AssemblyInformationalVersion("5.0.0.0")]
-
 [assembly: NeutralResourcesLanguage("en-US")]
 
