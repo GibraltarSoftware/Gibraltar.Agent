@@ -52,9 +52,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Agent.Web.NET20\Agent.Web.NET20.csproj">
+    <ProjectReference Include="..\Agent.Web\Agent.Web.csproj">
       <Project>{B15EB772-5642-43AC-8F80-20A8C9D1EE34}</Project>
-      <Name>Agent.Web.NET20</Name>
+      <Name>Agent.Web</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

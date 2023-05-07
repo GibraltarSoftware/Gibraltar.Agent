@@ -68,7 +68,7 @@ namespace Gibraltar.Agent.Web.Internal
             Description = "The time it took for the request to be looked up in cache")]
         public double ResolveRequestCacheDuration { get; private set; }
 
-#if NET_4_5
+#if NET45
         [EventMetricValue("mapRequestDuration", SummaryFunction.Average, "Milliseconds", Caption = "Map Request Duration",
             Description = "The time it took for the request to be mapped to the appropriate handler")]
         public double MapRequestDuration { get; private set; }
@@ -236,7 +236,7 @@ namespace Gibraltar.Agent.Web.Internal
             m_MapRequestTimer = Stopwatch.StartNew();
         }
 
-#if NET_4_5
+#if NET45
         internal void MapRequestEnd()
         {
             MapRequestDuration = StopAndRecordDuration(m_MapRequestTimer);

@@ -19,7 +19,7 @@
 using System;
 using System.Diagnostics;
 
-#if NET_4_5
+#if NET45
 using System.Threading.Tasks;
 #endif
 
@@ -67,7 +67,7 @@ namespace Gibraltar.Agent.Web
         {
             try
             {
-#if NET_4_5
+#if NET45
                 var taskAsyncHelper = new EventHandlerTaskAsyncHelper(BeginRequestAsync);
                 context.AddOnBeginRequestAsync(taskAsyncHelper.BeginEventHandler, taskAsyncHelper.EndEventHandler);
 
@@ -144,7 +144,7 @@ namespace Gibraltar.Agent.Web
                 {
                     context.LogRequest += HttpApplicationLogRequest;
                     context.PostLogRequest += HttpApplicationPostLogRequest;
-#if NET_4_5
+#if NET45
                     context.MapRequestHandler += HttpApplicationMapRequest;
                     context.PostMapRequestHandler += HttpApplicationPostMapRequest;
 
@@ -194,7 +194,7 @@ namespace Gibraltar.Agent.Web
 
         #endregion
 
-#if NET_4_5
+#if NET45
 
         private void HttpApplicationMapRequest(object sender, EventArgs e)
         {
@@ -368,7 +368,7 @@ namespace Gibraltar.Agent.Web
                     m_CurrentRequestMetric.AbsolutePath = fullAppRelativePath;
                     m_CurrentRequestMetric.QueryString = request.Url.Query;
 
-#if NET_4_5
+#if NET45
                     if (string.IsNullOrWhiteSpace(fullAppRelativePath) == false)
 #else
                     if (string.IsNullOrEmpty(fullAppRelativePath) == false)

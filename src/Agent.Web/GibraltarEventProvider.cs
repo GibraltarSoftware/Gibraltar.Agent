@@ -286,7 +286,7 @@ namespace Gibraltar.Agent.Web
                 IMessageSourceProvider requestSource = null;
                 if (exception != null)
                 {
-                    requestSource = new ExceptionSourceProvider(exception);
+                    requestSource = new Gibraltar.Agent.Logging.ExceptionSourceProvider(exception);
                 }
                 else if (requestInformation != null)
                 {
