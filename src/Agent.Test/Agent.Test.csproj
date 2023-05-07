@@ -10,7 +10,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Gibraltar.Agent.Test</RootNamespace>
-    <AssemblyName>Loupe.Agent.Test</AssemblyName>
+    <AssemblyName>Gibraltar.Agent.Test</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>

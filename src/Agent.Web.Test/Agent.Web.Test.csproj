@@ -53,7 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Agent.Web\Agent.Web.csproj">
-      <Project>{B15EB772-5642-43AC-8F80-20A8C9D1EE34}</Project>
+      <Project>{b15eb772-5642-43ac-8f80-20a8c9d1ee34}</Project>
       <Name>Agent.Web</Name>
     </ProjectReference>
   </ItemGroup>

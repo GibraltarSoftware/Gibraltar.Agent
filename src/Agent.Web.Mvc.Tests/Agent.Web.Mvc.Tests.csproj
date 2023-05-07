@@ -38,9 +38,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Gibraltar.Agent, Version=4.8.0.0, Culture=neutral, PublicKeyToken=ca42a1ee8d2e42d3, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Gibraltar.Agent.4.9.5\lib\net40\Gibraltar.Agent.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
   </ItemGroup>
   <Choose>
@@ -60,6 +57,16 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Agent.Web.Mvc\Agent.Web.Mvc.csproj">
+      <Project>{5ceab23a-edf0-4f45-b74c-ae16047c1ecc}</Project>
+      <Name>Agent.Web.Mvc</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Agent\Agent.csproj">
+      <Project>{1a2bbcaf-22cd-4c1b-8306-78ca3732867a}</Project>
+      <Name>Agent</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

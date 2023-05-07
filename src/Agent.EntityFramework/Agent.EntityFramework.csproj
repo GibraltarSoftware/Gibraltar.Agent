@@ -15,7 +15,7 @@
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<AutoGenerateBindingRedirects>True</AutoGenerateBindingRedirects>
 		<SignAssembly>True</SignAssembly>
-		<AssemblyOriginatorKeyFile>E:\dev\git\Loupe.Agent\loupe.agent.snk</AssemblyOriginatorKeyFile>
+		<AssemblyOriginatorKeyFile>..\..\loupe.agent.snk</AssemblyOriginatorKeyFile>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<PublishRepositoryUrl>true</PublishRepositoryUrl>
 		<EmbedUntrackedSources>true</EmbedUntrackedSources>
