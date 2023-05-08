@@ -37,21 +37,21 @@
 	  <Content Include="web.config.transform" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="ilmerge" Version="3.0.41" />
-		<PackageReference Include="Loupe.Extensibility" Version="4.10.17" />
+		<PackageReference Include="ilmerge" Version="3.0.41" PrivateAssets="All" />
+		<PackageReference Include="Loupe.Extensibility" Version="4.10.17" PrivateAssets="All" />
 		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
 	</ItemGroup>
 	<ItemGroup>
-	  <ProjectReference Include="..\Common\Common.csproj" />
-	  <ProjectReference Include="..\Core\Core.csproj" />
-	  <ProjectReference Include="..\Server.Client.Net20\Server.Client.Net20.csproj" />
+	  <ProjectReference Include="..\Common\Common.csproj" PrivateAssets="All" />
+	  <ProjectReference Include="..\Core\Core.csproj" PrivateAssets="All" />
+	  <ProjectReference Include="..\Server.Client.Net20\Server.Client.Net20.csproj" PrivateAssets="All" />
 	</ItemGroup>
 	<ItemGroup>
 		<Reference Include="System.Configuration" />
 		<Reference Include="System.Windows.Forms" />
 	</ItemGroup>
-	<Target Name="ILMerge" AfterTargets="PostBuildEvent">
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
 		<!-- the ILMergePath property points to the location of ILMerge.exe console application -->
-		<Exec Command="$(ILMergeConsolePath) /log /keyfile:$(ProjectDir)..\..\Loupe.Agent.snk /internalize /closed /targetplatform:v2 /out:$(TargetDir)Gibraltar.Agent.dll $(TargetPath) $(TargetDir)Loupe.Extensibility.dll $(TargetDir)Loupe.Common.dll $(TargetDir)Loupe.Serialization.dll $(TargetDir)Loupe.Server.Client.Net20.dll $(TargetDir)Loupe.Core.dll $(TargetDir)DevAge.Core.dll $(TargetDir)DevAge.Windows.Forms.dll $(TargetDir)SourceGrid.dll $(TargetDir)SourceGrid.Extensions.dll $(TargetDir)Ionic.Zip.Reduced.dll $(TargetDir)Manoli.Utils.CSharpFormat.dll $(TargetDir)CsvHelper.dll" />
+		<Exec Command="Call ILMerge.bat $(TargetFramework) $(ProjectDir) $(TargetDir) $(ILMergeConsolePath)" />
 	</Target>
 </Project>

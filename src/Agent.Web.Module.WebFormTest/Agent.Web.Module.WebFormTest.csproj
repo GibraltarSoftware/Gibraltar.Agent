@@ -43,13 +43,6 @@
     <Reference Include="AspNet.ScriptManager.bootstrap, Version=3.4.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\AspNet.ScriptManager.bootstrap.3.4.1\lib\net45\AspNet.ScriptManager.bootstrap.dll</HintPath>
     </Reference>
-    <Reference Include="Gibraltar.Agent, Version=4.8.0.0, Culture=neutral, PublicKeyToken=ca42a1ee8d2e42d3, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Gibraltar.Agent.4.9.5\lib\net40\Gibraltar.Agent.dll</HintPath>
-    </Reference>
-    <Reference Include="Gibraltar.Agent.Web, Version=4.0.0.0, Culture=neutral, PublicKeyToken=ca42a1ee8d2e42d3, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Gibraltar.Agent.Web.4.0.0.3015\lib\net20\Gibraltar.Agent.Web.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -192,7 +185,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Agent.Web.Module\Agent.Web.Module.csproj">
       <Project>{ea8936c9-44c3-4766-a515-e75a12b7f2c1}</Project>
-      <Name>Loupe.Agent.Web.Module</Name>
+      <Name>Agent.Web.Module</Name>
     </ProjectReference>
     <ProjectReference Include="..\Agent.Web\Agent.Web.csproj">
       <Project>{b15eb772-5642-43ac-8f80-20a8c9d1ee34}</Project>
