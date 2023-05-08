@@ -1,0 +1,6 @@
+echo Running Post-Build Event for %1
+mkdir %3Merge
+if "%1" == "net40" ( "%4" /log /keyfile:%2..\..\Loupe.Agent.snk /internalize /closed /targetplatform:v4 /out:%3Merge\Gibraltar.Agent.dll %3Gibraltar.Agent.dll %3Loupe.Extensibility.dll %3Loupe.Common.dll %3Loupe.Serialization.dll %3Loupe.Server.Client.Net20.dll %3Loupe.Core.dll %3DevAge.Core.dll %3DevAge.Windows.Forms.dll %3SourceGrid.dll %3SourceGrid.Extensions.dll %3Ionic.Zip.Reduced.dll %3Manoli.Utils.CSharpFormat.dll %3CsvHelper.dll )
+if "%1" == "net20" ( "%4" /log /keyfile:%2..\..\Loupe.Agent.snk /internalize /closed /targetplatform:v2 /out:%3Merge\Gibraltar.Agent.dll %3Gibraltar.Agent.dll %3Loupe.Extensibility.dll %3Loupe.Common.dll %3Loupe.Serialization.dll %3Loupe.Server.Client.Net20.dll %3Loupe.Core.dll %3DevAge.Core.dll %3DevAge.Windows.Forms.dll %3SourceGrid.dll %3SourceGrid.Extensions.dll %3Ionic.Zip.Reduced.dll %3Manoli.Utils.CSharpFormat.dll %3CsvHelper.dll )
+move /Y %3Merge\Gibraltar.Agent.dll %3Gibraltar.Agent.dll 
+move /Y %3Merge\Gibraltar.Agent.pdb %3Gibraltar.Agent.pdb
