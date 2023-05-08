@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>net40</TargetFramework>
+		<Title>Loupe Agent for Entity Framework 6</Title>
+		<Authors>Gibraltar Software</Authors>
+		<Product>Loupe</Product>
+		<Description>Records performance and tracing information for EF interactions while your application runs.  Designed for use in a production environment, it extends the Loupe Agent with features specific to Entity Framework (6 and later) and works with any EF provider.</Description>
+		<Copyright>Copyright © 2008-2023 Gibraltar Software, Inc.</Copyright>
+		<PackageProjectUrl>https://onloupe.com</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/GibraltarSoftware/Loupe.Agent</RepositoryUrl>
+		<PackageTags>Loupe Logging Entity Framework EntityFramework EF</PackageTags>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<EnableNETAnalyzers>False</EnableNETAnalyzers>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<AutoGenerateBindingRedirects>True</AutoGenerateBindingRedirects>
+		<SignAssembly>True</SignAssembly>
+		<AssemblyOriginatorKeyFile>..\..\loupe.agent.snk</AssemblyOriginatorKeyFile>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+		<PublishRepositoryUrl>true</PublishRepositoryUrl>
+		<EmbedUntrackedSources>true</EmbedUntrackedSources>
+		<IncludeSymbols>True</IncludeSymbols>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+		<AssemblyName>Gibraltar.Agent.EntityFramework</AssemblyName>
+		<RootNamespace>Gibraltar.Agent.EntityFramework</RootNamespace>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(TF_BUILD)' == 'true'">
+		<ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="EntityFramework" Version="6.0.2" />
+		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
+	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\Agent\Agent.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Reference Include="System.Configuration" />
+	</ItemGroup>
+</Project>

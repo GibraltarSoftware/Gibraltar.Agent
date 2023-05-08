@@ -14,7 +14,7 @@ variables:
 jobs:
 - job: build
   pool:
-    vmImage: 'windows-2019'
+    vmImage: 'windows-latest'
 
   steps:
   - task: DownloadSecureFile@1
@@ -45,7 +45,7 @@ jobs:
   - task: CopyFiles@2
     inputs:
       sourceFolder: '$(Build.SourcesDirectory)/src'
-      contents: 'agent/**/*.nupkg'
+      contents: '**\bin\**\?(*.nupkg|*.snupkg)'
       flattenFolders: true
       targetFolder: '$(Build.ArtifactStagingDirectory)/packages'
 
@@ -62,5 +62,5 @@ jobs:
       testAssemblyVer2: |
         **/bin/Release/Loupe.Agent.Test.dll
       searchFolder: '$(Build.SourcesDirectory)'
-      vsTestVersion: '16.0'
+      vsTestVersion: '17.0'
       codeCoverageEnabled: true

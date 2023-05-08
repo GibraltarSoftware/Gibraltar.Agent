@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFrameworks>net20;net45</TargetFrameworks>
+		<Title>Loupe Agent for ASP.NET WebForms</Title>
+		<Authors>Gibraltar Software</Authors>
+		<Product>Loupe</Product>
+		<Description>Records diagnostic information about your ASP.NET web site in the background while it runs.  Designed for use in a production environment, it extends the Loupe Agent with features specific to ASP.NET WebForms.</Description>
+		<Copyright>Copyright © 2008-2023 Gibraltar Software, Inc.</Copyright>
+		<PackageProjectUrl>https://onloupe.com</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/GibraltarSoftware/Loupe.Agent</RepositoryUrl>
+		<PackageTags>Loupe Logging ASP.NET MVC WebApi</PackageTags>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<EnableNETAnalyzers>False</EnableNETAnalyzers>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<AutoGenerateBindingRedirects>True</AutoGenerateBindingRedirects>
+		<SignAssembly>True</SignAssembly>
+		<AssemblyOriginatorKeyFile>..\..\loupe.agent.snk</AssemblyOriginatorKeyFile>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+		<PublishRepositoryUrl>true</PublishRepositoryUrl>
+		<EmbedUntrackedSources>true</EmbedUntrackedSources>
+		<IncludeSymbols>true</IncludeSymbols>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+		<RootNamespace>Gibraltar.Agent.Web</RootNamespace>
+		<AssemblyName>Gibraltar.Agent.Web</AssemblyName>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(TF_BUILD)' == 'true'">
+		<ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+	</PropertyGroup>
+	<ItemGroup>
+	  <None Remove="content\web.config.transform" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Content Include="content\web.config.transform" />
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
+	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\Agent\Agent.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Reference Include="System.Configuration" />
+	  <Reference Include="System.Web" />
+	</ItemGroup>
+</Project>
