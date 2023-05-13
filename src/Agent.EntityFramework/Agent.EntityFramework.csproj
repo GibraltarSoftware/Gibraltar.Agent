@@ -9,6 +9,7 @@
 		<Copyright>Copyright © 2008-2023 Gibraltar Software, Inc.</Copyright>
 		<PackageProjectUrl>https://onloupe.com</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/GibraltarSoftware/Loupe.Agent</RepositoryUrl>
+		<PackageIcon>loupe-192x192.png</PackageIcon>
 		<PackageTags>Loupe Logging Entity Framework EntityFramework EF</PackageTags>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<EnableNETAnalyzers>False</EnableNETAnalyzers>
@@ -36,5 +37,8 @@
 	</ItemGroup>
 	<ItemGroup>
 	  <Reference Include="System.Configuration" />
+	</ItemGroup>
+	<ItemGroup>
+		<None Include="..\Assets\loupe-192x192.png" Pack="true" PackagePath=""/>
 	</ItemGroup>
 </Project>

@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Agent.Windows.Packager": {
+      "commandName": "Project",
+      "commandLineArgs": "-p Loupe"
+    }
+  }
+}

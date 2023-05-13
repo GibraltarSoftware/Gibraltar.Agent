@@ -1,16 +1,17 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
 	<PropertyGroup>
-		<TargetFramework>net45</TargetFramework>
-		<Title>Loupe Agent Web Module</Title>
+		<OutputType>WinExe</OutputType>
+		<TargetFrameworks>net20;net40</TargetFrameworks>
+		<UseWindowsForms>true</UseWindowsForms>
+		<Title>Loupe Packager for .NET Framework</Title>
 		<Authors>Gibraltar Software</Authors>
 		<Product>Loupe</Product>
-		<Description>HttpModule that handles logging of messages/exceptions from Loupe JavaScript agent.</Description>
+		<Description>Executable that packages Loupe data for transport via file, email and the Loupe Server.</Description>
 		<Copyright>Copyright © 2008-2023 Gibraltar Software, Inc.</Copyright>
+		<PackageId>Gibraltar.Packager</PackageId>
 		<PackageProjectUrl>https://onloupe.com</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/GibraltarSoftware/Loupe.Agent</RepositoryUrl>
-		<PackageIcon>loupe-192x192.png</PackageIcon>
-		<PackageTags>Loupe Logging ASP.NET</PackageTags>
+		<PackageTags>Loupe Logging</PackageTags>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<EnableNETAnalyzers>False</EnableNETAnalyzers>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
@@ -20,36 +21,29 @@
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<PublishRepositoryUrl>true</PublishRepositoryUrl>
 		<EmbedUntrackedSources>true</EmbedUntrackedSources>
-		<IncludeSymbols>true</IncludeSymbols>
+		<IncludeSymbols>True</IncludeSymbols>
 		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
-		<RootNamespace>Gibraltar.Agent.Web.Module</RootNamespace>
-		<AssemblyName>Gibraltar.Agent.Web.Module</AssemblyName>
+		<RootNamespace>Gibraltar.Agent</RootNamespace>
+		<LangVersion>8.0</LangVersion>
+		<StartupObject>Gibraltar.Agent.Windows.Packager.Program</StartupObject>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(TF_BUILD)' == 'true'">
 		<ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
 	</PropertyGroup>
-	<ItemGroup>
-	  <None Remove="web.config.install.xdt" />
-	  <None Remove="web.config.uninstall.xdt" />
-	</ItemGroup>
-	<ItemGroup>
-	  <Content Include="web.config.install.xdt" />
-	  <Content Include="web.config.uninstall.xdt" />
-	</ItemGroup>
-	<ItemGroup>
-		<PackageReference Include="Microsoft.AspNet.Mvc" Version="4.0.20505" />
-		<PackageReference Include="Microsoft.AspNet.WebApi" Version="4.0.20505" />
-		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
-		<PackageReference Include="WebActivatorEx" Version="2.2.0" />
-	</ItemGroup>
+	<PropertyGroup Condition="'$(TargetFramework)' == 'net40'">
+		<AssemblyName>Gibraltar.Packager.NET40</AssemblyName>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(TargetFramework)' == 'net20'">
+		<AssemblyName>Gibraltar.Packager</AssemblyName>
+	</PropertyGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\Agent\Agent.csproj" />
 	</ItemGroup>
 	<ItemGroup>
-		<Reference Include="System.Configuration" />
-		<Reference Include="System.Web" />
+		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
 	</ItemGroup>
 	<ItemGroup>
-		<None Include="..\Assets\loupe-192x192.png" Pack="true" PackagePath=""/>
+		<Reference Include="System.Configuration" />
+		<Reference Include="System.Windows.Forms" />
 	</ItemGroup>
 </Project>

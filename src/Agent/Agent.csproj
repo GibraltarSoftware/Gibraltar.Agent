@@ -9,6 +9,7 @@
 		<Copyright>Copyright © 2008-2023 Gibraltar Software, Inc.</Copyright>
 		<PackageProjectUrl>https://onloupe.com</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/GibraltarSoftware/Loupe.Agent</RepositoryUrl>
+		<PackageIcon>loupe-192x192.png</PackageIcon>
 		<PackageTags>Loupe Logging</PackageTags>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<EnableNETAnalyzers>False</EnableNETAnalyzers>
@@ -49,6 +50,9 @@
 	<ItemGroup>
 		<Reference Include="System.Configuration" />
 		<Reference Include="System.Windows.Forms" />
+	</ItemGroup>
+	<ItemGroup>
+		<None Include="..\Assets\loupe-192x192.png" Pack="true" PackagePath=""/>
 	</ItemGroup>
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
 		<!-- the ILMergePath property points to the location of ILMerge.exe console application -->

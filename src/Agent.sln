@@ -52,6 +52,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Agent.Web.Module.WebApiTest
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Agent.Web.Module.WebFormTest", "Agent.Web.Module.WebFormTest\Agent.Web.Module.WebFormTest.csproj", "{7E151F25-AB5D-4020-BEEC-85797CF770DC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Agent.Windows.Packager", "Agent.Windows.Packager\Agent.Windows.Packager.csproj", "{35786458-CE5A-4706-99DE-FFA643DF0D85}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -251,6 +253,18 @@ Global
 		{7E151F25-AB5D-4020-BEEC-85797CF770DC}.Release|x64.Build.0 = Release|Any CPU
 		{7E151F25-AB5D-4020-BEEC-85797CF770DC}.Release|x86.ActiveCfg = Release|Any CPU
 		{7E151F25-AB5D-4020-BEEC-85797CF770DC}.Release|x86.Build.0 = Release|Any CPU
+		{35786458-CE5A-4706-99DE-FFA643DF0D85}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35786458-CE5A-4706-99DE-FFA643DF0D85}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35786458-CE5A-4706-99DE-FFA643DF0D85}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{35786458-CE5A-4706-99DE-FFA643DF0D85}.Debug|x64.Build.0 = Debug|Any CPU
+		{35786458-CE5A-4706-99DE-FFA643DF0D85}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{35786458-CE5A-4706-99DE-FFA643DF0D85}.Debug|x86.Build.0 = Debug|Any CPU
+		{35786458-CE5A-4706-99DE-FFA643DF0D85}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{35786458-CE5A-4706-99DE-FFA643DF0D85}.Release|Any CPU.Build.0 = Release|Any CPU
+		{35786458-CE5A-4706-99DE-FFA643DF0D85}.Release|x64.ActiveCfg = Release|Any CPU
+		{35786458-CE5A-4706-99DE-FFA643DF0D85}.Release|x64.Build.0 = Release|Any CPU
+		{35786458-CE5A-4706-99DE-FFA643DF0D85}.Release|x86.ActiveCfg = Release|Any CPU
+		{35786458-CE5A-4706-99DE-FFA643DF0D85}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
