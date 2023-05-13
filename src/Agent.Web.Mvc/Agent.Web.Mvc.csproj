@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>net40</TargetFramework>
+		<Title>Loupe Agent for ASP.NET MVC and Web API (.NET Framework)</Title>
+		<Authors>Gibraltar Software</Authors>
+		<Product>Loupe</Product>
+		<Description>Records performance, error, and tracing information for ASP.NET MVC and Web API.  Designed for use in a production environment, it extends the Loupe Agent with features specific to MVC 4.</Description>
+		<Copyright>Copyright © 2008-2023 Gibraltar Software, Inc.</Copyright>
+		<PackageProjectUrl>https://onloupe.com</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/GibraltarSoftware/Loupe.Agent</RepositoryUrl>
+		<PackageIcon>loupe-192x192.png</PackageIcon>
+		<PackageTags>Loupe Logging ASP.NET MVC WebApi</PackageTags>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<EnableNETAnalyzers>False</EnableNETAnalyzers>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<AutoGenerateBindingRedirects>True</AutoGenerateBindingRedirects>
+		<SignAssembly>True</SignAssembly>
+		<AssemblyOriginatorKeyFile>..\..\loupe.agent.snk</AssemblyOriginatorKeyFile>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+		<PublishRepositoryUrl>true</PublishRepositoryUrl>
+		<EmbedUntrackedSources>true</EmbedUntrackedSources>
+		<IncludeSymbols>True</IncludeSymbols>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+		<RootNamespace>Gibraltar.Agent.Web.Mvc</RootNamespace>
+		<AssemblyName>Gibraltar.Agent.Web.Mvc</AssemblyName>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(TF_BUILD)' == 'true'">
+		<ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNet.Mvc" Version="4.0.20505" />
+		<PackageReference Include="Microsoft.AspNet.WebApi" Version="4.0.20505" />
+		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
+		<PackageReference Include="System.Web.Http.Common" Version="4.0.20126.16343" />
+	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\Agent\Agent.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+		<Reference Include="Microsoft.CSharp" />
+		<Reference Include="System.Configuration" />
+		<Reference Include="System.Web" />
+	</ItemGroup>
+	<ItemGroup>
+		<None Include="..\Assets\loupe-192x192.png" Pack="true" PackagePath=""/>
+	</ItemGroup>
+</Project>
