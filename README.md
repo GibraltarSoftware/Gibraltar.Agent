@@ -1,7 +1,9 @@
 # Loupe Agent for .NET Framework #
 
 The Loupe Agent provides a generic facility for capturing log messages, exceptions, and metrics
-from .NET applications.  This repository is for the .NET Framework version of the Loupe Agent (for .NET 2.0 through 4.5).
+from .NET Framework applications.  This repository is for the .NET Framework version of the Loupe Agent (for .NET 2.0 through 4.8).
+If you are using .NET Core or .NET 5 or later, it's recommend you use the [Loupe Agent Core](https://github.com/gibraltarsoftware/loupe.agent.core/) family
+of agents that are based on .NET Standard and .NET 5.
 
 ## How do I use Loupe with my Application? ##
 
@@ -17,15 +19,19 @@ alerting, and error analysis to your application.
 
 ## What's In This Repository ##
 
-This is the repository for the Loupe Agent for .NET Core.
+This is the repository for the Loupe Agent for .NET Framework.
 The following NuGet packages live here:
 
 * Gibraltar.Agent: The primary API to use for logging & metrics.
-
+* Gibraltar.Agent.EntityFramework: Captures telemetry for EF 6.
+* Gibraltar.Agent.Web: Captures telemetry for ASP.NET WebForms applications
+* Gibraltar.Agent.Web.Module: Extends ASP.NET applications with an endpoint for collecting client data.
+* Gibraltar.Agent.Web.Mvc: Captures telemetry for ASP.NET WebAPI and MVC applications
+* Gibraltar.Packager: Console application for moving Loupe data outside of your application.
 
 ## How To Build These Projects ##
 
-The various projects can all be built with Visual Studio 2017 by opening src\Agent.sln.
+The various projects can all be built with Visual Studio 2022 by opening src\Agent.sln.
 
 ## Contributing ##
 

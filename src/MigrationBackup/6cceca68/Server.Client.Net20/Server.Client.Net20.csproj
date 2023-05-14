@@ -1,0 +1,101 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{23A44549-4F9B-45F4-8B9D-A92BC62DD6ED}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Gibraltar.Server.Client</RootNamespace>
+    <AssemblyName>Loupe.Server.Client.Net20</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\..\Loupe.Agent.snk</AssemblyOriginatorKeyFile>
+	  <LangVersion>8.0</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Loupe.Extensibility, Version=4.9.0.0, Culture=neutral, PublicKeyToken=ca42a1ee8d2e42d3, processorArchitecture=MSIL">
+      <HintPath>..\packages\Loupe.Extensibility.4.9.5\lib\net20\Loupe.Extensibility.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CachedCredentialsManager.cs" />
+    <Compile Include="ChannelConnectionState.cs" />
+    <Compile Include="ChannelConnectionStateChangedEventArgs.cs" />
+    <Compile Include="ClientRepositoryUploadRequest.cs" />
+    <Compile Include="CredentialsRequiredEventArgs.cs" />
+    <Compile Include="CustomerCredentials.cs" />
+    <Compile Include="Data\DataConverter.cs" />
+    <Compile Include="Data\Repository.cs">
+      <DependentUpon>Repository.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="ExtendedTimeoutWebClient.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GibraltarNetworkException.cs" />
+    <Compile Include="GibraltarRateLimitException.cs" />
+    <Compile Include="GibraltarTimeoutException.cs" />
+    <Compile Include="HubConfigurationGetRequest.cs" />
+    <Compile Include="HubConnection.cs" />
+    <Compile Include="HubConnectionCanConnectEventArgs.cs" />
+    <Compile Include="HubStatus.cs" />
+    <Compile Include="IClientLogger.cs" />
+    <Compile Include="IWebAuthenticationProvider.cs" />
+    <Compile Include="IWebChannelConnection.cs" />
+    <Compile Include="IWebRequest.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RepositoryCredentials.cs" />
+    <Compile Include="UserCredentials.cs" />
+    <Compile Include="WebChannel.cs" />
+    <Compile Include="WebChannelAuthorizationException.cs" />
+    <Compile Include="WebChannelConnectFailureException.cs" />
+    <Compile Include="WebChannelException.cs" />
+    <Compile Include="WebChannelFileNotFoundException.cs" />
+    <Compile Include="WebChannelRequestBase.cs" />
+    <Compile Include="WebRequestEventArgs.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{40fee87c-13aa-4f81-9b9d-462e6e39300f}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Data\Repository.xsd">
+      <CustomToolNamespace>Gibraltar.Server.Client.Data</CustomToolNamespace>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Data\RepositoryGen.bat" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
