@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>net45</TargetFramework>
+		<Title>Loupe Agent Web Module</Title>
+		<Authors>Gibraltar Software</Authors>
+		<Product>Loupe</Product>
+		<Description>HttpModule that handles logging of messages/exceptions from Loupe JavaScript agent.</Description>
+		<Copyright>Copyright © 2008-2023 Gibraltar Software, Inc.</Copyright>
+		<PackageProjectUrl>https://onloupe.com</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/GibraltarSoftware/Loupe.Agent</RepositoryUrl>
+		<PackageIcon>loupe-192x192.png</PackageIcon>
+		<PackageTags>Loupe Logging ASP.NET</PackageTags>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<EnableNETAnalyzers>False</EnableNETAnalyzers>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<AutoGenerateBindingRedirects>True</AutoGenerateBindingRedirects>
+		<SignAssembly>True</SignAssembly>
+		<AssemblyOriginatorKeyFile>..\..\loupe.agent.snk</AssemblyOriginatorKeyFile>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+		<PublishRepositoryUrl>true</PublishRepositoryUrl>
+		<EmbedUntrackedSources>true</EmbedUntrackedSources>
+		<IncludeSymbols>true</IncludeSymbols>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+		<RootNamespace>Gibraltar.Agent.Web.Module</RootNamespace>
+		<AssemblyName>Gibraltar.Agent.Web.Module</AssemblyName>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(TF_BUILD)' == 'true'">
+		<ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+	</PropertyGroup>
+	<ItemGroup>
+	  <None Remove="web.config.install.xdt" />
+	  <None Remove="web.config.uninstall.xdt" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Content Include="web.config.install.xdt" />
+	  <Content Include="web.config.uninstall.xdt" />
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNet.Mvc" Version="4.0.20505" />
+		<PackageReference Include="Microsoft.AspNet.WebApi" Version="4.0.20505" />
+		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
+		<PackageReference Include="WebActivatorEx" Version="2.2.0" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Agent\Agent.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+		<Reference Include="System.Configuration" />
+		<Reference Include="System.Web" />
+	</ItemGroup>
+	<ItemGroup>
+		<None Include="..\Assets\loupe-192x192.png" Pack="true" PackagePath=""/>
+	</ItemGroup>
+</Project>
