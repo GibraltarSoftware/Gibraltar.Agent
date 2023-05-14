@@ -65,7 +65,7 @@ jobs:
     displayName: 'Sign NuGet Packages'  
     inputs:
       command: 'custom'
-      arguments: 'sign $(Build.ArtifactStagingDirectory)/packages/*.nupkg -CertificatePath $(Agent.TempDirectory)/GibraltarSoftwareCCC.pfx -CertificatePassword f4rd+GM% -Timestamper http://timestamp.comodoca.com
+      arguments: sign $(Build.ArtifactStagingDirectory)/packages/*.nupkg -CertificatePath $(Agent.TempDirectory)/GibraltarSoftwareCCC.pfx -CertificatePassword f4rd+GM% -Timestamper http://timestamp.comodoca.com
 
   - task: PublishBuildArtifacts@1
     inputs:
