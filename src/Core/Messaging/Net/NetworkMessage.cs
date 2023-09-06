@@ -183,15 +183,19 @@ namespace Gibraltar.Messaging.Net
             //force the stream to be at the end of our length in case a derived class messed up.
             if (stream.Position - initialStreamPosition != packetLength)
             {
-                Log.Write(LogMessageSeverity.Warning, LogWriteMode.Queued, null, 0, NetworkClient.LogCategory,
-                    "Network stream is not in correct position after packet read", 
-                    "After reading a packet {0:N0} long from a stream starting at position {1:N0} the stream is at position {2:N0}.  This stream will likely fail on a subsequent read.",
-                    packetLength, initialStreamPosition, stream.Position);
+                if (!Log.SilentMode)
+                {
+                    Log.Write(LogMessageSeverity.Warning, LogWriteMode.Queued, null, 0, NetworkClient.LogCategory,
+                        "Network stream is not in correct position after packet read",
+                        "After reading a packet {0:N0} long from a stream starting at position {1:N0} the stream is at position {2:N0}.  This stream will likely fail on a subsequent read.",
+                        packetLength, initialStreamPosition, stream.Position);
 
 #if DEBUG
-                if (Debugger.IsAttached)
-                    Debugger.Break();
+                    if (Debugger.IsAttached)
+                        Debugger.Break();
 #endif
+                }
+
                 stream.Position = initialStreamPosition + packetLength;
             }
 
