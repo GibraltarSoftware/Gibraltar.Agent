@@ -47,6 +47,14 @@ namespace Gibraltar.Agent.EntityFramework.Configuration
         public bool LogCallStack { get { return (bool)this["logCallStack"]; } set { this["logCallStack"] = value; } }
 
         /// <summary>
+        /// Determines if the agent writes a log message for each SQL operation.  Defaults to true.
+        /// </summary>
+        /// <remarks>Set to false to disable writing log messages for each SQL operation before they are run.
+        /// For database-heavy applications this can create a significant volume of log data, but does not
+        /// affect overall application performance.</remarks>
+        public bool LogQuery { get { return (bool)this["logQuery"]; } set { this["logQuery"] = value; } }
+
+        /// <summary>
         /// The severity used for log messages for the Entity Framework trace message. Defaults to Verbose.
         /// </summary>
         [ConfigurationProperty("queryMessageSeverity", DefaultValue = LogMessageSeverity.Verbose, IsRequired = false)]
