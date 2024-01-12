@@ -17,6 +17,7 @@
 // */
 #endregion
 
+using System;
 using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -151,8 +152,9 @@ namespace Gibraltar.Agent.EntityFramework.Internal
                         var frameNamespace = (method.DeclaringType == null) ? null : method.DeclaringType.FullName;
 
                         if (frameNamespace != null &&
-                            frameNamespace.StartsWith("System.") == false &&
-                            frameNamespace.StartsWith("Gibraltar.") == false)
+                            frameNamespace.StartsWith("System.", StringComparison.InvariantCultureIgnoreCase) == false &&
+                            frameNamespace.StartsWith("Microsoft.", StringComparison.InvariantCultureIgnoreCase) == false &&
+                            frameNamespace.StartsWith("Gibraltar.", StringComparison.InvariantCultureIgnoreCase) == false)
                         {
                             // This is the first frame outside of this adapter and the logging framework itself.
                             // So this must be the actual caller!  We can stop looking.
