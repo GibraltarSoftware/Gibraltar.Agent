@@ -25,6 +25,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dependencies", "Dependencie
 		..\.gitignore = ..\.gitignore
 		..\azure-pipelines.yml = ..\azure-pipelines.yml
 		Common Resharper Settings.DotSettings = Common Resharper Settings.DotSettings
+		Directory.Build.props = Directory.Build.props
 		..\README.md = ..\README.md
 	EndProjectSection
 EndProject
@@ -52,7 +53,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Agent.Web.Module.WebApiTest
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Agent.Web.Module.WebFormTest", "Agent.Web.Module.WebFormTest\Agent.Web.Module.WebFormTest.csproj", "{7E151F25-AB5D-4020-BEEC-85797CF770DC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Agent.Windows.Packager", "Agent.Windows.Packager\Agent.Windows.Packager.csproj", "{35786458-CE5A-4706-99DE-FFA643DF0D85}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Agent.Windows.Packager", "Agent.Windows.Packager\Agent.Windows.Packager.csproj", "{35786458-CE5A-4706-99DE-FFA643DF0D85}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
