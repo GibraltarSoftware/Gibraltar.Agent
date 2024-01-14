@@ -23,6 +23,7 @@ using System.Data;
 using System.Data.Common;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure.Interception;
+using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Text;
 using Gibraltar.Agent.EntityFramework.Configuration;
@@ -88,6 +89,7 @@ namespace Gibraltar.Agent.EntityFramework
 
             LogCallStack = _configuration.LogCallStack;
             LogExceptions = _configuration.LogExceptions;
+            LogQuery = _configuration.LogQuery;
         }
 
         /// <summary>
@@ -113,6 +115,14 @@ namespace Gibraltar.Agent.EntityFramework
         /// Indicates if the call stack to the operation should be included in the log message
         /// </summary>
         public bool LogCallStack { get; set; }
+
+        /// <summary>
+        /// Determines if the agent writes a log message for each SQL operation.  Defaults to true.
+        /// </summary>
+        /// <remarks>Set to false to disable writing log messages for each SQL operation before they are run.
+        /// For database-heavy applications this can create a significant volume of log data, but does not
+        /// affect overall application performance.</remarks>
+        public bool LogQuery { get; set; }
 
         /// <summary>
         /// Indicates if execution exceptions should be logged
@@ -252,7 +262,7 @@ namespace Gibraltar.Agent.EntityFramework
 
             try
             {
-                var messageBuilder = new StringBuilder(1024);
+                var messageBuilder = LogQuery ? new StringBuilder(1024) : null;
 
                 string caption, shortenedQuery;
                 if (command.CommandType == CommandType.StoredProcedure)
@@ -285,7 +295,7 @@ namespace Gibraltar.Agent.EntityFramework
                     if (shortenedQuery.Length > 512)
                     {
                         shortenedQuery = shortenedQuery.Substring(0, 512) + "(...)";
-                        messageBuilder.AppendFormat("Full Query:\r\n\r\n{0}\r\n\r\n", command.CommandText);
+                        messageBuilder?.AppendFormat("Full Query:\r\n\r\n{0}\r\n\r\n", command.CommandText);
                     }
                     caption = string.Format("Executing Sql: '{0}'", shortenedQuery);
                 }
@@ -293,28 +303,30 @@ namespace Gibraltar.Agent.EntityFramework
                 string paramString = null;
                 if (command.Parameters.Count > 0)
                 {
-                    messageBuilder.AppendLine("Parameters:");
+                    messageBuilder?.AppendLine("Parameters:");
  
                     var paramStringBuilder = new StringBuilder(1024);
                     foreach (DbParameter parameter in command.Parameters)
                     {
                         string value = parameter.Value.FormatDbValue();
-                        messageBuilder.AppendFormat("    {0}: {1}\r\n", parameter.ParameterName, value);
+                        messageBuilder?.AppendFormat("    {0}: {1}\r\n", parameter.ParameterName, value);
                         paramStringBuilder.AppendFormat("{0}: {1}, ", parameter.ParameterName, value);
                     }
 
                     paramString = paramStringBuilder.ToString();
                     paramString = paramString.Substring(0, paramString.Length - 2); //get rid of the trailing comma
 
-                    messageBuilder.AppendLine();
+                    messageBuilder?.AppendLine();
                 }
 
-                var trackingMetric = new DatabaseMetric(shortenedQuery, command.CommandText);
-                trackingMetric.Parameters = paramString;
+                var trackingMetric = new DatabaseMetric(shortenedQuery, command.CommandText)
+                {
+                    Parameters = paramString
+                };
 
                 if (command.Transaction != null)
                 {
-                    messageBuilder.AppendFormat("Transaction:\r\n    Id: {0:X}\r\n    Isolation Level: {1}\r\n\r\n", command.Transaction.GetHashCode(), command.Transaction.IsolationLevel);
+                    messageBuilder?.AppendFormat("Transaction:\r\n    Id: {0:X}\r\n    Isolation Level: {1}\r\n\r\n", command.Transaction.GetHashCode(), command.Transaction.IsolationLevel);
                 }
 
                 var connection = command.Connection;
@@ -322,20 +334,24 @@ namespace Gibraltar.Agent.EntityFramework
                 {
                     trackingMetric.Server = connection.DataSource;
                     trackingMetric.Database = connection.Database;
-                    messageBuilder.AppendFormat("Server:\r\n    DataSource: {3}\r\n    Database: {4}\r\n    Connection Timeout: {2:N0} Seconds\r\n    Provider: {0}\r\n    Server Version: {1}\r\n\r\n",
+                    messageBuilder?.AppendFormat("Server:\r\n    DataSource: {3}\r\n    Database: {4}\r\n    Connection Timeout: {2:N0} Seconds\r\n    Provider: {0}\r\n    Server Version: {1}\r\n\r\n",
                                                 connection.GetType(), connection.ServerVersion, connection.ConnectionTimeout, connection.DataSource, connection.Database);
                 }
 
                 var messageSourceProvider = new MessageSourceProvider(2); //It's a minimum of two frames to our caller.
-                if (LogCallStack)
-                {
-                    messageBuilder.AppendFormat("Call Stack:\r\n{0}\r\n\r\n", messageSourceProvider.StackTrace);
-                }
-
-                Log.Write(_configuration.QueryMessageSeverity, LogSystem, messageSourceProvider, null, null, LogWriteMode.Queued, null, LogCategory, caption,
-                          messageBuilder.ToString());
-
                 trackingMetric.MessageSourceProvider = messageSourceProvider;
+
+                if (LogQuery && messageBuilder != null)
+                {
+                    if (LogCallStack)
+                    {
+                        messageBuilder?.AppendFormat("Call Stack:\r\n{0}\r\n\r\n", messageSourceProvider.StackTrace);
+                    }
+
+                    Log.Write(_configuration.QueryMessageSeverity, LogSystem, messageSourceProvider, null, null,
+                        LogWriteMode.Queued, null, LogCategory, caption,
+                        messageBuilder.ToString());
+                }
 
                 //we have to stuff the tracking metric in our index so that we can update it on the flipside.
                 try
