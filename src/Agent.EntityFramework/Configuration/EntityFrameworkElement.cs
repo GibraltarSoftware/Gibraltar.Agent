@@ -52,6 +52,7 @@ namespace Gibraltar.Agent.EntityFramework.Configuration
         /// <remarks>Set to false to disable writing log messages for each SQL operation before they are run.
         /// For database-heavy applications this can create a significant volume of log data, but does not
         /// affect overall application performance.</remarks>
+        [ConfigurationProperty("logQuery", DefaultValue = true, IsRequired = false)]
         public bool LogQuery { get { return (bool)this["logQuery"]; } set { this["logQuery"] = value; } }
 
         /// <summary>
@@ -86,8 +87,8 @@ namespace Gibraltar.Agent.EntityFramework.Configuration
             }
             catch (Exception ex)
             {
-                Log.Error(ex, LogCategory + ".Agent", "Unable to load the MVC Agent configuration from the config file",
-                          "The default configuration will be used which will undoubtedly create unexpected behavior.  Exception:\r\n{0}", ex.Message);
+                Log.Error(ex, LogCategory + ".Agent", "Unable to load the Entity Framework configuration from the config file",
+                          "The default configuration will be used which will may create unexpected behavior.  Exception:\r\n{0}", ex.Message);
             }
 
             return configuration ?? new EntityFrameworkElement();
