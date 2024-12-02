@@ -212,7 +212,7 @@ namespace Gibraltar.Monitor
         {
             //cause every performance counter to log itself.
 
-            //we are going to do this in two passes:  One to get all of the samples, the second to write them to the log file.  This 
+            //we are going to do this in two passes:  One to get all the samples, the second to write them to the log file.  This 
             //will let us write them as a single call and minimize locking.
             List<MetricSample> samples = new List<MetricSample>(Count);
 
