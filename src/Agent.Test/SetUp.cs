@@ -50,6 +50,7 @@ namespace Gibraltar.Agent.Test
 
             publisher.ApplicationDescription = "NUnit tests of the Gibraltar Agent Library";
 
+            m_Configuration.Listener.EnableMemoryPerformance = true;
             m_Configuration.SessionFile.EnableFilePruning = false;
             m_Configuration.ExportFile.Folder = @"C:\Data\Export";
 
