@@ -134,6 +134,7 @@ namespace Gibraltar.Agent.Test
 
             Log.MessageAlert += Log_ErrorAlertNotification;
 
+            e.Configuration.Listener.EnableMemoryPerformance = true;
             /*
             e.Configuration.Listener.EnableDiskPerformance = false;
             e.Configuration.Listener.EnableNetworkPerformance = false;

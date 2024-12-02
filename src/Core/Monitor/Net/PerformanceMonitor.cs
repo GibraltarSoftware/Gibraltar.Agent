@@ -94,7 +94,7 @@ namespace Gibraltar.Monitor.Net
         }
 
         /// <summary>
-        /// Poll all of the actively configured counters.
+        /// Poll all the actively configured counters.
         /// </summary>
         public void Poll()
         {
@@ -128,16 +128,16 @@ namespace Gibraltar.Monitor.Net
 #endif
 
                         if ((m_SystemCounters != null) && (m_EnableSystemCounters))
-                            m_SystemCounters.WriteSamples();
+                            SafeWriteSamples(m_SystemCounters);
 
                         if ((m_MemoryCounters != null) && (m_EnableMemoryCounters))
-                            m_MemoryCounters.WriteSamples();
+                            SafeWriteSamples(m_MemoryCounters);
 
                         if ((m_DiskCounters != null) && (m_EnableDiskCounters))
-                            m_DiskCounters.WriteSamples();
+                            SafeWriteSamples(m_DiskCounters);
 
                         if ((m_NetworkCounters != null) && (m_EnableNetworkCounters))
-                            m_NetworkCounters.WriteSamples();
+                            SafeWriteSamples(m_NetworkCounters);
 
 #if DEBUG_PERFMON
                         Log.Write(LogMessageSeverity.Verbose, "Gibraltar.Agent", "Completed performance counter poll.", null);
@@ -164,6 +164,24 @@ namespace Gibraltar.Monitor.Net
         #endregion
 
         #region Private Properties and Methods
+        /// <summary>
+        /// Request the collection write out its samples, catching any exception and logging it if necessary
+        /// </summary>
+        /// <param name="counters"></param>
+        private void SafeWriteSamples(PerfCounterCollection counters)
+        {
+            try
+            {
+                counters.WriteSamples();
+            }
+            catch (Exception exception)
+            {
+                if (!Log.SilentMode) Log.Write(LogMessageSeverity.Information, LogWriteMode.Queued, exception, "Gibraltar.Agent",
+                    "Failed to poll performance counters due to an exception.",
+                    "Exception type: {0}\r\nException message: {1}\r\n",
+                    exception.GetType().FullName, exception.Message);
+            }
+        }
 
         private void InitializeDiskCounters()
         {
@@ -306,16 +324,16 @@ namespace Gibraltar.Monitor.Net
                 m_MemoryCounters.Add(".NET CLR Memory", "Gen 2 heap size", PerfCounterInstanceAlias.CurrentProcess);
                 m_MemoryCounters.Add(".NET CLR Memory", "% Time in GC", PerfCounterInstanceAlias.CurrentProcess);
             }
-            catch (Exception exception)
+            catch (Exception ex)
             {
-                GC.KeepAlive(exception); //some warning prevention...
+                GC.KeepAlive(ex); //some warning prevention...
 #if DEBUG
-                ErrorNotifier.Notify(this, exception);
+                ErrorNotifier.Notify(this, ex);
 #endif
-                Log.Write(LogMessageSeverity.Warning, LogWriteMode.Queued, exception, "Gibraltar.Agent",
+                Log.Write(LogMessageSeverity.Warning, LogWriteMode.Queued, ex, "Gibraltar.Agent",
                           "Unable to record performance information for .NET memory counters",
                           "Specific exception: {0}\r\nException message: {1}",
-                          exception.GetType().FullName, exception.Message);
+                          ex.GetType().FullName, ex.Message);
             }
         }
 

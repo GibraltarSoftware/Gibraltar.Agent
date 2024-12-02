@@ -43,6 +43,20 @@ namespace Gibraltar.Monitor
         private static string s_OurProcessInstanceName;
         private static DateTimeOffset s_OurProcessInstanceNameExpirationDt;
 
+        static PerfCounterMetric()
+        {
+            // Attempt to capture our process name so we get a jump on resolving the right process instances and aren't fooled
+            // if there are multiple processes under the same PID.
+            try
+            {
+                s_OurProcessInstanceNamePrefix = Process.GetCurrentProcess().ProcessName;
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+
         /// <summary>
         /// Create a new performance counter metric object from the provided windows performance counter
         /// </summary>
@@ -339,6 +353,7 @@ namespace Gibraltar.Monitor
         /// Get the PerfMon instance name for the current process
         /// </summary>
         /// <returns>The string instance name for the current process</returns>
+        /// <exception cref="GibraltarException">When the process instance name couldn't be determined</exception>
         private static string GetCurrentProcessInstanceName()
         {
             lock (s_ProcessNameLock)
@@ -352,11 +367,11 @@ namespace Gibraltar.Monitor
                 //because this lookup is relatively expensive, lets be sure we really need to make it.
                 if (string.IsNullOrEmpty(s_OurProcessInstanceName) || (s_OurProcessInstanceNameExpirationDt < DateTimeOffset.Now))
                 {
-                    s_OurProcessInstanceNameExpirationDt = DateTimeOffset.Now.AddSeconds(1);
-                    s_OurProcessInstanceName = GetProcessInstanceName(s_OurPid, ref s_OurProcessInstanceNamePrefix);
+                    s_OurProcessInstanceNameExpirationDt = DateTimeOffset.Now.AddSeconds(5); // let's emphatically get outside our single pass poll time.
+                    s_OurProcessInstanceName = GetProcessInstanceName(s_OurPid, s_OurProcessInstanceNamePrefix);
                 }
 
-                return s_OurProcessInstanceName;
+                return s_OurProcessInstanceName ?? throw new GibraltarException("The performance counter instance name couldn't be determined.");
             }
         }
 
@@ -365,56 +380,53 @@ namespace Gibraltar.Monitor
         /// </summary>
         /// <remarks>Returns an empty string if no Process ID was found for the specified PID</remarks>
         /// <param name="pid">The Process ID to look up</param>
-        /// <param name="prefixHint">The invariant part of the name (regardless of the number of instances)</param>
-        /// <returns>The instance name for the process or string.Empty if not found.</returns>
-        private static string GetProcessInstanceName(int pid, ref string prefixHint)
+        /// <param name="processName">The invariant part of the name (regardless of the number of instances)</param>
+        /// <returns>The instance name for the process or null if not found.</returns>
+        private static string GetProcessInstanceName(int pid, string processName)
         {
-            string instanceName = string.Empty;
-            PerformanceCounterCategory processCounters = new PerformanceCounterCategory("Process");
+            string instanceName = null;
 
-            string[] processNames = processCounters.GetInstanceNames();
-            foreach (string processName in processNames)
+            try
             {
-                //look up the ID of each process by its instance name, check the value to 
-                //find out which has the PID we are looking for.  I'm open for a better idea
-                //if you have one.
+                PerformanceCounterCategory processCounters = new PerformanceCounterCategory("Process");
 
-                if (string.IsNullOrEmpty(prefixHint) || (processName.StartsWith(prefixHint)))
+                string[] potentialInstanceNames = processCounters.GetInstanceNames();
+                foreach (var potentialInstanceName in potentialInstanceNames)
                 {
-                    //we have to be careful - between when we pulled the instance names and now, the process we're checking may have exited.
-                    try
+                    //look up the ID of each process by its instance name, check the value to 
+                    //find out which has the PID we are looking for.  I'm open for a better idea
+                    //if you have one.
+
+                    if  (potentialInstanceName.StartsWith(processName, StringComparison.OrdinalIgnoreCase))
                     {
-                        using (PerformanceCounter cnt = GetPerformanceCounter("Process", "ID Process", processName))
+                        //we have to be careful - between when we pulled the instance names and now, the process we're checking may have exited.
+                        try
                         {
-                            //pull the raw value, it's the PID of the current process.
-                            if ((int)cnt.RawValue == pid)
+                            using (PerformanceCounter cnt = GetPerformanceCounter("Process", "ID Process", potentialInstanceName))
                             {
-                                instanceName = processName;
-                                break;
+                                //pull the raw value, it's the PID of the current process.
+                                if ((int)cnt.RawValue == pid)
+                                {
+                                    instanceName = potentialInstanceName;
+                                    break;
+                                }
                             }
                         }
-                    }
-                    catch
-                    {
-                        //we don't do anything right here - we just want to swallow the error.
+                        catch
+                        {
+                            //we don't do anything right here - we just want to swallow the error.
+                        }
                     }
                 }
             }
-
-            if ((string.IsNullOrEmpty(instanceName) == false) && (string.IsNullOrEmpty(prefixHint)))
+            catch (UnauthorizedAccessException ex)
             {
-                //figure out our new prefix hint.
-                int percentOffset = instanceName.LastIndexOf("%");
-                if (percentOffset <= 0)
-                {
-                    //no percent symbol - the whole thing is the prefix.
-                    prefixHint = instanceName;
-                }
-                else
-                {
-                    //pull off everything up to the %.
-                    prefixHint = instanceName.Substring(0, percentOffset - 1).TrimEnd();
-                }
+                if (!Log.SilentMode)
+                    Log.WriteMessage(LogMessageSeverity.Warning, LogWriteMode.Queued, 0, ex, null,
+                        "Unable to determine the process Id for performance counters due to an UnauthorizedAccessException.", "We will assume we're the only process named {0} and use that as our instance name.", processName);
+
+                //If we can't enumerate the instances, assume we're the one true process and use our prefix hint.
+                instanceName = processName;
             }
 
             return instanceName;
