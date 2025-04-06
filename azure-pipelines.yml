@@ -24,13 +24,6 @@ jobs:
       secureFile: 'loupe.agent.snk'
       overWrite: true
 
-  - task: DownloadSecureFile@1
-    displayName: 'Download Code Signing Cert'  
-    name: GibraltarSoftwareCCC
-    inputs:
-      secureFile: 'GibraltarSoftwareCCC.pfx'
-      overWrite: true
-
   - task: CopyFiles@2
     displayName: 'Copy Signing Key to Build Location'  
     inputs:
@@ -65,13 +58,13 @@ jobs:
     displayName: 'Sign NuGet Packages'  
     inputs:
       command: 'custom'
-      arguments: sign $(Build.ArtifactStagingDirectory)\packages\*.nupkg -CertificatePath $(Agent.TempDirectory)/GibraltarSoftwareCCC.pfx -CertificatePassword f4rd+GM% -Timestamper http://timestamp.comodoca.com -Verbosity detailed
+      arguments: sign $(Build.ArtifactStagingDirectory)\packages\*.nupkg -CertificatePath $(Cert_Storage_Path)/gibraltarsoftwareccc.cer -CertificatePassword $(Cert_Password)-Timestamper http://timestamp.comodoca.com -Verbosity detailed
 
   - task: NuGetCommand@2
     displayName: 'Sign NuGet Symbol Packages'  
     inputs:
       command: 'custom'
-      arguments: sign $(Build.ArtifactStagingDirectory)\packages\*.snupkg -CertificatePath $(Agent.TempDirectory)/GibraltarSoftwareCCC.pfx -CertificatePassword f4rd+GM% -Timestamper http://timestamp.comodoca.com -Verbosity detailed
+      arguments: sign $(Build.ArtifactStagingDirectory)\packages\*.snupkg -CertificatePath $(Cert_Storage_Path)/gibraltarsoftwareccc.cer -CertificatePassword $(Cert_Password) -Timestamper http://timestamp.comodoca.com -Verbosity detailed
 
   - task: PublishBuildArtifacts@1
     inputs:
