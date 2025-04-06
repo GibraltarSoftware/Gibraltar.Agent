@@ -2,6 +2,9 @@ name: $(major).$(minor).$(revision)$(Rev:.r)
 trigger:
 - main
 
+pool:
+  name: 'Dedicated Build Server'
+
 variables:
   agentSolution: 'src\Agent.sln'
   buildPlatform: 'Any CPU'
@@ -14,7 +17,7 @@ variables:
 jobs:
 - job: build
   pool:
-    vmImage: 'windows-latest'
+    name: 'Dedicated Build Server'
 
   steps:
   - task: DownloadSecureFile@1
