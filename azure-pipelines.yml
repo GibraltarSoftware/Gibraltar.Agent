@@ -58,7 +58,7 @@ jobs:
     displayName: 'Sign NuGet Packages'  
     inputs:
       command: 'custom'
-      arguments: sign $(Build.ArtifactStagingDirectory)\packages\*.nupkg -CertificatePath $(Cert_Storage_Path)/gibraltarsoftwareccc.cer -CertificatePassword $(Cert_Password)-Timestamper http://timestamp.comodoca.com -Verbosity detailed
+      arguments: sign $(Build.ArtifactStagingDirectory)\packages\*.nupkg -CertificatePath $(Cert_Storage_Path)/gibraltarsoftwareccc.cer -CertificatePassword $(Cert_Password) -Timestamper http://timestamp.comodoca.com -Verbosity detailed
 
   - task: NuGetCommand@2
     displayName: 'Sign NuGet Symbol Packages'  
