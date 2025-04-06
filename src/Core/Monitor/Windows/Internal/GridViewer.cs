@@ -92,7 +92,7 @@ namespace Gibraltar.Monitor.Windows.Internal
             AutoStretchColumnsToFitWidth = false;
             AutoStretchRowsToFitHeight = false;
 
-            // It turns out the the order of these next two calls is important
+            // It turns out the order of these next two calls is important
             // Changing SelectionMode will reset EnableMultiSelection
             SelectionMode = GridSelectionMode.Row;
 
@@ -1164,9 +1164,9 @@ namespace Gibraltar.Monitor.Windows.Internal
             }
 
             /// <summary>
-            /// All of the text of the log message for searching and filtering.
+            /// All the text of the log message for searching and filtering.
             /// </summary>
-            public string SearchableText
+            private string SearchableText
             {
                 get
                 {
@@ -1175,28 +1175,37 @@ namespace Gibraltar.Monitor.Windows.Internal
                         //add the details and exception to the message.
                         var stringBuilder = new StringBuilder();
 
-                        if (!string.IsNullOrEmpty(m_Message))
-                            stringBuilder.AppendLine(m_Message?.ToLower());
+                        var message = Message; // Force it to lazy load.
+                        if (!string.IsNullOrEmpty(message))
+                            stringBuilder.AppendLine(message);
 
                         if (!string.IsNullOrEmpty(m_LogMessage.Details))
-                            stringBuilder.AppendLine(m_LogMessage.Details.ToLower());
+                            stringBuilder.AppendLine(m_LogMessage.Details);
 
                         var currentException = Exception;
                         while (currentException != null)
                         {
                             if (!string.IsNullOrEmpty(currentException.Message))
-                                stringBuilder.AppendLine(currentException.Message.ToLower());
+                                stringBuilder.AppendLine(currentException.Message);
 
                             if (!string.IsNullOrEmpty(currentException.Source))
-                                stringBuilder.AppendLine(currentException.Source.ToLower());
+                                stringBuilder.AppendLine(currentException.Source);
 
                             if (!string.IsNullOrEmpty(currentException.StackTrace))
-                                stringBuilder.AppendLine(currentException.StackTrace.ToLower());
+                                stringBuilder.AppendLine(currentException.StackTrace);
 
                             currentException = currentException.InnerException;
                         }
 
-                        m_SearchableText = stringBuilder.ToString();
+                        // Limit the size of the searchable text to avoid excessive memory usage
+                        const int maxLength = 1024*16; // 16kB
+                        if (stringBuilder.Length > maxLength)
+                            m_SearchableText = stringBuilder.ToString(0, maxLength);
+                        else
+                            m_SearchableText = stringBuilder.ToString();
+
+                        // Speed up case-insensitive matches by ToLowering now.
+                        m_SearchableText = m_SearchableText.ToLower();
                     }
 
                     return m_SearchableText;
