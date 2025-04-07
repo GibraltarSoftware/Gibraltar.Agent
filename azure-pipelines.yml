@@ -57,18 +57,6 @@ jobs:
       flattenFolders: true
       targetFolder: '$(Build.ArtifactStagingDirectory)\packages'
 
-  - task: NuGetCommand@2
-    displayName: 'Sign NuGet Packages'  
-    inputs:
-      command: 'custom'
-      arguments: sign $(Build.ArtifactStagingDirectory)\packages\*.nupkg -CertificatePath '$(Cert_Storage_Path)\gibraltarsoftwareccc.cer' -CertificatePassword $(Cert_Password) -Timestamper http://timestamp.comodoca.com -Verbosity detailed
-
-  - task: NuGetCommand@2
-    displayName: 'Sign NuGet Symbol Packages'  
-    inputs:
-      command: 'custom'
-      arguments: sign $(Build.ArtifactStagingDirectory)\packages\*.snupkg -CertificatePath '$(Cert_Storage_Path)\gibraltarsoftwareccc.cer' -CertificatePassword $(Cert_Password) -Timestamper http://timestamp.comodoca.com -Verbosity detailed
-
   - task: PublishBuildArtifacts@1
     inputs:
       pathToPublish: '$(Build.ArtifactStagingDirectory)\packages'
