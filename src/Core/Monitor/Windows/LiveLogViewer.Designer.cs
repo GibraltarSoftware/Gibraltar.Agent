@@ -385,9 +385,8 @@
             this.SearchToolStripTextBox.Name = "SearchToolStripTextBox";
             this.SearchToolStripTextBox.Size = new System.Drawing.Size(150, 25);
             this.SearchToolStripTextBox.Text = "Search Messages";
-            this.SearchToolStripTextBox.Enter += new System.EventHandler(this.SearchToolStripTextBox_Enter);
-            this.SearchToolStripTextBox.Leave += new System.EventHandler(this.SearchToolStripTextBox_Leave);
-            this.SearchToolStripTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.SearchToolStripTextBox_KeyDown);
+            this.SearchToolStripTextBox.GotFocus += new System.EventHandler(this.SearchToolStripTextBox_GotFocus);
+            this.SearchToolStripTextBox.LostFocus += new System.EventHandler(this.SearchToolStripTextBox_LostFocus);
             this.SearchToolStripTextBox.TextChanged += new System.EventHandler(this.SearchToolStripTextBox_TextChanged);
             // 
             // SearchToolStripButton
