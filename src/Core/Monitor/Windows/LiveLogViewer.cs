@@ -34,6 +34,7 @@ namespace Gibraltar.Monitor.Windows
 
         private const string GibraltarProductName = "Gibraltar";
         private const string GibraltarApplicationName = "Application Monitor";
+        private const string PlaceholderText = "Search Messages";
 
         private readonly Queue<ILogMessage> m_MessageQueue = new Queue<ILogMessage>();
         private volatile bool m_PendingInQueue; // Only update inside lock.  Safe to read outside of lock.
@@ -46,11 +47,12 @@ namespace Gibraltar.Monitor.Windows
 
         private Font m_ActiveSearchFont;
         private bool m_AutoDocked;
-        private bool m_EnteringSearchText;
         private bool m_GetPriorMessages;
         private bool m_MessagesStarted;
         private bool m_ViewerEnabled;
         private bool m_RemoteConnected;
+        private bool m_SuppressSearchText; //used to prevent an event cascade while we mess with the placeholder text.
+
 
         private bool m_AutoScroll = true;
         private bool m_DetailsCollapsed;
@@ -1278,7 +1280,6 @@ namespace Gibraltar.Monitor.Windows
                 Cursor = Cursors.WaitCursor;
                 string searchText = SearchToolStripTextBox.Text;
                 ActionSetSearchText(searchText);
-                UpdateSearchBackColor();
             }
             finally
             {
@@ -1288,22 +1289,22 @@ namespace Gibraltar.Monitor.Windows
 
         private void ClearSearch()
         {
-            SearchToolStripTextBox.Font = m_InactiveSearchFont;
-            SearchToolStripTextBox.ForeColor = Color.Gray;
-            SearchToolStripTextBox.Text = "Search Messages";
+            try
+            {
+                // We're about to set our inactive search again so we need to tell our text box to ignore the change
+                m_SuppressSearchText = true;
+                SearchToolStripTextBox.Font = m_InactiveSearchFont;
+                SearchToolStripTextBox.ForeColor = Color.Gray;
+                SearchToolStripTextBox.Text = PlaceholderText;
+            }
+            finally
+            {
+                m_SuppressSearchText = false;
+            }
+
             ResetSearchToolStripButton.Visible = false;
             SearchToolStripButton.Visible = false;
             ActionSetSearchText(null);
-        }
-
-        private void UpdateSearchBackColor()
-        {
-            if (SearchToolStripTextBox.Text == m_GridViewer.SearchText && !string.IsNullOrEmpty(SearchToolStripTextBox.Text))
-                SearchToolStripTextBox.BackColor = Color.Cornsilk;
-            else
-                SearchToolStripTextBox.BackColor = Color.White;
-
-            m_GridViewer.UpdateGridBackColor();
         }
 
         /// <summary>
@@ -1602,73 +1603,63 @@ namespace Gibraltar.Monitor.Windows
             }
         }
 
-        private void SearchToolStripTextBox_KeyDown(object sender, KeyEventArgs e)
-        {
-            //if (e.KeyCode == Keys.Return)
-        }
-
         private void SearchToolStripButton_Click(object sender, EventArgs e)
         {
             RefreshSearch();
         }
 
-        private void SearchToolStripTextBox_Enter(object sender, EventArgs e)
+        private void SearchToolStripTextBox_GotFocus(object sender, EventArgs e)
         {
-            if (m_EnteringSearchText)
-                return;
-
-            try
+            if (SearchToolStripTextBox.Text == PlaceholderText)
             {
-                m_EnteringSearchText = true;
-                if (SearchToolStripTextBox.ForeColor != Color.Black)
+                try
                 {
+                    // we want to suppress the text box change event when we change out the placeholder text.
+                    m_SuppressSearchText = true;
+
                     SearchToolStripTextBox.Font = m_ActiveSearchFont;
+                    SearchToolStripTextBox.Text = m_GridViewer.SearchText ?? string.Empty;
                     SearchToolStripTextBox.ForeColor = Color.Black;
-                    SearchToolStripTextBox.Text = "";
                 }
-            }
-            finally
-            {
-                m_EnteringSearchText = false;
+                finally
+                {
+                    m_SuppressSearchText = false;
+                }
             }
         }
 
-        private void SearchToolStripTextBox_Leave(object sender, EventArgs e)
+        private void SearchToolStripTextBox_LostFocus(object sender, EventArgs e)
         {
-            if (m_EnteringSearchText)
-                return;
-
-            try
+            if (string.IsNullOrEmpty(SearchToolStripTextBox.Text))
             {
-                m_EnteringSearchText = true;
-                if (string.IsNullOrEmpty(SearchToolStripTextBox.Text))
+                try
                 {
-                    ResetSearchToolStripButton.Visible = false;
-                    ClearSearch();
+                    // we want to suppress the text box change event when we change out the placeholder text.
+                    m_SuppressSearchText = true;
+
+                    SearchToolStripTextBox.Font = m_InactiveSearchFont;
+                    SearchToolStripTextBox.Text = PlaceholderText;
+                    SearchToolStripTextBox.ForeColor = Color.Gray;
+                }
+                finally
+                {
+                    m_SuppressSearchText = false;
                 }
             }
-            finally
-            {
-                m_EnteringSearchText = false;
-            }
+        }
+
+        private void SearchToolStripTextBox_TextChanged(object sender, EventArgs e)
+        {
+            if (m_SuppressSearchText) return;
+
+            ResetSearchToolStripButton.Visible = !string.IsNullOrEmpty(m_GridViewer.SearchText);
+
+            RefreshSearch();
         }
 
         private void ClearSearchToolStripButton_Click(object sender, EventArgs e)
         {
             ClearSearch();
-            UpdateSearchBackColor();
-        }
-
-        private void SearchToolStripTextBox_TextChanged(object sender, EventArgs e)
-        {
-            if (m_EnteringSearchText)
-                return;
-
-            ResetSearchToolStripButton.Visible = !string.IsNullOrEmpty(SearchToolStripTextBox.Text);
-
-            RefreshSearch();
-            //UpdateSearchBackColor(); // RefreshSearch() already does this.
-            SearchToolStripTextBox.Focus();
         }
 
         private void messageDetailsSplitContainer_Resize(object sender, EventArgs e)
