@@ -460,6 +460,17 @@ namespace Gibraltar.Agent
         }
 
         /// <summary>
+        /// The minimum severity level for log messages. Messages with severity below this level will be filtered out.
+        /// </summary>
+        /// <remarks>Severity values are: Critical=1, Error=2, Warning=4, Information=8, Verbose=16. 
+        /// Higher numeric values represent less severe messages. Setting this to Information(8) will filter out Verbose(16) messages.</remarks>
+        public static LogMessageSeverity MinimumSeverity 
+        { 
+            get { return (LogMessageSeverity)Monitor.Log.MinimumSeverity; } 
+            set { Monitor.Log.MinimumSeverity = (Loupe.Extensibility.Data.LogMessageSeverity)value; } 
+        }
+
+        /// <summary>
         /// Indicates if the agent should package &amp; send sessions for the current application after this session exits.
         /// </summary>
         /// <remarks>
@@ -2184,6 +2195,11 @@ namespace Gibraltar.Agent
             if (Monitor.Log.IsLoggingActive(false) == false)
                 return;
 
+            // Filter out messages below the minimum severity threshold
+            // Note: Severity values are inverted - Critical=1, Verbose=16, so higher values are less severe
+            if (severity > MinimumSeverity)
+                return;
+
             if (skipFrames < 0)
                 skipFrames = 0; // Make sure they don't pass us a negative, it would attribute it here to us.
 
@@ -2243,6 +2259,11 @@ namespace Gibraltar.Agent
             if (Monitor.Log.IsLoggingActive(false) == false)
                 return;
 
+            // Filter out messages below the minimum severity threshold
+            // Note: Severity values are inverted - Critical=1, Verbose=16, so higher values are less severe
+            if (severity > MinimumSeverity)
+                return;
+
             if (skipFrames < 0)
                 skipFrames = 0; // Make sure they don't pass us a negative, it would attribute it here to us.
 
@@ -2285,6 +2306,11 @@ namespace Gibraltar.Agent
         {
             //don't do jack if we aren't initialized.
             if (Monitor.Log.IsLoggingActive(false) == false)
+                return;
+
+            // Filter out messages below the minimum severity threshold
+            // Note: Severity values are inverted - Critical=1, Verbose=16, so higher values are less severe
+            if (severity > MinimumSeverity)
                 return;
 
             Monitor.Log.WriteMessage((Loupe.Extensibility.Data.LogMessageSeverity)severity, (Monitor.LogWriteMode)writeMode, logSystem,

@@ -94,6 +94,8 @@ namespace Gibraltar.Monitor
         private static readonly object s_ConsentLock = new object(); //used just for the Auto Send Consent to keep it from interfering with anything else.
         private static readonly object s_NotifierLock = new object(); //used for initializing Notifier instances.
 
+        private static LogMessageSeverity s_MinimumSeverity = LogMessageSeverity.Verbose; //protected by being static and simple assignment
+
         private volatile static bool s_Initialized; //protected by being volatile
         private volatile static bool s_InitializationNeverAttempted = true; //protected by being volatile
         private volatile static bool s_Initializing; //PROTECTED BY INITIALIZING and volatile
@@ -209,6 +211,17 @@ namespace Gibraltar.Monitor
         /// </summary>
         /// <remarks>Once true it will never go false, however if false it may go true at any time.</remarks>
         public static bool Initialized { get { return s_Initialized; } }
+
+        /// <summary>
+        /// The minimum severity level for log messages. Messages with severity below this level will be filtered out.
+        /// </summary>
+        /// <remarks>Severity values are: Critical=1, Error=2, Warning=4, Information=8, Verbose=16. 
+        /// Higher numeric values represent less severe messages. Setting this to Information(8) will filter out Verbose(16) messages.</remarks>
+        public static LogMessageSeverity MinimumSeverity 
+        { 
+            get { return s_MinimumSeverity; } 
+            set { s_MinimumSeverity = value; } 
+        }
 
         /// <summary>
         /// Attempt to initialize the log system.  If it is already initialized it will return immediately.
@@ -1061,6 +1074,11 @@ namespace Gibraltar.Monitor
             if (s_Initialized == false)
                 return;
 
+            // Filter out messages below the minimum severity threshold
+            // Note: Severity values are inverted - Critical=1, Verbose=16, so higher values are less severe
+            if (severity > s_MinimumSeverity)
+                return;
+
             if (skipFrames < 0)
                 skipFrames = 0; // Less than 0 is illegal (it would mean us!), correct it to designate our immediate caller.
 
@@ -1099,6 +1117,11 @@ namespace Gibraltar.Monitor
                                         string detailsXml, string caption, string description, params object[] args)
         {
             if (s_Initialized == false)
+                return;
+
+            // Filter out messages below the minimum severity threshold
+            // Note: Severity values are inverted - Critical=1, Verbose=16, so higher values are less severe
+            if (severity > s_MinimumSeverity)
                 return;
 
             if (skipFrames < 0)
@@ -1424,6 +1447,11 @@ namespace Gibraltar.Monitor
                                         Exception exception, string detailsXml, string caption, string description, params object[] args)
         {
             if (s_Initialized == false)
+                return;
+
+            // Filter out messages below the minimum severity threshold
+            // Note: Severity values are inverted - Critical=1, Verbose=16, so higher values are less severe
+            if (severity > s_MinimumSeverity)
                 return;
 
             IMessengerPacket packet = MakeLogPacket(severity, logSystem, categoryName, sourceProvider, userName,
