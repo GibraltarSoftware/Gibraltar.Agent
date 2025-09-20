@@ -44,7 +44,7 @@ namespace Gibraltar.Agent
         }
 
         /// <summary>
-        /// Invoked to load all of the environment variables that match the configuration elements for this section.
+        /// Invoked to load all the environment variables that match the configuration elements for this section.
         /// </summary>
         /// <param name="environmentVars"></param>
         protected abstract void OnLoadEnvironmentVars(IDictionary<string, string> environmentVars);
