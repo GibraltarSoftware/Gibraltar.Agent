@@ -31,8 +31,9 @@ namespace Gibraltar.Agent
             LoadEnvironmentVariable(environmentVars, "maxQueueLength");
             LoadEnvironmentVariable(environmentVars, "enableAnonymousMode");
             LoadEnvironmentVariable(environmentVars, "enableDebugMode");
+            LoadEnvironmentVariable(environmentVars, "disableMemoryOptimization");
         }
-        
+
         /// <summary>
         /// Optional.  The name of the product for logging purposes.
         /// </summary>
@@ -169,6 +170,7 @@ namespace Gibraltar.Agent
             get => ReadBoolean("enableAnonymousMode");
             set => this["enableAnonymousMode"] = value;
         }
+
         /// <summary>
         /// When true, the Agent will include debug messages in logs. Not intended for production use
         /// </summary>
@@ -183,6 +185,23 @@ namespace Gibraltar.Agent
         {
             get => ReadBoolean("enableDebugMode");
             set => this["enableDebugMode"] = value;
+        }
+
+        /// <summary>
+        /// When true, the Agent will not do string compression and other optimizations to minimize memory.
+        /// </summary>
+        /// <remarks><para>The Agent normally works to minimize memory use in production scenarios, such as
+        /// using a string cache to avoid keeping duplicate strings in memory and other steps.  These steps
+        /// rely on .NET Garbage Collector features; if there are GC issues in the process they can be
+        /// confusing to debug and understand using conventional profilers while these optimizations are being
+        /// used.</para>
+        /// <para>Setting this option to true will disable these optimizations which will increase the memory used by 
+        /// the agent (particularly for log message buffering) but makes a simpler picture for memory profiling.</para></remarks>
+        [ConfigurationProperty("disableMemoryOptimization", DefaultValue = false, IsRequired = false)]
+        public bool DisableMemoryOptimization
+        {
+            get => ReadBoolean("disableMemoryOptimization");
+            set => this["disableMemoryOptimization"] = value;
         }
     }
 }

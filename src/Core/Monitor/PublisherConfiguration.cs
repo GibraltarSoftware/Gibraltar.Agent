@@ -1,6 +1,4 @@
-﻿
-
-using System;
+﻿using System;
 using System.Configuration;
 using System.Xml;
 using Gibraltar.Agent;
@@ -41,6 +39,7 @@ namespace Gibraltar.Monitor
             //copy the provided configuration
             if (node != null)
             {
+                DisableMemoryOptimization = AgentConfiguration.ReadValue(node, "disableMemoryOptimization", baseline.DisableMemoryOptimization);
                 EnableAnonymousMode = AgentConfiguration.ReadValue(node, "enableAnonymousMode", baseline.EnableAnonymousMode);
                 EnableDebugMode = AgentConfiguration.ReadValue(node, "enableDebugMode", baseline.EnableDebugMode);
                 ForceSynchronous = AgentConfiguration.ReadValue(node, "forceSynchronous", baseline.ForceSynchronous);
@@ -181,6 +180,18 @@ namespace Gibraltar.Monitor
         public bool EnableDebugMode { get; set; }
 
         /// <summary>
+        /// When true, the Agent will not do string compression and other optimizations to minimize memory.
+        /// </summary>
+        /// <remarks><para>The Agent normally works to minimize memory use in production scenarios, such as
+        /// using a string cache to avoid keeping duplicate strings in memory and other steps.  These steps
+        /// rely on .NET Garbage Collector features; if there are GC issues in the process they can be
+        /// confusing to debug and understand using conventional profilers while these optimizations are being
+        /// used.</para>
+        /// <para>Setting this option to true will disable these optimizations which will increase the memory used by 
+        /// the agent (particularly for log message buffering) but makes a simpler picture for memory profiling.</para></remarks>
+        public bool DisableMemoryOptimization { get; set; }
+
+        /// <summary>
         /// Save the configuration to the specified XML node.
         /// </summary>
         /// <param name="gibraltarNode"></param>
@@ -200,6 +211,7 @@ namespace Gibraltar.Monitor
             AgentConfiguration.WriteValue(newNode, "maxQueueLength", MaxQueueLength, baseline.MaxQueueLength);
             AgentConfiguration.WriteValue(newNode, "enableAnonymousMode", EnableAnonymousMode, baseline.EnableAnonymousMode);
             AgentConfiguration.WriteValue(newNode, "enableDebugMode", EnableDebugMode, baseline.EnableDebugMode);
+            AgentConfiguration.WriteValue(newNode, "disableMemoryOptimization", DisableMemoryOptimization, baseline.DisableMemoryOptimization);
 
             if (ApplicationVersion != null)
             {
@@ -242,6 +254,7 @@ namespace Gibraltar.Monitor
         private void Initialize(PublisherElement configuration)
         {
             //copy the configuration
+            DisableMemoryOptimization = configuration.DisableMemoryOptimization;
             EnableAnonymousMode = configuration.EnableAnonymousMode;
             EnableDebugMode = configuration.EnableDebugMode;
             ForceSynchronous = configuration.ForceSynchronous;

@@ -20,7 +20,7 @@ namespace Gibraltar
         private static readonly object s_Lock = new object(); //Multithread Protection lock
         private static Dictionary<int, WeakStringCollection> s_StringReferences = new Dictionary<int, WeakStringCollection>(DefaultCollectionSize); //PROTECTED BY LOCK
 
-        private volatile static bool s_DisableCache;
+        private static volatile bool s_DisableCache;
         private static long s_PeakReferenceSize; //PROTECTED BY LOCK
 
         /// <summary>
@@ -30,14 +30,8 @@ namespace Gibraltar
         /// behavior with and without the cache without changing code.</remarks>
         public static bool Disabled
         {
-            get
-            {
-                return s_DisableCache;
-            }
-            set
-            {
-                s_DisableCache = value;
-            }
+            get => s_DisableCache;
+            set => s_DisableCache = value;
         }
 
         /// <summary>

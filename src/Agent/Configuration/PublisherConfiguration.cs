@@ -29,8 +29,8 @@ namespace Gibraltar.Agent.Configuration
         /// product name from the assemblies that initiate logging.</remarks>
         public string ProductName
         {
-            get { return m_WrappedConfiguration.ProductName; }
-            set { m_WrappedConfiguration.ProductName = value; }
+            get => m_WrappedConfiguration.ProductName;
+            set => m_WrappedConfiguration.ProductName = value;
         }
 
         /// <summary>
@@ -41,8 +41,8 @@ namespace Gibraltar.Agent.Configuration
         /// application description from the assemblies that initiate logging.</remarks>
         public string ApplicationDescription
         {
-            get { return m_WrappedConfiguration.ApplicationDescription; }
-            set { m_WrappedConfiguration.ApplicationDescription = value; }
+            get => m_WrappedConfiguration.ApplicationDescription;
+            set => m_WrappedConfiguration.ApplicationDescription = value;
         }
 
         /// <summary>
@@ -53,8 +53,8 @@ namespace Gibraltar.Agent.Configuration
         /// product name from the assemblies that initiate logging.</remarks>
         public string ApplicationName
         {
-            get { return m_WrappedConfiguration.ApplicationName; }
-            set { m_WrappedConfiguration.ApplicationName = value; }
+            get => m_WrappedConfiguration.ApplicationName;
+            set => m_WrappedConfiguration.ApplicationName = value;
         }
 
         /// <summary>
@@ -67,8 +67,8 @@ namespace Gibraltar.Agent.Configuration
         /// for the application could have undesirable effects.</remarks>
         public ApplicationType ApplicationType // Note: Should it restrict certain detectable mismatches?
         {
-            get { return (ApplicationType)m_WrappedConfiguration.ApplicationType; }
-            set { m_WrappedConfiguration.ApplicationType = (Loupe.Extensibility.Data.ApplicationType)value; }
+            get => (ApplicationType)m_WrappedConfiguration.ApplicationType;
+            set => m_WrappedConfiguration.ApplicationType = (Loupe.Extensibility.Data.ApplicationType)value;
         }
 
         /// <summary>
@@ -79,8 +79,8 @@ namespace Gibraltar.Agent.Configuration
         /// product name from the assemblies that initiate logging.</para></remarks>
         public Version ApplicationVersion
         {
-            get { return m_WrappedConfiguration.ApplicationVersion; }
-            set { m_WrappedConfiguration.ApplicationVersion = value; }
+            get => m_WrappedConfiguration.ApplicationVersion;
+            set => m_WrappedConfiguration.ApplicationVersion = value;
         }
 
 
@@ -93,8 +93,8 @@ namespace Gibraltar.Agent.Configuration
         /// corresponding entry does not exist it will be automatically created.</remarks>
         public string EnvironmentName
         {
-            get { return m_WrappedConfiguration.EnvironmentName; }
-            set { m_WrappedConfiguration.EnvironmentName = value; }
+            get => m_WrappedConfiguration.EnvironmentName;
+            set => m_WrappedConfiguration.EnvironmentName = value;
         }
 
         /// <summary>
@@ -106,8 +106,8 @@ namespace Gibraltar.Agent.Configuration
         /// If the corresponding entry does not exist it will be automatically created.</remarks>
         public string PromotionLevelName
         {
-            get { return m_WrappedConfiguration.PromotionLevelName; }
-            set { m_WrappedConfiguration.PromotionLevelName = value; }
+            get => m_WrappedConfiguration.PromotionLevelName;
+            set => m_WrappedConfiguration.PromotionLevelName = value;
         }
 
         /// <summary>
@@ -119,8 +119,8 @@ namespace Gibraltar.Agent.Configuration
         /// configured messenger.</remarks>
         public bool ForceSynchronous
         {
-            get { return m_WrappedConfiguration.ForceSynchronous; }
-            set { m_WrappedConfiguration.ForceSynchronous = value; }
+            get => m_WrappedConfiguration.ForceSynchronous;
+            set => m_WrappedConfiguration.ForceSynchronous = value;
         }
 
         /// <summary>
@@ -131,8 +131,8 @@ namespace Gibraltar.Agent.Configuration
         /// catch up.  This will cause the client to block until each new message is published.</remarks>
         public int MaxQueueLength
         {
-            get { return m_WrappedConfiguration.MaxQueueLength; }
-            set { m_WrappedConfiguration.MaxQueueLength = value; }
+            get => m_WrappedConfiguration.MaxQueueLength;
+            set => m_WrappedConfiguration.MaxQueueLength = value;
         }
 
         /// <summary>
@@ -143,8 +143,8 @@ namespace Gibraltar.Agent.Configuration
         /// by default, and normal operation will collect this information automatically.</remarks>
         public bool EnableAnonymousMode
         {
-            get { return m_WrappedConfiguration.EnableAnonymousMode; }
-            set { m_WrappedConfiguration.EnableAnonymousMode = value; }
+            get => m_WrappedConfiguration.EnableAnonymousMode;
+            set => m_WrappedConfiguration.EnableAnonymousMode = value;
         }
 
         /// <summary>
@@ -158,9 +158,27 @@ namespace Gibraltar.Agent.Configuration
         /// just silently ignore. Therefore, this option is not recommended for consistent production use.</para></remarks>
         public bool EnableDebugMode
         {
-            get { return m_WrappedConfiguration.EnableDebugMode; }
-            set { m_WrappedConfiguration.EnableDebugMode = value; }
+            get => m_WrappedConfiguration.EnableDebugMode;
+            set => m_WrappedConfiguration.EnableDebugMode = value;
         }
+
+
+        /// <summary>
+        /// When true, the Agent will not do string compression and other optimizations to minimize memory.
+        /// </summary>
+        /// <remarks><para>The Agent normally works to minimize memory use in production scenarios, such as
+        /// using a string cache to avoid keeping duplicate strings in memory and other steps.  These steps
+        /// rely on .NET Garbage Collector features; if there are GC issues in the process they can be
+        /// confusing to debug and understand using conventional profilers while these optimizations are being
+        /// used.</para>
+        /// <para>Setting this option to true will disable these optimizations which will increase the memory used by 
+        /// the agent (particularly for log message buffering) but makes a simpler picture for memory profiling.</para></remarks>
+        public bool DisableMemoryOptimization
+        {
+            get => m_WrappedConfiguration.DisableMemoryOptimization;
+            set => m_WrappedConfiguration.DisableMemoryOptimization = value;
+        }
+
 
         #endregion
     }

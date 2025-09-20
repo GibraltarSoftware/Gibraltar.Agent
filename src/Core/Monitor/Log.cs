@@ -96,10 +96,10 @@ namespace Gibraltar.Monitor
 
         private static LogMessageSeverity s_MinimumSeverity = LogMessageSeverity.Verbose; //protected by being static and simple assignment
 
-        private volatile static bool s_Initialized; //protected by being volatile
-        private volatile static bool s_InitializationNeverAttempted = true; //protected by being volatile
-        private volatile static bool s_Initializing; //PROTECTED BY INITIALIZING and volatile
-        private volatile static bool s_ExplicitStartSessionCalled; // protected by being volatile
+        private static volatile bool s_Initialized; //protected by being volatile
+        private static volatile bool s_InitializationNeverAttempted = true; //protected by being volatile
+        private static volatile bool s_Initializing; //PROTECTED BY INITIALIZING and volatile
+        private static volatile bool s_ExplicitStartSessionCalled; // protected by being volatile
         private static bool s_StartupConsentDisplayed; //protected by CONSENT LOCK
 
         private static Notifier s_MessageAlertNotifier; // PROTECTED BY NOTIFIERLOCK (weak check outside lock allowed)
@@ -2441,6 +2441,9 @@ namespace Gibraltar.Monitor
             //if we're in debug mode then force the central silent mode option.
             if (s_RunningConfiguration.Publisher.EnableDebugMode)
                 Log.SilentMode = false;
+
+            if (s_RunningConfiguration.Publisher.DisableMemoryOptimization)
+                StringReference.Disabled = true;
 
             s_SessionStartInfo = new SessionSummary(s_RunningConfiguration);
 
